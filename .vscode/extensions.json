@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "james-yu.latex-workshop",
+    "ltex-plus.vscode-ltex-plus",
+    "davidanson.vscode-markdownlint",
+    "shd101wyy.markdown-preview-enhanced",
+    "github.copilot-chat",
+    "tomoki1207.pdf",
+    "esbenp.prettier-vscode",
+    "raykr.zotex"
+  ]
+}

@@ -1,0 +1,36 @@
+# LaTeX build output directory (set in .vscode/settings.json)
+out/
+build/
+
+# Common LaTeX intermediate files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.run.xml
+
+# latexmk and minted caches
+.latexmk/
+_minted-*/
+
+# macOS / editor
+.DS_Store
+Thumbs.db

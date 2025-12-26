@@ -1,0 +1,74 @@
+% shopickup-thesis.tex
+% Basic LaTeX thesis boilerplate — adapt as needed.
+\documentclass[11pt,oneside]{report}
+
+% --- Encoding & language (adjust if using XeLaTeX/LuaLaTeX) ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% --- Page layout ---
+\usepackage[a4paper,margin=1in]{geometry}
+
+% --- Useful packages ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% --- Bibliography: uncomment and adjust if you use biblatex ---
+% \usepackage[backend=biber,style=authoryear]{biblatex}
+% \addbibresource{references.bib}
+
+% --- Title data ---
+\title{Shopickup: Thesis Title Goes Here}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+A short abstract (150--300 words) summarising the thesis: goals, methods, results.
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter*{Acknowledgements}
+Brief acknowledgements go here.
+
+\chapter{Introduction}
+\label{ch:intro}
+Introduce the problem, motivation, contributions, and outline of the thesis.
+
+\chapter{Related Work}
+\label{ch:related}
+Summarise prior work and position your contributions.
+
+\chapter{Methodology}
+\label{ch:methods}
+Describe algorithms, models, experimental setup, data, and implementation details.
+
+\chapter{Experiments and Results}
+\label{ch:results}
+Present experiments, results, and discussion.
+
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+Summarise findings and outline future directions.
+
+% \printbibliography  % Uncomment when using biblatex
+\bibliographystyle{plain}
+\bibliography{references} % references.bib
+
+\appendix
+\chapter{Appendix A}
+Supplementary material.
+
+\end{document}
