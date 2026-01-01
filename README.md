@@ -6,10 +6,10 @@ The application code can be found on the [following repository](https://github.c
 
 ## Recommended Setup
 
-Firstly, make sure you have a LaTeX distribution installed on your system. For Windows, MiKTeX is a popular choice, while Mac users often go for MacTeX. Linux users can install TeX Live via their package manager. I will be using TeX Live for this project as it is cross-platform.
+Firstly, make sure you have a LaTeX distribution installed on your system. For Windows, MiKTeX is a popular choice, while Mac users often go for MacTeX. Linux users can install TeX Live via their package manager. I will be using MacTeX for this guide.
 
 ```brew
-brew install --cask texlive
+brew install --cask mactex
 ```
 
 In addition, you will need to install Zotero and the Better BibTeX plugin for reference management.

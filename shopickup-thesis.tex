@@ -1,51 +1,142 @@
 % shopickup-thesis.tex
-% Basic LaTeX thesis boilerplate — adapt as needed.
-\documentclass[11pt,oneside]{report}
+\documentclass[12pt,oneside]{report}
 
 % --- Encoding & language (adjust if using XeLaTeX/LuaLaTeX) ---
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage{csquotes}
 
 % --- Page layout ---
-\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[a4paper,left=3.5cm,right=2cm,top=3cm,bottom=3cm,headsep=1.5cm,footskip=1.5cm]{geometry}
 
-% --- Useful packages ---
+% Fonts: use Arial-like sans; switch document to sans family
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Spacing utilities
+\usepackage{setspace}
+\onehalfspacing                    % main text 1.5 spaced
+\setlength{\parskip}{8pt}          % paragraph spacing after 8pt
+
+% Footnotes: 10pt, single spaced, hanging 0.75cm
+\usepackage[hang,flushmargin]{footmisc}
+\renewcommand{\footnotesize}{\fontsize{10}{12}\selectfont}
+\setlength{\footnotemargin}{0.75cm} % best-effort; footmisc provides hanging formatting
+
+% Captions: 11pt single spaced
+\usepackage{caption}
+\DeclareCaptionFont{capfont}{\fontsize{11}{13}\selectfont}
+\captionsetup{font=capfont,justification=justified}
+
+% Graphics, math, tables
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
-\usepackage[hidelinks]{hyperref}
-\usepackage{caption}
 \usepackage{subcaption}
 
-% --- Bibliography: uncomment and adjust if you use biblatex ---
-% \usepackage[backend=biber,style=authoryear]{biblatex}
-% \addbibresource{references.bib}
+% Hyperlinks (hidden)
+\usepackage[hidelinks]{hyperref}
 
-% --- Title data ---
+% Header/footer: single line, 11pt, page number right (Arabic numerals)
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\fontsize{11}{13}\selectfont\leftmark}   % header left
+\fancyfoot[R]{\fontsize{11}{13}\selectfont\thepage}    % page number right
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+% ensure header/footer single spaced
+\newcommand{\headfootfont}{\fontsize{11}{13}\selectfont}
+\fancyhead[L]{\headfootfont\leftmark}
+\fancyfoot[R]{\headfootfont\thepage}
+
+% Section headings: sizes, weights, spacing (titlesec)
+\usepackage{titlesec}
+% Level 1 -> \chapter (16pt bold, new page, left)
+\titleformat{\chapter}[hang]{\normalfont\bfseries\fontsize{16}{19}\selectfont}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{24pt}{12pt}
+% Level 2 -> \section (14pt bold)
+\titleformat{\section}[hang]{\normalfont\bfseries\fontsize{14}{17}\selectfont}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{22pt}{10pt}
+% Level 3 -> \subsection (12pt bold)
+\titleformat{\subsection}[hang]{\normalfont\bfseries\fontsize{12}{15}\selectfont}{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{20pt}{8pt}
+% Level 4 -> \subsubsection (12pt normal)
+\titleformat{\subsubsection}[hang]{\normalfont\fontsize{12}{14}\selectfont}{\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{20pt}{8pt}
+% Level 5 -> \paragraph (12pt italics)
+\titleformat{\paragraph}[hang]{\normalfont\itshape\fontsize{12}{14}\selectfont}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{20pt}{8pt}
+
+% Ensure automatic hyphenation (LaTeX default)
+\hyphenpenalty=1000
+
+% Bibliography: use biblatex with IEEE style (Zotero -> export references.bib via Better BibTeX)
+\usepackage[backend=biber,style=ieee]{biblatex}
+\addbibresource{references.bib}
+
+% --- Document metadata ---
 \title{Shopickup: Thesis Title Goes Here}
-\author{Your Name}
+\author{David Fodor}
 \date{\today}
 
 \begin{document}
 
-\maketitle
+% ----- Front matter (roman numerals) -----
+\pagenumbering{roman}
 
+% Cover page (placeholder)
+\begin{titlepage}
+  \centering
+  {\Huge\bfseries Shopickup: Thesis Title Goes Here\par}
+  \vspace{2cm}
+  {\Large David Fodor\par}
+  \vfill
+  {\large \today\par}
+\end{titlepage}
+
+% Declaration of honour (placeholder)
+\chapter*{Declaration of Honour}
+I hereby declare...
+
+% Clause of confidentiality (optional)
+\chapter*{Clause of Confidentiality}
+% ...optional text...
+
+% Notification of the Ethical Review Committee (optional)
+\chapter*{Ethical Review Committee Notification}
+% ...optional text...
+
+% Preface (optional) — roman numerals continue
+\chapter*{Preface}
+% ...preface text...
+
+% Abstract (English)
 \begin{abstract}
-A short abstract (150--300 words) summarising the thesis: goals, methods, results.
+A short abstract (approx. 1/2 A4 page) summarising aims, methods, results.
 \end{abstract}
 
 \tableofcontents
 \listoffigures
 \listoftables
 
-\chapter*{Acknowledgements}
-Brief acknowledgements go here.
+% List of abbreviations
+\chapter*{List of Abbreviations}
+\begin{tabular}{p{3cm}p{10cm}}
+% ABBR & Description \\
+\end{tabular}
+
+% ----- Main text (Arabic numerals starting at 1) -----
+\clearpage
+\pagenumbering{arabic}
 
 \chapter{Introduction}
 \label{ch:intro}
 Introduce the problem, motivation, contributions, and outline of the thesis.
+
+Example citation \cite{kaptosvRESTfulAPIDesign2025}
 
 \chapter{Related Work}
 \label{ch:related}
@@ -63,12 +154,12 @@ Present experiments, results, and discussion.
 \label{ch:conclusion}
 Summarise findings and outline future directions.
 
-% \printbibliography  % Uncomment when using biblatex
-\bibliographystyle{plain}
-\bibliography{references} % references.bib
+% Bibliography
+\printbibliography
 
 \appendix
 \chapter{Appendix A}
 Supplementary material.
 
 \end{document}
+% ...existing code...
