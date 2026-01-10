@@ -52,6 +52,12 @@
 \fancyhead[L]{\headfootfont\leftmark}
 \fancyfoot[R]{\headfootfont\thepage}
 
+\fancypagestyle{plain}{
+  \fancyhf{}                      % clear header/footer
+  \fancyfoot[R]{\headfootfont\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
 % Section headings: sizes, weights, spacing (titlesec)
 \usepackage{titlesec}
 % Level 1 -> \chapter (16pt bold, new page, left)
@@ -77,6 +83,13 @@
 \usepackage[backend=biber,style=ieee]{biblatex}
 \addbibresource{references.bib}
 
+% Enumerate customization
+\usepackage{enumitem}
+
+% Code listings
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,breaklines=true}
+
 % --- Document metadata ---
 \title{Shopickup: Thesis Title Goes Here}
 \author{David Fodor}
@@ -86,27 +99,77 @@
 
 % ----- Front matter (roman numerals) -----
 \pagenumbering{roman}
+\pagestyle{empty}
 
-% Cover page (placeholder)
+% Styled cover page (supports optional logo file `logo.png` in project root)
 \begin{titlepage}
+  \thispagestyle{empty}
   \centering
-  {\Huge\bfseries Shopickup: Thesis Title Goes Here\par}
-  \vspace{2cm}
-  {\Large David Fodor\par}
+
+  % Top colour band (reduced height and lighter)
+  % \begin{tikzpicture}[remember picture,overlay]
+  %   \fill[black!15] (current page.north west) rectangle ([yshift=-2cm]current page.north east);
+  %   % % Alternative: use brand colour and opacity
+  %   % \fill[fill=blue!60,opacity=0.9] (current page.north west) rectangle ([yshift=-2cm]current page.north east);
+  % \end{tikzpicture}
+  \vspace{1cm}
+
+  \begingroup
+  % title (use larger size)
+  {\fontsize{20}{24}\selectfont\bfseries Architecture for Extensible Multi-Carrier API Adapters in E-Commerce\par}
+  \vspace{1cm}
+
+  % subtitle
+  {\fontsize{14}{18}\selectfont\bfseries From Integration to KPI-Based Evaluation\par}
+  \vspace{1cm}
+
+  {\fontsize{20}{24}\selectfont\bfseries BACHELOR PAPER\par}
+  \vspace{1cm}
+
+  % submitted at
+  {\fontsize{14}{18}\selectfont\bfseries submitted at\\
+    IMC Krems\\
+    (University of Applied Sciences)\par}
+  \vspace{1cm}
+
+  % optional logo
+  \IfFileExists{./src/imc-logo.png}{\includegraphics[height=2cm]{./src/imc-logo.png}\\[1cm]}{}
+
+  % bachelor program
+  {\fontsize{14}{18}\selectfont\bfseries Bachelor Programme\\
+    Informatics\par}
+  \vspace{1cm}
+
+  % author block
+  {\fontsize{14}{22}\selectfont\bfseries by\\
+    \fontsize{20}{22}\selectfont David Fodor BSc\\
+    \fontsize{14}{18}\selectfont for the award of the academic degree\\
+    \fontsize{20}{22}\selectfont Bachelor of Science in Engineering (BSc)
+    \par}
+  \vspace{1cm}
+
+  % degree block
+  {\fontsize{14}{18}\selectfont\raggedright
+    \textbf{Supervisor:}\enspace Rubén Ruiz, Torrubiano, Prof. (FH) Dr.\\[4pt]
+    \fontsize{12}{14}\textbf Submitted on: TBD\par
+  }
+
+  \endgroup
+
   \vfill
-  {\large \today\par}
+  \null
 \end{titlepage}
 
 % Declaration of honour (placeholder)
 \chapter*{Declaration of Honour}
-I hereby declare...
+I hereby confirm that I have written the thesis by myself and has not used any unauthorized material. All parts taken from other sources have been clearly indicated and I have not submitted the thesis as academic research paper for an exam somewhere else before.
 
 % Clause of confidentiality (optional)
-\chapter*{Clause of Confidentiality}
+% \chapter*{Clause of Confidentiality}
 % ...optional text...
 
 % Notification of the Ethical Review Committee (optional)
-\chapter*{Ethical Review Committee Notification}
+% \chapter*{Ethical Review Committee Notification}
 % ...optional text...
 
 % Preface (optional) — roman numerals continue
@@ -115,7 +178,7 @@ I hereby declare...
 
 % Abstract (English)
 \begin{abstract}
-A short abstract (approx. 1/2 A4 page) summarising aims, methods, results.
+  A short abstract (approx. 1/2 A4 page) summarising aims, methods, results.
 \end{abstract}
 
 \tableofcontents
@@ -124,29 +187,438 @@ A short abstract (approx. 1/2 A4 page) summarising aims, methods, results.
 
 % List of abbreviations
 \chapter*{List of Abbreviations}
-\begin{tabular}{p{3cm}p{10cm}}
-% ABBR & Description \\
+\begin{tabular}{@{}p{3cm}p{10cm}@{}}
+  \textbf{API}  & Application Programming Interface — a set of routines, protocols and tools that enable communication between software components.              \\[6pt]
+  \textbf{KPI}  & Key Performance Indicator — a measurable value used to evaluate the success of an activity in meeting strategic or operational objectives.     \\[6pt]
+  \textbf{REST} & Representational State Transfer — an architectural style for networked applications, commonly used for web APIs.                               \\[6pt]
+  \textbf{JSON} & JavaScript Object Notation — a lightweight data-interchange format, often used in APIs.                                                        \\[6pt]
+  \textbf{SME}  & Small and Medium-sized Enterprises — businesses with a limited number of employees and revenue, typically defined by specific thresholds.      \\[6pt]
+  \textbf{MRQ}  & Main Research Question — the primary question that guides the research objectives of the thesis.                                               \\[6pt]
+  \textbf{SRQ}  & Sub-Research Question — secondary questions that support and elaborate on the main research question.                                          \\[6pt]
+  \textbf{EU}   & European Union — a political and economic union of member states located primarily in Europe.                                                  \\[6pt]
+  \textbf{EEA}  & European Economic Area — an international agreement which enables the extension of the European Union's single market to non-EU member states. \\[6pt]
+  \textbf{SOA}  & Service-Oriented Architecture — a design pattern where services are provided to other components by application components, through a network. \\
 \end{tabular}
 
 % ----- Main text (Arabic numerals starting at 1) -----
 \clearpage
 \pagenumbering{arabic}
+\pagestyle{fancy}   % <- restore fancy headers for main chapters
 
 \chapter{Introduction}
 \label{ch:intro}
-Introduce the problem, motivation, contributions, and outline of the thesis.
 
-Example citation \cite{kaptosvRESTfulAPIDesign2025}
+E-commerce has revolutionized the retail landscape, enabling businesses of all sizes to reach domestic and global markets with unprecedented ease, meanwhile consumers benefit from unparalleled convenience and choice.
+Consequently, online shopping has seen strong growth over the past two decades, a trend accelerated by technological advancements and shifting consumer behaviors. As per Capital One's 2025 report, online sales accounted for 20.5\% of total retail sales worldwide \cite{capitaloneECommerceStatistics20252025} and has been steadily climbing over the past decade.
+Similar trends can be observed in various regional markets and their respective research reports, such as in Eurostat's EEA specific data  showing that more and more stores are adopting online sales channels, with 23.83\% of all enterprises having one in 2023, compared to just 17.21\% ten years prior \cite{eurostatEcommerceStatistics2025}, with the share of total sales following suit.
+On the individual level, Eurostat surveyed that 94\% of EU citizens used the internet in 2024 and 77\% have made online purchases in the past year \cite{eurostatEcommerceStatisticsIndividuals2025}, with younger demographics leading the way, showing that this growth is likely to continue in the foreseeable future.
+
+We have watched the rise of giants like Amazon and the Alibaba group, who have set new standards for customer experience, logistics, and supply chain management on a global scale. These large enterprises have proven that efficient e-commerce operations can drive significant revenue growth and to this day in Europe, larger enterprises are more likely to sell online than smaller ones, with 24.44\% of turnover coming from online sales in large companies, compared to just 14.99\% for medium and 9.49\% for small enterprises \cite{eurostatEcommerceStatistics2025}.
+However, the e-commerce boom is not limited to large players, small and medium-sized enterprises (SMEs) have more opportunities and tools under their disposal than ever before to establish and grow their online presence.
+Webshop engines like Shopify, Wix and Wordpress based solutions like WooCommerce have democratized access to e-commerce, allowing SMEs to set up online stores with relative ease and minimal upfront investment.
+This lowers the barrier to entry for many small businesses and aspiring entrepreneurs, leading to a remarkable number of 24.1 million online stores globally \cite{capitaloneHowManyOnline2025}.
+We can also see that most of the online stores are created with a just a handful of these popular platforms, with Shopify alone powering 23.6\% of them \cite{capitaloneHowManyOnline2025}.
+These giant platforms can not by themselves cover all the needs of the diverse e-commerce landscape across different regions, industries and business models, thus they need some help from third-party applications and services to fill in the gaps.
+This thesis project, referred to as Shopickup, comes into play, to solve a major pain point for SMEs in the e-commerce space: the integration and management of shipping carriers.
+
+\section{Motivation and Problem Statement}
+While e-commerce platforms provide solid foundations for online sales, due to their general-purpose large-scale international nature, they can not possibly cover all shipping providers of all regions they operate in.
+SMEs similarly often struggle with fragmented shipping workflows, where order data must be manually transferred between sales platforms like Shopify and heterogeneous carrier systems like GLS, DPD, DHL and many others.
+This fragmentation leads to operational inefficiencies, data redundancy, and a lack of real-time visibility into shipping performance.
+To address these challenges, webshop engines allow third-party applications to extend their core functionalities via well-defined APIs.
+
+Multiple such third-party applications already exist, but they most often have limited carrier or region support, or are built for specific use-cases, such as label generation only.
+They typically rely on platform-specific plugins that are difficult to maintain or monolithic middleware that lacks the flexibility to adapt to new carrier standards rapidly.
+This project addresses the lack of a unified, extensible integration layer that can:
+
+\begin{enumerate}[label=\arabic*., left=0pt, itemsep=6pt]
+  \item Normalize data across diverse carrier Application Programming Interfaces (APIs) without completely custom code for each new provider.
+  \item Provide a scalable analytics framework that transforms raw shipping data into actionable business intelligence.
+\end{enumerate}
+
+There is a clear need for a more comprehensive, flexible, and scalable solution that can integrate multiple carriers, is easily extensible to support new ones, and provides meaningful insights into shipping performance via key performance indicators (KPIs).
+The motivation for this project also stems from practical experience supporting a Shopify-based online store.
+
+\section{Research Objectives}
+The primary objective of this thesis is to design develop and evaluate a scalable software architecture that unifies e-commerce shipping operations.
+Research to be done can be divided into two main topics, each of which with their main and related sub-research questions (MRQ and SRQ, respectively).
+Inevitably, to present the whole picture, I will have to cover some of the other aspects of the implementation as well, but the focus will remain on the most relevant technical aspects.
+
+\subsection{Architecture and Extensibility}
+The first part of this study focuses on the structural design of the Shopickup application, going into more detail about the architecture and extensibility aspects.
+
+% \begin{enumerate}[label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
+%   \item What is the most suitable architecture for a common, extensible API adapter that integrates multiple shipping carriers with heterogeneous APIs?
+%         \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
+%           \item (Platform Agnosticity) What is the most appropriate architecture for a platform-agnostic integration layer that enables the application to support multiple e-commerce platforms?
+%           \item (Extensibility) How can the adapter be structured to minimise per-carrier boilerplate and allow pluggable driver modules?
+%         \end{enumerate}
+% \end{enumerate}
+
+\begin{enumerate}[label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
+  \item What is the most appropriate architecture for a common, extensible API adapter that integrates multiple shipping carriers with heterogeneous APIs, data formats and workflows, and what are the advantages and disadvantages of the candidate architectures?
+        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
+          \item What is the most appropriate architecture for a platform-agnostic integration layer that enables the application to support multiple e-commerce platforms, and what are the advantages and disadvantages of alternative approaches?
+        \end{enumerate}
+\end{enumerate}
+
+\subsection{Evaluation and Analytics}
+The second part of this study focuses on the usability and effectiveness of the proposed system.
+
+% \begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
+%   \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance?
+%         \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
+%           \item (Effectiveness \& KPIs) How can the effectiveness of such a system in shipping operations be objectively evaluated using Key Performance Indicators (KPIs)?
+%           \item (Usability) Which dashboard interactions and visualisations best support merchant decision-making?
+%         \end{enumerate}
+% \end{enumerate}
+
+\begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
+  \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance and customer preferences while balancing usability, scalability, and real-time needs, and what are the advantages and disadvantages of alternative dashboard architectures?
+        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
+          \item How can the effectiveness of such a system in shipping operations be objectively evaluated, which KPIs should be used, and what are the advantages and disadvantages of different evaluation methods?
+        \end{enumerate}
+\end{enumerate}
+
+\section{Scope and Limitations}
+This study focuses on the development of a functional prototype integrating Shopify with a selected set of international shipping providers (e.g.: GLS, Austrian Post, MPL and others) to demonstrate the proposed architecture.
+While the system is designed for extensibility, full integration with all major global carriers is beyond the scope of this bachelor thesis, but potentially open sourcing the shipping carrier adapter framework will allow future contributions to expand its capabilities if desired.
+Implementation of the analytical dashboard and the overall application will be evaluated on our own e-commerce store's data in-depth and to a lesser extent on surveys and feedback from other business owners using the system.
+
+\section{Thesis Structure}
+Throughout this thesis, the standard IMRAD structure (Introduction, Methods, Results, and Discussion) is followed, mirroring the process of scientific discovery, as well as my journey of development along the way.
+The remainder of this thesis is structured as follows, as per the IMC Krems guidelines:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{@{}p{3cm}p{3cm}p{9cm}@{}}
+    \toprule
+    \textbf{Chapter} & \textbf{Title}             & \textbf{Contents (summary)}                                                                                                                              \\
+    \midrule
+    2                & Related Work               & Reviews prior work in API integration, middleware for logistics, and related integration patterns; positions this thesis relative to existing solutions. \\
+    3                & Methodology                & Details the theoretical framework, architectural choices, design criteria and evaluation methodology used for the proposed system.                       \\
+    4                & Implementation and Results & Describes the Shopickup prototype implementation, integration with selected carriers and platforms, and presents experimental results.                   \\
+    5                & Discussion                 & Interprets results, discusses limitations, trade-offs and lessons learned.                                                                               \\
+    6                & Conclusion and Future Work & Summarises findings and outlines potential directions for further development and research.                                                              \\
+    \bottomrule
+  \end{tabular}
+  \caption{Thesis structure and chapter summaries}
+\end{table}
 
 \chapter{Related Work}
 \label{ch:related}
-Summarise prior work and position your contributions.
+Finding existing literature that directly addresses the design of an extensible, multi-carrier shipping integration layer for SMEs is challenging. Most scientific work either focuses on logistics and supply chains (routing, last-mile optimization, warehouse management) or on general software architecture and integration patterns (SOA, microservices, API gateways). There is a clear gap when it comes to shipping integrations at the API level between e-commerce platforms and parcel carriers such as DHL, GLS, or national postal services.
+This chapter therefore proceeds in two steps. First, it reviews general software architecture approaches for integrating heterogeneous APIs and argues how these can be applied to the domain of multi-carrier shipping. Second, it briefly positions existing commercial and open-source solutions relative to the architectural patterns discussed, thereby highlighting the research gap addressed by this thesis.
+
+\section{Software Architecture for API Integration}
+
+The core technical problem of this thesis is the integration of multiple heterogeneous carrier APIs into a single, unified application in a way that remains extensible when adding new carriers or changing existing ones. This problem is a specific instance of the broader topic of enterprise application integration and service-oriented architecture (SOA).
+
+\subsection{Service-Oriented Architecture as Theoretical Foundation}
+
+Service-Oriented Architecture (SOA) has been developed as a paradigm for organizing distributed systems around loosely coupled services. Papazoglou describes SOA as a way of “organizing and utilizing distributed capabilities that may be under the control of different ownership domains,” emphasizing that it “captures the logical way of designing a software system to provide services to end-user applications or other services distributed over a network.” The key principle is loose coupling, achieved by a clear separation between service interfaces and service implementations.
+In an SOA-based design, an application does not directly depend on the internal details of another application. Instead, it interacts with well-defined service contracts. For the problem at hand, this translates to the idea that the Shopickup core system should not be tightly coupled to the internal details of DHL’s, GLS’s, or Austrian Post’s APIs. Instead, it should rely on a stable, domain-specific interface (e.g., “create shipment,” “track shipment,” “cancel shipment”), while carrier-specific logic is encapsulated in separate components behind these interfaces.
+A systematic literature review by Niknejad et al. confirms that SOA is particularly effective for integration of heterogeneous systems in enterprise environments. The review synthesizes 103 primary studies and concludes that SOA provides “adaptable integration and service reusability through modular architecture based on services,” and that it reduces complexity by “encapsulating applications and data sources in black boxes” and minimizing the amount of shared knowledge required between components. This is highly relevant for SMEs: they typically cannot afford large integration teams and therefore benefit from architectures that localize complexity and reduce coupling.
+In the context of Shopickup, SOA implies that:
+
+\begin{itemize}
+  \item The core business logic (e.g., order management, user interface) interacts with a generic shipping service interface rather than individual carrier APIs.
+  \item Each carrier integration is treated as a service that implements this generic interface.
+  \item Adding or replacing a carrier should require only changes in the implementation of the corresponding service, not in the rest of the system.
+\end{itemize}
+
+This conceptual foundation is important, but it does not yet specify concrete implementation structures or design patterns.
+
+\subsection{Empirical Evidence of REST API Heterogeneity}
+
+In practice, most modern integrations are realized via RESTful web APIs over HTTP. A common assumption in industry is that “REST APIs are all similar,” implying that integration is straightforward once a generic HTTP client exists. However, empirical research strongly contradicts this assumption.
+Neumann et al. conducted an extensive empirical study of 522 public web service APIs from providers such as Facebook, eBay, Twitter, GitHub, and Dropbox to understand how “RESTful” they really are and how consistent their designs are. Their findings are highly relevant for the design of a multi-carrier API layer:
+
+\begin{itemize}
+  \item 95.8\% of the analyzed APIs claim to be REST or REST-like, yet actual implementations differ significantly.
+  \item 87.8\% use resource-oriented URIs (e.g., `/shipments/{id}`), but 12.2\% still expose RPC-style endpoints (e.g., `/createShipment`).
+  \item Response formats vary widely: although JSON is dominant, XML and mixed or non-standard structures are still common.
+  \item Authentication mechanisms differ (API keys, OAuth variants, custom headers), as do error reporting formats and rate-limiting strategies.
+\end{itemize}
+
+Neumann et al. conclude that there is “high diversity in services, including differences in adherence to best practices,” and that even among “REST” APIs, there is only limited compliance to strict REST constraints. In other words, there is no real homogeneity at the API level—each provider does things slightly differently.
+Translating this to the parcel-shipping context: even if DHL, GLS, Austrian Post, and others expose “REST” APIs, their URL structures, authentication, request bodies, responses, and error handling differ in non-trivial ways. A naive point-to-point design that integrates each carrier directly into the core application will inevitably accumulate a large amount of carrier-specific branching logic, making the system brittle and hard to maintain.
+The empirical heterogeneity demonstrated by Neumann et al. thus provides a strong justification for an explicit abstraction and normalization layer in Shopickup, rather than relying on ad-hoc HTTP calls scattered throughout the codebase.
+
+\subsection{Adapter Pattern for Carrier Abstraction}
+
+The Adapter pattern is a classical design pattern introduced by Gamma et al. to allow cooperation between otherwise incompatible components by wrapping one interface into another. More recent work by IJAIDR formally examines the Adapter pattern and its use in object-oriented interoperability, distinguishing between class adapters (inheritance-based) and object adapters (composition-based). For integration scenarios, the object adapter variant is generally preferred, as it avoids tight inheritance couplings and is easier to extend.
+In the context of multi-carrier shipping, an object adapter approach would define a carrier-agnostic interface for all operations required by Shopickup, for example:
+
+\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:dispatch]
+interface CarrierAdapter {
+    createLabel(order): Label
+    trackShipment(trackingId): TrackingInfo
+    cancelShipment(trackingId): CancellationResult
+  }
+\end{lstlisting}
+
+For each carrier, a dedicated adapter implements this interface:
+
+\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:dispatch]
+class DHLAdapter implements CarrierAdapter { ... }
+class GLSAdapter implements CarrierAdapter { ... }
+class AustrianPostAdapter implements CarrierAdapter { ... }
+\end{lstlisting}
+
+Each adapter is responsible for:
+
+\begin{itemize}
+  \item Translating the generic Shopickup domain model into the carrier-specific request model (e.g., mapping address fields, parcel dimensions, and service options).
+  \item Calling the carrier’s API, including managing authentication, endpoints, and error conditions.
+  \item Translating the carrier’s response into a normalized internal representation suitable for downstream processing and analytics.
+\end{itemize}
+
+This pattern has several benefits, which align closely with the quality attributes targeted by this thesis:
+
+\begin{itemize}
+  \item Encapsulation of change: When a carrier changes their API (e.g., URL, auth method, required fields), only the corresponding adapter needs modification, not the rest of the system.
+  \item Extensibility: Adding a new carrier requires implementing a new `CarrierAdapter` without altering existing adapters or the core logic, directly supporting the Open/Closed Principle.
+  \item Testability: Each adapter can be unit-tested in isolation with mock carrier APIs.
+\end{itemize}
+
+The Adapter pattern therefore provides a concrete, implementation-level mechanism to realize the carrier-agnostic abstraction suggested by SOA and motivated by REST API heterogeneity.
+
+\subsection{API Gateway as a Unified Front Door}
+
+While the Adapter pattern addresses the structural coupling problem at the code level, it does not by itself solve several cross-cutting concerns that inevitably arise in a multi-carrier context:
+
+\begin{itemize}
+  \item Authentication and authorization of external clients
+  \item Rate limiting and throttling (e.g., to respect carrier rate limits)
+  \item Central logging and monitoring of requests
+  \item Versioning and gradual rollout of new functionality
+  \item Caching of frequently requested data (e.g., tracking information)
+\end{itemize}
+
+In microservice and distributed architectures, these concerns are commonly handled using an API Gateway. Ochuba et al. present a systematic review of API Gateway patterns for scalable and secure microservices architectures, identifying a number of roles and patterns an API Gateway typically plays. These include:
+
+\begin{itemize}
+  \item Proxy pattern: Acting as a single entry point, routing client requests to appropriate backend services.
+  \item Adapter pattern: Transforming protocols and payloads to accommodate legacy or heterogeneous services.
+  \item Aggregator pattern: Combining responses from multiple services into a single response (useful, for example, for rate-shopping across multiple carriers).
+  \item Security and policy enforcement patterns: Such as centralized authentication, token exchange, and rate limiting.
+\end{itemize}
+
+Ochuba et al. conclude that API Gateways have become a foundational component in modern scalable, secure, and resilient distributed systems, particularly when integrating multiple backend services.
+Applied to Shopickup, an API Gateway would:
+
+\begin{itemize}
+  \item Expose a single REST API towards the e-commerce frontend (and potentially other clients such as ERP systems), with stable endpoints like `POST /shipments`, `GET /shipments/{id}`, and `GET /shipments/{id}/tracking`.
+  \item Internally, route requests to the appropriate carrier adapter service based on parameters such as the selected carrier, destination country, or configured routing rules.
+  \item Provide centralized rate limiting per carrier (e.g., to avoid exceeding DHL’s API quota).
+  \item Apply caching for certain idempotent operations, such as repeated tracking queries within a short time window.
+  \item Ensure consistent logging and monitoring across all carrier integrations.
+\end{itemize}
+
+By combining the Adapter pattern at the service level with an API Gateway at the edge, Shopickup can offer a single, coherent interface to clients while encapsulating all carrier-specific complexity in backend modules. This architectural combination directly supports the goal of building an extensible, maintainable multi-carrier integration layer.
+
+\subsection{Extensibility as a Measurable Architectural Quality}
+
+Extensibility is not only a design intention but can be treated as a measurable quality attribute. Work by the Software Engineering Institute (SEI) at CMU discusses extensibility as a specific architectural concern and outlines how extension points and extension strategies should be identified and evaluated. In parallel, Petrillo et al. review software architecture metrics and derive a number of metrics relevant for SOA and service-based systems, such as coupling, cohesion, and service granularity.
+In the SEI view, a system is extensible if new functionalities can be added with localized changes and without degrading existing quality attributes. This involves:
+
+\begin{itemize}
+  \item Defining clear extension points (e.g., the `CarrierAdapter` interface and adapter registration in the gateway).
+  \item Choosing an appropriate extension strategy, such as packaging each carrier as a separate module or microservice.
+  \item Ensuring extension components can be tested independently.
+  \item Minimizing the need for changes in existing modules when extensions are added.
+\end{itemize}
+
+Petrillo et al. highlight that low coupling and high cohesion are essential for extensible architectures: services should depend on each other as little as possible, and each service should implement a focused, coherent set of responsibilities. In the case of Shopickup, a well-structured architecture would ensure that:
+
+\begin{itemize}
+  \item The core shipping logic depends only on the abstract carrier interface, not on any concrete carrier implementation.
+  \item Each carrier adapter is cohesive (responsible only for that carrier's integration) and loosely coupled to others (no adapter knows about any other carrier).
+\end{itemize}
+
+These theoretical and metric-based perspectives support using extensibility, coupling, and cohesion as criteria when comparing different architectural options for the Shopickup integration layer.
+
+\section{Architectural Styles for Multi-Carrier Integration}
+
+Based on the literature and patterns described above, several architectural styles can be considered for implementing a multi-carrier integration layer:
+
+\begin{enumerate}[label=\arabic*., left=0pt, itemsep=3pt]
+  \item Point-to-point integration
+  \item Hub-and-spoke broker
+  \item Message-oriented service bus
+  \item API gateway-centric architecture
+  \item Event-driven microservices
+\end{enumerate}
+
+The following subsections describe each of these in turn, discuss their advantages and disadvantages, and relate them to the goals of this thesis.
+2.2.1 Point-to-Point Integration
+In a point-to-point architecture, the application establishes direct connections to each external system. For Shopickup, this would mean that the backend directly invokes the DHL, GLS, Austrian Post, etc. APIs wherever shipping functionality is needed, often with branching logic such as:
+
+\begin{lstlisting}[language=Python,caption={Carrier dispatch example},label=lst:dispatch]
+if carrier == "DHL": call_dhl_api(...)
+elif carrier == "GLS": call_gls_api(...)
+...
+\end{lstlisting}
+
+This approach is simple and often used in early-stage prototypes because it has a low upfront cost: no additional infrastructure or architectural components are needed, and integrating the first one or two carriers can be done quickly.
+However, enterprise integration literature consistently identifies point-to-point integration as problematic at scale. Gadde et al., discussing enterprise integration optimization, note that proliferating point-to-point connections leads to “significant challenges” for architecture governance and maintainability. Every new integration increases the number of dependencies and potential failure points, and changes in one system can ripple unpredictably through others.
+In the context of Shopickup, the main disadvantages are:
+
+\begin{itemize}
+  \item High coupling: The core application must “know” about the details of every carrier API, violating SOA principles and making change localized only with difficulty.
+  \item Poor extensibility: Adding a new carrier involves editing central business logic and testing the entire application, not just an isolated module.
+  \item Limited reuse: Any normalization or error-handling logic gets duplicated across multiple code paths.
+  \item Lack of centralized concerns: There is no central place to enforce rate limiting, authentication, or logging across all carriers.
+\end{itemize}
+
+For these reasons, point-to-point integration can serve as a baseline or initial stage but is not a suitable architecture for the extensible multi-carrier platform targeted in this thesis.
+
+\subsection{Hub-and-Spoke (Central Broker)}
+
+A hub-and-spoke architecture introduces a dedicated broker component that sits between the core application and the external systems. The core application communicates only with the broker using a canonical data format. The broker then routes and transforms messages to and from individual spokes, which are the carrier adapters.
+In Shopickup’s context, the broker would:
+
+\begin{itemize}
+  \item Accept generic shipping requests such as `CreateShipment(order, carrier)` in a normalized format.
+  \item Select the appropriate carrier adapter based on the requested carrier or routing logic.
+  \item Transform the canonical request into the carrier's specific format and invoke the carrier API.
+  \item Transform the carrier's response back into the canonical format before returning it to the core application.
+\end{itemize}
+
+This architecture is closer to SOA principles and facilitates the use of Adapter and normalization patterns. It brings several benefits:
+
+\begin{itemize}
+  \item The core application is decoupled from carrier details and depends only on the broker's canonical interface.
+  \item All data transformation is centralized in the broker, improving consistency.
+  \item It becomes easier to add logging, basic rate limiting, or validation in one place.
+\end{itemize}
+
+However, literature on integration middleware also notes disadvantages. The broker can become a single point of failure and a performance bottleneck, especially if all traffic is routed synchronously through it. Scaling and evolving the broker itself becomes a critical and non-trivial task.
+In practice, hub-and-spoke architectures are often a stepping stone towards more distributed patterns such as service buses or microservices with API gateways.
+
+\subsection{Message-Oriented Service Bus}
+
+A more decoupled architecture uses a message-oriented middleware or service bus, where components communicate via asynchronous messages, often in a publish–subscribe model. Berna-Martinez et al. describe such architectures in the context of robotics, where heterogeneous sensors and devices need to be integrated; they propose a service-oriented, multi-layer structure where messages are used to decouple components and support varying update rates and formats. Similar ideas are widely applied in enterprise integration and IoT middleware.
+Applied to Shopickup, a service bus architecture would work as follows:
+
+\begin{itemize}
+  \item The core application publishes a CreateShipment message to a queue or topic, containing the order data and the selected carrier.
+  \item One or more carrier adapter services subscribe to these messages. Each adapter handles messages for its specific carrier, performing the necessary API calls and transformations.
+  \item Once a label is created, the adapter publishes a ShipmentCreated event, which the core application or other services consume to update their state or trigger notifications.
+\end{itemize}
+
+This approach has strong advantages:
+
+\begin{itemize}
+  \item Components are loosely coupled: the publisher of a message does not need to know which services will consume it.
+  \item The system is inherently more resilient: if a carrier API is temporarily unavailable, messages can wait in the queue and be processed later, rather than failing the entire request flow.
+  \item Throughput can be scaled by adding more consumer instances for heavy carriers.
+\end{itemize}
+
+The disadvantages are mostly related to complexity:
+
+\begin{itemize}
+  \item System behavior becomes asynchronous and eventually consistent; labels may not be available immediately after the order is placed.
+  \item Debugging and tracing flows across multiple queues and services is more complex than direct synchronous invocation.
+  \item Operating and securing a message bus requires non-trivial operational expertise.
+\end{itemize}
+
+Given the scope of a bachelor thesis and the requirement for near-real-time feedback in typical e-commerce workflows (e.g., showing the label immediately on order confirmation), a fully asynchronous service bus architecture is likely too heavy as a primary pattern. However, specific parts of the system, such as background tracking updates, could still benefit from asynchronous messaging in future work.
+
+\subsection{PI Gateway-Centric Multi-Carrier Architecture}
+
+The API Gateway pattern, as surveyed by Ochuba et al., offers a pragmatic compromise between the simplicity of direct integration and the flexibility and extensibility of more advanced service-oriented approaches. It is particularly well-suited for systems that expose a unified API to clients while internally delegating work to multiple backend services.
+In an API gateway-centric architecture for Shopickup:
+
+\begin{itemize}
+  \item The gateway exposes a stable REST API to the frontend and other consumers.
+  \item Each carrier integration is implemented as a separate service (Adapter) that adheres to a shared internal interface.
+  \item The gateway routes requests to the appropriate adapter based on routing rules (e.g., selected carrier, destination).
+  \item The gateway can also perform cross-cutting tasks such as authentication, rate limiting, logging, and caching.
+\end{itemize}
+
+Ochuba et al. systematize gateway responsibilities into patterns such as Proxy, Adapter, and Aggregator, and emphasize that gateways are now a foundational element of scalable microservice architectures. In particular, their review highlights that API Gateways are effective in:
+
+\begin{itemize}
+  \item Isolating external clients from internal changes.
+  \item Providing a single control point for security and observability.
+  \item Enabling a combination of synchronous and asynchronous backend interactions.
+\end{itemize}
+
+For Shopickup, this architecture has several advantages relevant to the research questions:
+
+\begin{itemize}
+  \item Extensibility (RQ1): New carriers can be added by implementing new adapter services and registering them with routing rules in the gateway. Existing clients continue to use the same API shape, aligning with SEI’s notion of extension points and localized changes.
+  \item Platform-agnostic operation (RQ1.1): The same gateway interface can be consumed by different e-commerce platforms (e.g., Shopify, WooCommerce) or internal tools, since the gateway remains agnostic to the upstream platform.
+  \item Operational clarity: Logging, metrics, and error handling are centralized at the gateway, simplifying monitoring and debugging.
+\end{itemize}
+
+Compared to hub-and-spoke, the gateway approach more naturally aligns with microservices and modern DevOps tooling, and commercial and open-source gateway solutions (e.g., Kong, NGINX, AWS API Gateway) are mature and well-supported. At the same time, it avoids some of the operational complexity of full event-driven microservice architectures.
+
+\subsection{Event-Driven Microservices}
+
+The most advanced architecture considered in the literature combines an API Gateway with a fully event-driven microservice back end. In such systems, individual business capabilities—Orders, Shipping, Tracking, Notifications—are each implemented as independent services that communicate via events on a message bus (e.g., Kafka). A service mesh such as Istio may be used to manage service-to-service communication, security, and observability.
+The advantages of this style, as reported in multiple studies and industrial experience, include:
+
+\begin{itemize}
+  \item High scalability and fault tolerance: each service can be scaled independently, and failures in one area (e.g., tracking updates) do not necessarily affect others.
+  \item Fine-grained deployment and evolution: services can be updated and re-deployed independently.
+  \item Rich observability capabilities when combined with service meshes.
+\end{itemize}
+
+However, systematic reviews of microservice systems also highlight the increased architectural complexity, the need for sophisticated monitoring and testing, and the challenge of managing eventual consistency across many services. These factors make full event-driven microservice architectures more appropriate for large organizations with substantial engineering resources (e.g., Amazon, Netflix, Uber) than for SME-oriented projects or bachelor thesis prototypes.
+For this thesis, event-driven microservices are therefore considered primarily as a reference point for future evolution rather than as the immediate target architecture.
+
+\subsection{Comparative Assessment and Architectural Choice}
+
+Synthesizing the literature above, the architectural options can be compared along the axes that matter for this thesis: extensibility, complexity, and fitness for the SME/Shopickup context.
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{@{}p{3.5cm}p{5.5cm}p{5.5cm}@{}}
+    \toprule
+    \textbf{Architecture}                                                                        & \textbf{Pros} & \textbf{Cons} \\
+    \midrule
+    Point-to-point                                                                               &
+    Simple; low upfront cost for prototypes.                                                     &
+    High coupling, poor extensibility, duplicated logic; hard to maintain at scale.                                              \\[6pt]
+
+    Hub-and-spoke                                                                                &
+    Centralised transformation, consistent logging and validation.                               &
+    Broker can be a single point of failure and performance bottleneck.                                                          \\[6pt]
+
+    Message-oriented service bus                                                                 &
+    Loose coupling, resilience, natural retry/backpressure, good scalability.                    &
+    Increased complexity, eventual consistency, harder debugging and ops.                                                        \\[6pt]
+
+    API gateway-centric                                                                          &
+    Centralised cross-cutting concerns (auth, rate limiting, logging); extensible and pragmatic. &
+    Requires gateway infrastructure and some operational overhead.                                                               \\[6pt]
+
+    Event-driven microservices                                                                   &
+    High scalability, independent deploys, fine-grained evolution.                               &
+    Highest operational and conceptual complexity; heavy monitoring/testing needs.                                               \\
+    \bottomrule
+  \end{tabular}
+  \caption{Comparative assessment of candidate architectures for Shopickup}
+\end{table}
+
+Given the project scope and target audience (SMEs), the API gateway–centric architecture combined with adapter-based carrier integrations is selected as the most suitable trade-off between extensibility and operational effort.
+
+
+\section{Preexisting Solutions}
+It is worth mentioning that some similar commercial and even open-source solutions do exist, however they are often fully fledged applications with limited extensibility, such as karrio \cite{KarrioapiKarrio2026}, or are indeed lightweight, but limited to specific vendors or use-cases, such as ShippingProAPICollection \cite{kevinvenclovasKevinvenclovasShippingProAPICollection2025}.
+
+\section{Evaluation and Analytics of Shipping Monitoring Systems}
+
 
 \chapter{Methodology}
 \label{ch:methods}
 Describe algorithms, models, experimental setup, data, and implementation details.
 
-\chapter{Experiments and Results}
+\chapter{Implementation and Results}
 \label{ch:results}
 Present experiments, results, and discussion.
 
