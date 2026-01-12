@@ -88,7 +88,10 @@
 
 % Code listings
 \usepackage{listings}
-\lstset{basicstyle=\ttfamily\small,breaklines=true}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,captionpos=b}
+
+% Quotes
+\usepackage{csquotes}
 
 % --- Document metadata ---
 \title{Shopickup: Thesis Title Goes Here}
@@ -231,7 +234,7 @@ Multiple such third-party applications already exist, but they most often have l
 They typically rely on platform-specific plugins that are difficult to maintain or monolithic middleware that lacks the flexibility to adapt to new carrier standards rapidly.
 This project addresses the lack of a unified, extensible integration layer that can:
 
-\begin{enumerate}[label=\arabic*., left=0pt, itemsep=6pt]
+\begin{enumerate}[label=\arabic*., left=0pt, itemsep=3pt]
   \item Normalize data across diverse carrier Application Programming Interfaces (APIs) without completely custom code for each new provider.
   \item Provide a scalable analytics framework that transforms raw shipping data into actionable business intelligence.
 \end{enumerate}
@@ -255,9 +258,9 @@ The first part of this study focuses on the structural design of the Shopickup a
 %         \end{enumerate}
 % \end{enumerate}
 
-\begin{enumerate}[label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
+\begin{enumerate}[label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=3pt]
   \item What is the most appropriate architecture for a common, extensible API adapter that integrates multiple shipping carriers with heterogeneous APIs, data formats and workflows, and what are the advantages and disadvantages of the candidate architectures?
-        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
+        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=3pt]
           \item What is the most appropriate architecture for a platform-agnostic integration layer that enables the application to support multiple e-commerce platforms, and what are the advantages and disadvantages of alternative approaches?
         \end{enumerate}
 \end{enumerate}
@@ -273,9 +276,9 @@ The second part of this study focuses on the usability and effectiveness of the 
 %         \end{enumerate}
 % \end{enumerate}
 
-\begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
+\begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=3pt]
   \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance and customer preferences while balancing usability, scalability, and real-time needs, and what are the advantages and disadvantages of alternative dashboard architectures?
-        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
+        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=3pt]
           \item How can the effectiveness of such a system in shipping operations be objectively evaluated, which KPIs should be used, and what are the advantages and disadvantages of different evaluation methods?
         \end{enumerate}
 \end{enumerate}
@@ -312,16 +315,33 @@ This chapter therefore proceeds in two steps. First, it reviews general software
 
 \section{Software Architecture for API Integration}
 
-The core technical problem of this thesis is the integration of multiple heterogeneous carrier APIs into a single, unified application in a way that remains extensible when adding new carriers or changing existing ones. This problem is a specific instance of the broader topic of enterprise application integration and service-oriented architecture (SOA).
+The core technical problem of this thesis is the integration of multiple heterogeneous carrier APIs into a single, unified application in a way that remains extensible when adding new carriers or changing existing ones.
+This problem is a specific instance of the broader topic of enterprise application integration and service-oriented architecture (SOA).
 
 \subsection{Service-Oriented Architecture as Theoretical Foundation}
 
-Service-Oriented Architecture (SOA) has been developed as a paradigm for organizing distributed systems around loosely coupled services. Papazoglou describes SOA as a way of “organizing and utilizing distributed capabilities that may be under the control of different ownership domains,” emphasizing that it “captures the logical way of designing a software system to provide services to end-user applications or other services distributed over a network.” The key principle is loose coupling, achieved by a clear separation between service interfaces and service implementations.
-In an SOA-based design, an application does not directly depend on the internal details of another application. Instead, it interacts with well-defined service contracts. For the problem at hand, this translates to the idea that the Shopickup core system should not be tightly coupled to the internal details of DHL’s, GLS’s, or Austrian Post’s APIs. Instead, it should rely on a stable, domain-specific interface (e.g., “create shipment,” “track shipment,” “cancel shipment”), while carrier-specific logic is encapsulated in separate components behind these interfaces.
-A systematic literature review by Niknejad et al. confirms that SOA is particularly effective for integration of heterogeneous systems in enterprise environments. The review synthesizes 103 primary studies and concludes that SOA provides “adaptable integration and service reusability through modular architecture based on services,” and that it reduces complexity by “encapsulating applications and data sources in black boxes” and minimizing the amount of shared knowledge required between components. This is highly relevant for SMEs: they typically cannot afford large integration teams and therefore benefit from architectures that localize complexity and reduce coupling.
-In the context of Shopickup, SOA implies that:
+Let us first establish a theoretical foundation based on SOA principles. What better way to start than with a definition?
+While there is evidently no single agreed-upon definition of SOA \cite{niknejadUnderstandingServiceOrientedArchitecture2020}, for the purpose of introducing it we turn to the book of Juric et al., which provides a concise and practical definition:
 
-\begin{itemize}
+\begin{displayquote}
+  "In short, it is an Enterprise Architecture where applications are designed to provide coarse-grained services, which are consumed by Business Processes or other integration applications.
+  Service-Oriented Architecture is both a design concept and an architecture.
+  The design concept in SOA is about designing applications/systems that have well defined self-describing access interfaces, with the services being composed into business processes.
+  The architecture is about having simple mechanisms to use these access-interfaces for Integration of the Enterprise."
+\end{displayquote}
+
+It is easy to see how this thesis's projects calls for use of SOA practices, specifically the architectural approach of simple mechanisms for using different access-interfaces.
+Papazoglou emphasizes that it “captures the logical way of designing a software system to provide services to end-user applications or other services distributed over a network” \cite{papazoglouServiceOrientedArchitectures2007}.
+The key principle is loose coupling, achieved by a clear separation between service interfaces and service implementations.
+In an SOA-based design, an application does not directly depend on the internal details of another application, instead it interacts with well-defined service contracts.
+For the problem at hand, this translates to the idea that our core system should not be tightly coupled to the internal details of DHL's, GLS's, or Austrian Post's APIs, as these are likely to change over time and differ significantly between providers anyway.
+Instead, it should rely on a stable, domain-specific interface (e.g., “create shipment,” “track shipment,” “cancel shipment”) outlining the capabilities required for users of our system, while carrier-specific logic is encapsulated in separate components behind these interfaces and abstractions.
+
+A systematic literature review by Niknejad et al. synthesizes 103 primary studies and concludes that much of the case studies and implementations of SOA show the positive impact of the before mentioned characteristics and that it has "proven to be a key paradigm in numerous industries" \cite{niknejadUnderstandingServiceOrientedArchitecture2020}.
+It also highlighted however, that the biggest problem with SOA adoption is the topic of governance and the lack of empirical studies on measuring its success, however these are out of scope for this thesis.
+Applying these principles to this project, we can outline the following high-level architectural guidelines:
+
+\begin{itemize}[itemsep=3pt]
   \item The core business logic (e.g., order management, user interface) interacts with a generic shipping service interface rather than individual carrier APIs.
   \item Each carrier integration is treated as a service that implements this generic interface.
   \item Adding or replacing a carrier should require only changes in the implementation of the corresponding service, not in the rest of the system.
@@ -331,24 +351,26 @@ This conceptual foundation is important, but it does not yet specify concrete im
 
 \subsection{Empirical Evidence of REST API Heterogeneity}
 
-In practice, most modern integrations are realized via RESTful web APIs over HTTP. A common assumption in industry is that “REST APIs are all similar,” implying that integration is straightforward once a generic HTTP client exists. However, empirical research strongly contradicts this assumption.
-Neumann et al. conducted an extensive empirical study of 522 public web service APIs from providers such as Facebook, eBay, Twitter, GitHub, and Dropbox to understand how “RESTful” they really are and how consistent their designs are. Their findings are highly relevant for the design of a multi-carrier API layer:
+In practice, most modern integrations are realized via RESTful web APIs over HTTP.
+A common assumption in industry is that REST APIs are similar, implying that integration should be straightforward across different providers.
+However, this is not necessarily the truth in most cases.
+Neumann et al. concluded through an extensive empirical study of 522 public web service APIs that there is “high diversity in services, including differences in adherence to best practices, with only 0.8\% of services strictly complying with all REST principles.” \cite{neumannAnalysisPublicREST2021} and that even among “REST” APIs, there is only limited compliance to strict REST constraints.
+In other words, there is no real homogeneity at the API level—each provider does things slightly differently.
+One very common example many developers encounter day by day is for example the variety of authentication methods or the lack of a variety of available REST methods (GET, POST, PUT, DELETE, etc.) for operations that would logically map to them.
 
-\begin{itemize}
-  \item 95.8\% of the analyzed APIs claim to be REST or REST-like, yet actual implementations differ significantly.
-  \item 87.8\% use resource-oriented URIs (e.g., `/shipments/{id}`), but 12.2\% still expose RPC-style endpoints (e.g., `/createShipment`).
-  \item Response formats vary widely: although JSON is dominant, XML and mixed or non-standard structures are still common.
-  \item Authentication mechanisms differ (API keys, OAuth variants, custom headers), as do error reporting formats and rate-limiting strategies.
-\end{itemize}
-
-Neumann et al. conclude that there is “high diversity in services, including differences in adherence to best practices,” and that even among “REST” APIs, there is only limited compliance to strict REST constraints. In other words, there is no real homogeneity at the API level—each provider does things slightly differently.
-Translating this to the parcel-shipping context: even if DHL, GLS, Austrian Post, and others expose “REST” APIs, their URL structures, authentication, request bodies, responses, and error handling differ in non-trivial ways. A naive point-to-point design that integrates each carrier directly into the core application will inevitably accumulate a large amount of carrier-specific branching logic, making the system brittle and hard to maintain.
-The empirical heterogeneity demonstrated by Neumann et al. thus provides a strong justification for an explicit abstraction and normalization layer in Shopickup, rather than relying on ad-hoc HTTP calls scattered throughout the codebase.
+Translating this to the parcel-shipping context, even if DHL, GLS, Austrian Post, and others expose “REST” APIs, their URL structures, authentication, request bodies, responses, and error handling differ in non-trivial ways.
+A naive point-to-point design that integrates each carrier directly into the core application will inevitably accumulate a large amount of carrier-specific branching logic, making the system brittle and hard to maintain.
+The empirical heterogeneity demonstrated by Neumann et al. thus again provides a strong justification for an explicit abstraction and normalization layer aligning with SOA guidelines, rather than relying on ad-hoc HTTP calls scattered throughout the codebase.
 
 \subsection{Adapter Pattern for Carrier Abstraction}
 
-The Adapter pattern is a classical design pattern introduced by Gamma et al. to allow cooperation between otherwise incompatible components by wrapping one interface into another. More recent work by IJAIDR formally examines the Adapter pattern and its use in object-oriented interoperability, distinguishing between class adapters (inheritance-based) and object adapters (composition-based). For integration scenarios, the object adapter variant is generally preferred, as it avoids tight inheritance couplings and is easier to extend.
-In the context of multi-carrier shipping, an object adapter approach would define a carrier-agnostic interface for all operations required by Shopickup, for example:
+The challenge of integrating heterogeneous systems with incompatible interfaces is not new to software engineering.
+The Adapter pattern is a well-established structural design pattern introduced in the foundational work “Design Patterns: Elements of Reusable Object-Oriented Software” by Gamma et al. all the way back in 1994 \cite{gammaDesignPatternsElements1994}.
+It works by introducing an intermediary adapter that implements a target interface (the one the client expects) while internally delegating to an adaptee (the existing component with an incompatible interface).
+
+This pattern has two primary implementation variants, one commonly referred to as Class Adapter, which is inheritance based, and the other as Object Adapter, which is composition based.
+In the context of this project, the latter one is more appropriate, as we are dealing with external carrier APIs with no benefit of inheritance.
+The following is a simplified illustration of how the Adapter pattern can be applied to the multi-carrier shipping integration problem:
 
 \begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:dispatch]
 interface CarrierAdapter {
@@ -368,15 +390,15 @@ class AustrianPostAdapter implements CarrierAdapter { ... }
 
 Each adapter is responsible for:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item Translating the generic Shopickup domain model into the carrier-specific request model (e.g., mapping address fields, parcel dimensions, and service options).
-  \item Calling the carrier’s API, including managing authentication, endpoints, and error conditions.
-  \item Translating the carrier’s response into a normalized internal representation suitable for downstream processing and analytics.
+  \item Calling the carrier's API, including managing authentication, endpoints, and error conditions.
+  \item Translating the carrier's response into a normalized internal representation suitable for downstream processing and analytics.
 \end{itemize}
 
 This pattern has several benefits, which align closely with the quality attributes targeted by this thesis:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item Encapsulation of change: When a carrier changes their API (e.g., URL, auth method, required fields), only the corresponding adapter needs modification, not the rest of the system.
   \item Extensibility: Adding a new carrier requires implementing a new `CarrierAdapter` without altering existing adapters or the core logic, directly supporting the Open/Closed Principle.
   \item Testability: Each adapter can be unit-tested in isolation with mock carrier APIs.
@@ -388,7 +410,7 @@ The Adapter pattern therefore provides a concrete, implementation-level mechanis
 
 While the Adapter pattern addresses the structural coupling problem at the code level, it does not by itself solve several cross-cutting concerns that inevitably arise in a multi-carrier context:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item Authentication and authorization of external clients
   \item Rate limiting and throttling (e.g., to respect carrier rate limits)
   \item Central logging and monitoring of requests
@@ -396,52 +418,62 @@ While the Adapter pattern addresses the structural coupling problem at the code 
   \item Caching of frequently requested data (e.g., tracking information)
 \end{itemize}
 
-In microservice and distributed architectures, these concerns are commonly handled using an API Gateway. Ochuba et al. present a systematic review of API Gateway patterns for scalable and secure microservices architectures, identifying a number of roles and patterns an API Gateway typically plays. These include:
+In microservice and distributed architectures, these concerns are commonly handled using an API Gateway as an extra intermediary layer.
+Ochuba et al. have written an extensive review on API Gateway patterns \cite{ochubaSystematicReviewAPI2021} where they first argue that with the rise of SOA and microservices, and that API Gateways have become a foundational component in modern scalable, secure systems, particularly when integrating multiple backend services.
 
-\begin{itemize}
-  \item Proxy pattern: Acting as a single entry point, routing client requests to appropriate backend services.
-  \item Adapter pattern: Transforming protocols and payloads to accommodate legacy or heterogeneous services.
-  \item Aggregator pattern: Combining responses from multiple services into a single response (useful, for example, for rate-shopping across multiple carriers).
-  \item Security and policy enforcement patterns: Such as centralized authentication, token exchange, and rate limiting.
-\end{itemize}
+\begin{displayquote}{}
+  "As enterprises increasingly adopt service-oriented designs, the need for robust intermediary layers that can handle diverse client protocols and varied backend requirements has become essential.
+  In this context, API gateways not only provide a unified interface but also act as enforcement points for both technical and business logic" \parencite{ochubaSystematicReviewAPI2021}
+\end{displayquote}
 
-Ochuba et al. conclude that API Gateways have become a foundational component in modern scalable, secure, and resilient distributed systems, particularly when integrating multiple backend services.
-Applied to Shopickup, an API Gateway would:
+They also identified a number of roles and patterns an API Gateway typically plays such as Aggregator, Proxy, Adapter for roles and patterns such as Edge Caching, which could be very relevant for some functionalities of our use case \cite{ochubaSystematicReviewAPI2021}.
+Applied to Shopickup, an API Gateway would serve the following purposes:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item Expose a single REST API towards the e-commerce frontend (and potentially other clients such as ERP systems), with stable endpoints like `POST /shipments`, `GET /shipments/{id}`, and `GET /shipments/{id}/tracking`.
   \item Internally, route requests to the appropriate carrier adapter service based on parameters such as the selected carrier, destination country, or configured routing rules.
-  \item Provide centralized rate limiting per carrier (e.g., to avoid exceeding DHL’s API quota).
+  \item Provide centralized rate limiting per carrier (e.g., to avoid exceeding DHL's API quota).
   \item Apply caching for certain idempotent operations, such as repeated tracking queries within a short time window.
   \item Ensure consistent logging and monitoring across all carrier integrations.
 \end{itemize}
 
-By combining the Adapter pattern at the service level with an API Gateway at the edge, Shopickup can offer a single, coherent interface to clients while encapsulating all carrier-specific complexity in backend modules. This architectural combination directly supports the goal of building an extensible, maintainable multi-carrier integration layer.
+By combining the Adapter pattern at the service level with an API Gateway at the edge, the project could offer a single, coherent interface to clients while encapsulating all carrier-specific complexity in backend modules.
+This architectural combination directly supports the goal of building an extensible, maintainable multi-carrier integration layer.
 
 \subsection{Extensibility as a Measurable Architectural Quality}
 
-Extensibility is not only a design intention but can be treated as a measurable quality attribute. Work by the Software Engineering Institute (SEI) at CMU discusses extensibility as a specific architectural concern and outlines how extension points and extension strategies should be identified and evaluated. In parallel, Petrillo et al. review software architecture metrics and derive a number of metrics relevant for SOA and service-based systems, such as coupling, cohesion, and service granularity.
-In the SEI view, a system is extensible if new functionalities can be added with localized changes and without degrading existing quality attributes. This involves:
+Extensibility has been mentioned multiple times as a key design goal for this thesis, so it is worth discussing it in more detail, as it is not only a design intention but can be treated as a measurable quality attribute.
+The technical report by the Software Engineering Institute (SEI) at CMU discusses extensibility as a specific architectural concern and outlines how extension points and extension strategies should be identified and evaluated.
+In the following table I will present their view on what a system's extensibility can be assessed based on and how these criteria map to the thesis domain of multi-carrier shipping integration.
 
-\begin{itemize}
-  \item Defining clear extension points (e.g., the `CarrierAdapter` interface and adapter registration in the gateway).
-  \item Choosing an appropriate extension strategy, such as packaging each carrier as a separate module or microservice.
-  \item Ensuring extension components can be tested independently.
-  \item Minimizing the need for changes in existing modules when extensions are added.
-\end{itemize}
+\begin{table}
+  \centering
+  \begin{tabular}{@{}p{8cm}p{8cm}@{}}
+    \toprule
+    \textbf{Criterion}                                          & \textbf{Thesis domain example}                                                                            \\
+    \midrule
+    Appropriateness of extension points                         &
+    The \texttt{CarrierAdapter} interface (create/track/cancel) and its method signatures cover the majority of required carrier behaviors and potential extension options. \\[6pt]
+    Degree of encapsulation and coupling                        &
+    Can adapters be added/removed without touching core business logic? Evaluates whether carrier-specific code is fully localized to adapter modules.                      \\[6pt]
+    Cohesion of extension mechanisms                            &
+    Adapter implementations contain only carrier-specific responsibilities (mapping, auth, error handling) and avoid leaking cross-cutting concerns.                        \\[6pt]
+    Extension lifecycle: performance, testing, deployment, etc. &
+    Ease of unit/integration testing of adapters in isolation; expected performance impact; deployment/update workflow for individual adapters.                             \\
+    \bottomrule
+  \end{tabular}
+  \caption{Extensibility evaluation criteria as defined by SEI and how they map to the thesis domain}
+\end{table}
 
-Petrillo et al. highlight that low coupling and high cohesion are essential for extensible architectures: services should depend on each other as little as possible, and each service should implement a focused, coherent set of responsibilities. In the case of Shopickup, a well-structured architecture would ensure that:
-
-\begin{itemize}
-  \item The core shipping logic depends only on the abstract carrier interface, not on any concrete carrier implementation.
-  \item Each carrier adapter is cohesive (responsible only for that carrier's integration) and loosely coupled to others (no adapter knows about any other carrier).
-\end{itemize}
-
-These theoretical and metric-based perspectives support using extensibility, coupling, and cohesion as criteria when comparing different architectural options for the Shopickup integration layer.
+In parallel, Petrillo et al. have done a literature review of 56 studies, showing which metrics are most commonly used by researchers.
+They found that coupling was one of the most frequently measured metrics and highlighted that generally low coupling and high cohesion are essential for extensible architectures. \cite{coulinSoftwareArchitectureMetrics2019}
+Moreover, of these 56 papers, 6 had extensibility as their main focus, showing that it is an actively researched topic, especially with the rise of agile development practices and SOAs.
+These theoretical and metric-based perspectives support using extensibility, coupling, and cohesion as criteria when comparing different architectural options and could be used later in the evaluation chapter to assess the chosen design.
 
 \section{Architectural Styles for Multi-Carrier Integration}
 
-Based on the literature and patterns described above, several architectural styles can be considered for implementing a multi-carrier integration layer:
+Based on the literature and the guiding principles discussed above, several architectural styles can be considered for implementing a multi-carrier integration layer.
+The following candidates are neither exhaustive of all possible options, nor are some of them seriously considered for implementation, but they still serve as useful points of comparison to understand trade-offs.
 
 \begin{enumerate}[label=\arabic*., left=0pt, itemsep=3pt]
   \item Point-to-point integration
@@ -452,8 +484,9 @@ Based on the literature and patterns described above, several architectural styl
 \end{enumerate}
 
 The following subsections describe each of these in turn, discuss their advantages and disadvantages, and relate them to the goals of this thesis.
-2.2.1 Point-to-Point Integration
-In a point-to-point architecture, the application establishes direct connections to each external system. For Shopickup, this would mean that the backend directly invokes the DHL, GLS, Austrian Post, etc. APIs wherever shipping functionality is needed, often with branching logic such as:
+
+\subsection{Point-to-Point Integration}
+In a point-to-point architecture, the application establishes direct connections to each external system. For the thesis project, this would mean that the backend directly invokes the DHL, GLS, Austrian Post, etc. APIs wherever shipping functionality is needed, often with branching logic such as:
 
 \begin{lstlisting}[language=Python,caption={Carrier dispatch example},label=lst:dispatch]
 if carrier == "DHL": call_dhl_api(...)
@@ -461,118 +494,107 @@ elif carrier == "GLS": call_gls_api(...)
 ...
 \end{lstlisting}
 
-This approach is simple and often used in early-stage prototypes because it has a low upfront cost: no additional infrastructure or architectural components are needed, and integrating the first one or two carriers can be done quickly.
-However, enterprise integration literature consistently identifies point-to-point integration as problematic at scale. Gadde et al., discussing enterprise integration optimization, note that proliferating point-to-point connections leads to “significant challenges” for architecture governance and maintainability. Every new integration increases the number of dependencies and potential failure points, and changes in one system can ripple unpredictably through others.
-In the context of Shopickup, the main disadvantages are:
+This approach is simple and often used in early-stage prototypes because it has a low upfront cost and development time, by having no additional infrastructure or architectural components.
+Actually, this approach was initially used first in the project, up until two carriers were integrated, to quickly validate and develop other core functionalities, which I will discuss in future chapters.
+Clearly, this is not very scalable and like I have also experienced in my own small project.
+Literature also consistently identifies point-to-point integration as problematic at scale, even describing it as an expensive approach and bad extreme on the scale of integration \cite{gulledgeWhatIntegration2006}.
+Every new integration increases the number of dependencies and potential failure points, and changes in one system can ripple unpredictably through others.
+In the context of Shopickup, the main disadvantages of point-to-point integration, as experienced firsthand and reported in literature, include:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item High coupling: The core application must “know” about the details of every carrier API, violating SOA principles and making change localized only with difficulty.
   \item Poor extensibility: Adding a new carrier involves editing central business logic and testing the entire application, not just an isolated module.
   \item Limited reuse: Any normalization or error-handling logic gets duplicated across multiple code paths.
-  \item Lack of centralized concerns: There is no central place to enforce rate limiting, authentication, or logging across all carriers.
 \end{itemize}
 
 For these reasons, point-to-point integration can serve as a baseline or initial stage but is not a suitable architecture for the extensible multi-carrier platform targeted in this thesis.
 
 \subsection{Hub-and-Spoke (Central Broker)}
 
-A hub-and-spoke architecture introduces a dedicated broker component that sits between the core application and the external systems. The core application communicates only with the broker using a canonical data format. The broker then routes and transforms messages to and from individual spokes, which are the carrier adapters.
-In Shopickup’s context, the broker would:
+A hub-and-spoke architecture introduces a dedicated broker component that sits between the core application and the external systems.
+The core application communicates only with the broker using a canonical data format. The broker then routes and transforms messages to and from individual spokes, which are the carrier adapters.
+In the projects context, the broker would:
 
-\begin{itemize}
-  \item Accept generic shipping requests such as `CreateShipment(order, carrier)` in a normalized format.
+\begin{enumerate}[label=\arabic*., left=0pt, itemsep=3pt]
+  \item Accept generic shipping requests such as \verb|CreateShipment(order, carrier)| in a normalized format.
   \item Select the appropriate carrier adapter based on the requested carrier or routing logic.
   \item Transform the canonical request into the carrier's specific format and invoke the carrier API.
   \item Transform the carrier's response back into the canonical format before returning it to the core application.
-\end{itemize}
+\end{enumerate}
 
-This architecture is closer to SOA principles and facilitates the use of Adapter and normalization patterns. It brings several benefits:
+This architecture is closer to SOA principles and facilitates the use of Adapter and normalization patterns.
+It brings several benefits:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item The core application is decoupled from carrier details and depends only on the broker's canonical interface.
   \item All data transformation is centralized in the broker, improving consistency.
   \item It becomes easier to add logging, basic rate limiting, or validation in one place.
 \end{itemize}
 
-However, literature on integration middleware also notes disadvantages. The broker can become a single point of failure and a performance bottleneck, especially if all traffic is routed synchronously through it. Scaling and evolving the broker itself becomes a critical and non-trivial task.
+However, this approach also has drawbacks.
+The broker can become a single point of failure and a performance bottleneck, especially if all traffic is routed synchronously through it, scaling is complex.
 In practice, hub-and-spoke architectures are often a stepping stone towards more distributed patterns such as service buses or microservices with API gateways.
+When contemplating the architecture for the system, after seeing the limitations of point-to-point integration, this pattern felt like a natural next step.
 
 \subsection{Message-Oriented Service Bus}
 
-A more decoupled architecture uses a message-oriented middleware or service bus, where components communicate via asynchronous messages, often in a publish–subscribe model. Berna-Martinez et al. describe such architectures in the context of robotics, where heterogeneous sensors and devices need to be integrated; they propose a service-oriented, multi-layer structure where messages are used to decouple components and support varying update rates and formats. Similar ideas are widely applied in enterprise integration and IoT middleware.
-Applied to Shopickup, a service bus architecture would work as follows:
+A more decoupled architecture uses a message-oriented middleware or service bus, where components communicate via asynchronous messages, often in a publish-subscribe model via message queues or topics.
+This approach is widely applied in enterprise integration and IoT middleware, where the asynchronous nature of communication is not a limitation.
+In our practical example, a service bus architecture might work as follows:
 
-\begin{itemize}
-  \item The core application publishes a CreateShipment message to a queue or topic, containing the order data and the selected carrier.
+\begin{itemize}[itemsep=3pt]
+  \item The core application publishes a \verb|CreateShipment| message to a queue or topic, containing the order data and the selected carrier.
   \item One or more carrier adapter services subscribe to these messages. Each adapter handles messages for its specific carrier, performing the necessary API calls and transformations.
-  \item Once a label is created, the adapter publishes a ShipmentCreated event, which the core application or other services consume to update their state or trigger notifications.
+  \item Once a label is created, the adapter publishes a \verb|ShipmentCreated| event, which the core application or other services consume to update their state or trigger notifications.
 \end{itemize}
 
-This approach has strong advantages:
-
-\begin{itemize}
-  \item Components are loosely coupled: the publisher of a message does not need to know which services will consume it.
-  \item The system is inherently more resilient: if a carrier API is temporarily unavailable, messages can wait in the queue and be processed later, rather than failing the entire request flow.
-  \item Throughput can be scaled by adding more consumer instances for heavy carriers.
-\end{itemize}
-
+This approach has obvious advantages in terms of loose coupling, scalability, resilience and throughput.
 The disadvantages are mostly related to complexity:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item System behavior becomes asynchronous and eventually consistent; labels may not be available immediately after the order is placed.
   \item Debugging and tracing flows across multiple queues and services is more complex than direct synchronous invocation.
-  \item Operating and securing a message bus requires non-trivial operational expertise.
+  \item Operating and securing a message bus comes with its own operational challenges and complexities.
 \end{itemize}
 
-Given the scope of a bachelor thesis and the requirement for near-real-time feedback in typical e-commerce workflows (e.g., showing the label immediately on order confirmation), a fully asynchronous service bus architecture is likely too heavy as a primary pattern. However, specific parts of the system, such as background tracking updates, could still benefit from asynchronous messaging in future work.
+Given the scope of a bachelor thesis and the requirement for near-real-time feedback in this e-commerce workflow (e.g., changing order states instantly), a fully asynchronous service bus architecture is likely too heavy and unnecessarily complex for our purposes and is more suitable on the higher level on a general e-commerce platform architecture, such as in Baraka and Al-Ashqar's paper \cite{barakaBuildingSOABasedModel2013}.
+However, other specific parts of the system, such as background tracking updates, scheduled tasks such as pickup location synchronization, or analytics data processing, could benefit from message-oriented designs in future iterations.
 
-\subsection{PI Gateway-Centric Multi-Carrier Architecture}
+\subsection{API Gateway-Centric Multi-Carrier Architecture}
 
-The API Gateway pattern, as surveyed by Ochuba et al., offers a pragmatic compromise between the simplicity of direct integration and the flexibility and extensibility of more advanced service-oriented approaches. It is particularly well-suited for systems that expose a unified API to clients while internally delegating work to multiple backend services.
-In an API gateway-centric architecture for Shopickup:
+The API Gateway pattern offers a pragmatic compromise between the simplicity of direct integration and the flexibility and extensibility of more advanced service-oriented approaches.
+It is particularly well-suited for systems that expose a unified API to clients while internally delegating work to multiple backend services.
+It would work as follows in our context:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item The gateway exposes a stable REST API to the frontend and other consumers.
   \item Each carrier integration is implemented as a separate service (Adapter) that adheres to a shared internal interface.
   \item The gateway routes requests to the appropriate adapter based on routing rules (e.g., selected carrier, destination).
   \item The gateway can also perform cross-cutting tasks such as authentication, rate limiting, logging, and caching.
 \end{itemize}
 
-Ochuba et al. systematize gateway responsibilities into patterns such as Proxy, Adapter, and Aggregator, and emphasize that gateways are now a foundational element of scalable microservice architectures. In particular, their review highlights that API Gateways are effective in:
-
-\begin{itemize}
-  \item Isolating external clients from internal changes.
-  \item Providing a single control point for security and observability.
-  \item Enabling a combination of synchronous and asynchronous backend interactions.
-\end{itemize}
-
-For Shopickup, this architecture has several advantages relevant to the research questions:
-
-\begin{itemize}
-  \item Extensibility (RQ1): New carriers can be added by implementing new adapter services and registering them with routing rules in the gateway. Existing clients continue to use the same API shape, aligning with SEI’s notion of extension points and localized changes.
-  \item Platform-agnostic operation (RQ1.1): The same gateway interface can be consumed by different e-commerce platforms (e.g., Shopify, WooCommerce) or internal tools, since the gateway remains agnostic to the upstream platform.
-  \item Operational clarity: Logging, metrics, and error handling are centralized at the gateway, simplifying monitoring and debugging.
-\end{itemize}
-
-Compared to hub-and-spoke, the gateway approach more naturally aligns with microservices and modern DevOps tooling, and commercial and open-source gateway solutions (e.g., Kong, NGINX, AWS API Gateway) are mature and well-supported. At the same time, it avoids some of the operational complexity of full event-driven microservice architectures.
+This architecture combines the benefits of the Adapter pattern with the centralized control of an API Gateway.
+Compared to hub-and-spoke, the gateway approach more naturally aligns with microservices and modern DevOps tooling, and commercial and open-source gateway solutions (e.g., Kong, NGINX) are mature and well-supported.
+At the same time, it avoids some of the operational complexity of full event-driven microservice architectures.
 
 \subsection{Event-Driven Microservices}
 
-The most advanced architecture considered in the literature combines an API Gateway with a fully event-driven microservice back end. In such systems, individual business capabilities—Orders, Shipping, Tracking, Notifications—are each implemented as independent services that communicate via events on a message bus (e.g., Kafka). A service mesh such as Istio may be used to manage service-to-service communication, security, and observability.
-The advantages of this style, as reported in multiple studies and industrial experience, include:
+The most advanced architecture considered in the literature combines an API Gateway with a fully event-driven microservice back end. In such systems, individual business capabilities—Orders, Shipping, Tracking, Notifications—are each implemented as independent services that communicate via events on a message bus (e.g., Kafka). 
+The advantages of this style include:
 
-\begin{itemize}
+\begin{itemize}[itemsep=3pt]
   \item High scalability and fault tolerance: each service can be scaled independently, and failures in one area (e.g., tracking updates) do not necessarily affect others.
   \item Fine-grained deployment and evolution: services can be updated and re-deployed independently.
-  \item Rich observability capabilities when combined with service meshes.
+  \item Fault tolerance and resilience: services can retry operations, handle backpressure, and recover from transient failures more gracefully.
 \end{itemize}
 
-However, systematic reviews of microservice systems also highlight the increased architectural complexity, the need for sophisticated monitoring and testing, and the challenge of managing eventual consistency across many services. These factors make full event-driven microservice architectures more appropriate for large organizations with substantial engineering resources (e.g., Amazon, Netflix, Uber) than for SME-oriented projects or bachelor thesis prototypes.
+However, systematic reviews of microservice systems also highlight the increased architectural complexity, the need for sophisticated monitoring and testing, and the challenge of managing eventual consistency across many services \cite{benaventeComparativeAnalysisMicroservices2022}. TODO: Check again
+These factors make full event-driven microservice architectures more appropriate for large organizations with substantial engineering resources (e.g., Amazon, Netflix, Uber) than for SME-oriented projects or bachelor thesis prototypes.
 For this thesis, event-driven microservices are therefore considered primarily as a reference point for future evolution rather than as the immediate target architecture.
 
 \subsection{Comparative Assessment and Architectural Choice}
 
-Synthesizing the literature above, the architectural options can be compared along the axes that matter for this thesis: extensibility, complexity, and fitness for the SME/Shopickup context.
+Synthesizing the above subsections, the architectural options can be compared along the axes that matter for this thesis: extensibility, complexity, and fitness for the SME/Shopickup context.
 
 \begin{table}[h]
   \centering
@@ -605,14 +627,192 @@ Synthesizing the literature above, the architectural options can be compared alo
   \caption{Comparative assessment of candidate architectures for Shopickup}
 \end{table}
 
-Given the project scope and target audience (SMEs), the API gateway–centric architecture combined with adapter-based carrier integrations is selected as the most suitable trade-off between extensibility and operational effort.
+Given the project scope and the desire for a balance between extensibility and operational effort, lightness, the API gateway-centric architecture combined with adapter-based carrier integrations is selected as the most suitable trade-off.
 
+\section{Preexisting Solutions and Papers in this Domain}
+As I have previously mentioned, there is a lack of academic literature directly addressing multi-carrier shipping integration at the API level.
+Most relevant conference paper I could find is by Lin et al. in 2010, in which they also first emphasize the gap in this research topic, then follow up by proposing a SOA guided, J2EE based framework for integrating shipping providers \cite{linResearchShippingECommerce2010}.
+While their work is conceptually aligned with the principles discussed earlier, especially regarding coupling and extensibility, as also mentioned by the authors themselves, their implementation is now somewhat dated.
+The industry has since largely moved towards lightweight RESTful APIs and microservice architectures, not to mention the replacement of J2EE and XML-based web services with more modern frameworks.
+Therefore, while Lin et al.'s work provides a useful historical perspective and validation of SOA principles and wrapper patterns, even message brokers, it does not directly inform the design of a contemporary system like Shopickup.
 
-\section{Preexisting Solutions}
-It is worth mentioning that some similar commercial and even open-source solutions do exist, however they are often fully fledged applications with limited extensibility, such as karrio \cite{KarrioapiKarrio2026}, or are indeed lightweight, but limited to specific vendors or use-cases, such as ShippingProAPICollection \cite{kevinvenclovasKevinvenclovasShippingProAPICollection2025}.
+Most other existing literature in the domain are more general and aim to theorize a broader e-commerce architecture.
+These can still to some extent be relevant, as they often highlight the same challenges and propose similar SOA-based solutions, or may even address logistics and shipping as part of a larger system.
+Good examples include the following works:
 
-\section{Evaluation and Analytics of Shipping Monitoring Systems}
+\begin{itemize}[itemsep=3pt]
+  \item The paper of Bhakar and Al-Ashqar, in which they propose an enterprise service bus the central integration layer for their purchase order management system, with a separate shipping service module \cite{barakaBuildingSOABasedModel2013}.
+  \item Xiong-yi similarly proposes SOA as the better alternative for e-commerce systems and highlights the heterogeneity of external systems, as we have also seen before in a more general context with APIs \cite{xiong-yiResearchApplicationSOA2009}.
+  \item Li's paper confirms that the adapter method is now a standard approach for encapsulating legacy service interfaces in modern SOA e-commerce platforms \cite{liDesignB2BEcommerce2019}.
+\end{itemize}
 
+It is also worth mentioning that some similar commercial and even open-source solutions do exist to what we are trying to achieve, however they are often fully fledged applications with limited extensibility, such as karrio \cite{KarrioapiKarrio2026}, or are indeed lightweight, but limited to specific vendors or use-cases and follow more of a point-to-point approach, such as ShippingProAPICollection \cite{kevinvenclovasKevinvenclovasShippingProAPICollection2025}.
+
+\section{Design, Evaluation and Analytics of Shipping Monitoring Systems}
+The second half of my literature review focuses on the more usability focused aspect of the application with the following two research questions in mind:
+
+\begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=3pt]
+  \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance and customer preferences while balancing usability, scalability, and real-time needs, and what are the advantages and disadvantages of alternative dashboard architectures?
+        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=3pt]
+          \item How can the effectiveness of such a system in shipping operations be objectively evaluated, which KPIs should be used, and what are the advantages and disadvantages of different evaluation methods?
+        \end{enumerate}
+\end{enumerate}
+
+Analytical dashboards and monitoring systems are widely used in various domains, including e-commerce logistics.
+However, it is not immediately clear how to best design and evaluate such a system, that is both efficient and provides real value to merchants.
+In cases like this, we can not just simply measure system performance in just technical terms, such as the Google SRE team's Four Golden Signals \cite{GoogleSREMonitoring} (latency, traffic, errors, saturation), but also need to consider user-centric and domain specific metrics as well.
+The following subsections explore relevant literature on dashboard design architectures, KPIs and evaluation methods in the context of shipping monitoring systems.
+
+\subsection{Beyond Technical Metrics: Understanding Monitoring System Effectiveness}
+Technical infrastructure metrics—uptime percentages, query response latencies, and system throughput—represent necessary conditions for effective monitoring systems but are not sufficient indicators of value. A shipping monitoring dashboard with 99.95\% uptime and sub-second query response means little if merchants cannot understand the information presented or if the system fails to trigger alerts when decisions are needed. Thus, evaluation of monitoring systems must address two interconnected layers: technical performance that enables service delivery, and business impact that determines whether the system actually improves operational decisions and merchant outcomes.
+
+Infrastructure metrics serve as enablers of business value rather than measures of value themselves. The Four Golden Signals framework provides useful infrastructure monitoring patterns, but requires contextualization for shipping domains. Latency matters only when it affects decision quality—a 500-millisecond query response time acceptable for a merchant analyzing last month's trend analysis may be unacceptable for a system alerting an SLA breach while a shipment is still in transit. Traffic and throughput indicate system load but reveal nothing about whether the dashboard drives better merchant decisions. Error rates measure system reliability, critical for alerts (SLA breach detection must never fail silently) but less critical for exploratory queries where merchants can retry. Saturation indicates when scaling is needed but not whether the system generates merchant value.
+
+This distinction leads to a tiered performance strategy: critical-path metrics (SLA alerts, inventory shortage warnings) justify 99.95\% uptime targets and sub-2-second latency; operational dashboards (daily status monitoring) reasonably tolerate 99.9\% uptime and 5-second latency; analytical queries (trend analysis, forecasting) accept 99.5\% uptime and 30-second latencies. Effective evaluation contexts performance targets by decision-making criticality rather than pursuing universal high-performance targets.
+
+\subsection{Real-Time vs. Batch Analytics: Architectural Choice}
+A fundamental architectural decision in shipping monitoring systems is the choice between real-time and batch analytics approaches. This decision is not primarily technical but rather reflects what decision-making problems the system is designed to solve. Understanding this distinction is essential for evaluating which architectures provide value for specific merchant needs.
+
+\subsubsection{Operational Intelligence vs. Business Intelligence: Different Decision Horizons}
+Real-time analytics processes data continuously as events occur, enabling decisions in motion while situations are still unfolding. When a shipment status update arrives from a carrier’s GPS system, real-time systems can immediately: (1) detect that the shipment is trending late, (2) alert the merchant, (3) present suggested actions (contact customer, offer discount, authorize expedited redelivery). This rapid response window—often measured in minutes rather than hours—enables operational intelligence: acting on what is happening right now.
+
+Batch analytics processes accumulated data in scheduled bulk operations (typically nightly), enabling comprehensive analysis of patterns. A batch job running at midnight might analyze all shipments from the previous day, identifying patterns: “Tuesday deliveries are 12\% more likely to be late than Monday deliveries; Carrier X has 8\% worse on-time performance in rainy conditions.” This analysis feeds strategic decisions made the next day or week: should we shift Tuesday volume to faster carriers? Should we allocate extra buffers for rainy-forecast days? This represents business intelligence: learning from historical patterns to make better future decisions.
+
+These two intelligence types serve different decision problems and cannot easily substitute for each other. Operational intelligence requires sub-minute latency (decisions expire quickly), handles immediate tactical responses (contact customer now), and tolerates less comprehensive analysis (only the most critical metrics matter). Business intelligence tolerates hour-to-day latency (decisions apply to future decisions, not current situations), requires deep historical aggregation (looking for patterns across months), and prioritizes analytical completeness over speed.
+
+The architectural implications are profound. Real-time systems (streaming ETL with event processing engines) prioritize latency by accepting operational complexity. Data flows through Apache Kafka or AWS Kinesis pipelines where events trigger immediate responses. A shipment delay triggers an alert within seconds. However, streaming systems are operationally complex (managing event brokers, handling backpressure, ensuring exactly-once semantics), expensive (maintaining 24/7 streaming infrastructure), and poorly suited for complex historical queries (aggregating billions of events to answer “What was the correlation between weather and delivery failures last quarter?”).
+
+Batch systems (traditional ETL to data warehouse) prioritize analytical comprehensiveness by accepting latency. Data is extracted from operational systems, transformed through staged pipelines, and loaded into dimensional data warehouses where complex SQL queries execute efficiently. Historical data is preserved for deep analysis. However, data arrives with significant latency (typically 4-24 hours after events occur), limiting responsiveness to immediate disruptions. A batch system discovering an inventory stockout the next morning is too late when the merchant needed to respond within 2 hours.
+
+\subsubsection{Decision Windows and Latency Requirements: The Critical Link}
+Latency requirements are not continuous spectrums but discrete decision-windows. If a merchant has a 4-hour decision window (time to take corrective action before a problem escalates), then 1-hour latency and 3-hour latency are functionally equivalent—both provide adequate warning. However, 6-hour latency fails completely because action becomes impossible. Thus, architectural choices should be driven by decision-window requirements, not by philosophical preferences for “always real-time”.
+
+Decision problems and corresponding latency requirements drive architectural choices. Latency requirements are not continuous but represent discrete decision windows.
+
+Research on supply chain disruptions confirms the business case for real-time systems: companies that detect and respond to disruptions within 4 hours achieve 40\% lower disruption costs than companies responding within 24 hours. This quantified impact justifies infrastructure investment in real-time systems for critical alerts, while batch systems remain cost-effective for non-critical strategic analysis.
+
+\subsubsection{Concrete Shipping Use Cases Illustrating the Distinction}
+A practical example illuminates why both approaches are necessary in shipping monitoring:
+
+{Real-time use case (Operational Intelligence)}: Inventory stockout risk. When a customer orders the last unit of a fast-moving SKU and the reorder point is not met, the system must alert the merchant within seconds, not hours, enabling them to: (1) contact supplier for emergency replenishment, (2) offer customer expedited shipping if partial fulfillment, or (3) cancel order and offer alternative product. A batch system discovering the stockout the next morning is too late—the customer has already left a negative review or cancelled the order entirely. This requires real-time streaming: inventory events → immediate processing → alert within 60 seconds.
+
+{Batch use case (Business Intelligence)}: Demand forecasting. Analyzing seasonal patterns, day-of-week effects, and product correlations requires historical data aggregation across months. A batch job analyzing the previous 12 months of order data can identify that “Black Friday creates 8x spike in orders for electronics; we should pre-position inventory accordingly.” This analysis is computationally intensive (requires sophisticated statistical models) and only needs to run weekly or monthly. Real-time processing cannot reasonably maintain complex ML models that process millions of historical records every time a new order arrives. The value emerges from patterns, not from processing speed.
+
+{Hybrid use case (Both types needed)}: SLA compliance monitoring. The real-time layer monitors shipment ETAs against promised delivery dates and alerts when trending-late, enabling immediate customer communication. Simultaneously, the batch layer analyzes historical on-time performance by carrier/region/product, identifying systemic improvements needed for strategic carrier selection and capacity planning.
+
+\subsection{Hybrid Architectures: Combining Real-Time and Batch Analytics}
+Modern shipping monitoring systems increasingly employ hybrid architectures combining streaming and batch processing layers, each optimized for its purpose. This approach is increasingly formalized as the Change Data Capture (CDC)-First architecture pattern: capture all data changes from source systems (orders, shipments, inventory) via streaming CDC, then route streams to both operational and analytical destinations.
+
+\subsubsection{Hybrid Architecture Components}
+A reference architecture for shipping monitoring (applicable to platforms like Shopickup) contains four integrated layers:
+
+CDC/Streaming Ingestion Layer: Change Data Capture captures all order, inventory, and shipment status changes from source systems in real-time (sub-second latency). This creates an immutable event stream serving as the single source of truth. For example, when a shipment status changes from “In Transit” to “Out for Delivery”, this event is captured and published to the event stream immediately, ensuring all downstream systems process the same data from the same source.
+
+Real-Time (Speed Layer): Streaming processors (Apache Flink, Kafka Streams) consume events and compute operational metrics: current inventory levels by SKU by warehouse, shipments trending late, SLA breach predictions. Results stream to the operational dashboard via WebSockets enabling <2 second display updates. Alerts trigger automatically (SMS/email) when thresholds exceed defined bounds. For example, when a shipment enters the “Out for Delivery” state, a Flink job immediately checks: (1) is the current timestamp within the promised delivery window? (2) if not, calculate likely arrival time—will it miss? (3) if trending late, trigger alert. All computations complete within 60 seconds from event to alert delivery.
+
+Batch (Cold Layer): Nightly batch jobs consume accumulated events and compute comprehensive metrics: daily on-time delivery rate by carrier, cost analysis by region, damage rate analysis. Results load into a dimensional data warehouse enabling complex historical analysis and ML model training. These jobs run during off-peak hours (1-6 AM) when infrastructure is least utilized, reducing costs.
+
+Serving Layer: Operational dashboards connect to the real-time layer for live metrics (inventory levels update within seconds, SLA alerts trigger within minutes). Analytical dashboards connect to the data warehouse for historical analysis (merchants can drill down into previous weeks/months of data). Merchants see both—real-time alerts for immediate action, historical trends for strategic decisions.
+
+\subsubsection{Cost-Benefit of Hybrid Approaches}
+
+This hybrid approach incurs higher upfront infrastructure costs (maintaining two processing paths, operational complexity of event brokers, staffing expertise in both streaming and batch systems). However, it enables solving both operational and analytical problems, whereas choosing only real-time or only batch forces impossible compromises: real-time-only systems cannot economically support complex historical analysis; batch-only systems miss disruptive events until too late.
+
+Data streaming platforms like Estuary Flow exemplify this hybrid approach at scale: simultaneous sub-second streaming (for real-time alerts) and batch ETL (for historical analysis) in unified pipelines, with throughput of 7GB+/second in production environments. Similarly, Gartner's 2025 assessment affirms the hybrid direction: “Operational Intelligence that embeds analytics within business transactions, eliminating delays from separate ETL activities, can reduce governance efforts, time, and infrastructure costs compared to maintaining separate analytical systems.” This validates the CDC-First hybrid approach as industry direction.
+
+The business case emerges from reduced cost of inaction: if real-time alerts save even one major SLA breach per month (customer churn, reputational damage), the infrastructure investment is justified. If batch analytics enable even a 1-2\% improvement in carrier efficiency (cost per shipment), the investment pays for itself across large merchant bases.
+
+\subsection{Domain-Specific KPIs for Shipping Operations}
+With understanding of the real-time/batch distinction established, we now define domain-specific KPIs appropriate for merchant evaluation and decision-making. KPIs are organized into three tiers reflecting decision frequency and architectural requirements.
+
+\subsubsection{Operational KPIs: Real-Time Monitoring for Immediate Action}
+Operational KPIs appear on real-time dashboards and trigger automated alerts when thresholds breach. Merchants check these during operational crises or daily standard operations.
+
+Current Inventory Position by SKU by Warehouse: Live count of available units by product and location. When inventory drops to reorder point, system triggers alert and initiates purchase order. Example: “Shoppe SKU-4421 (Widget X) dropped to 85 units at Newark warehouse (reorder point: 100); purchase order initiated; arrival date: 3 days”. Alert latency requirement: <2 minutes from inventory depletion to merchant notification.
+
+Shipments Currently at SLA Risk: Number and list of shipments where current location/velocity indicates they will miss promised delivery date without intervention. Example: “14 shipments at risk. Most critical: Order \#ORD-892341 promised delivery Thursday 6 PM, currently in Memphis distribution, on track for Friday 2 PM delivery (8 hours late). Recommend: Contact customer now, offer \$5 discount + expedited reroute”. Alert latency: <5 minutes from SLA risk detection to merchant notification.
+
+Carrier Performance Today: Real-time on-time delivery percentage for each carrier today (versus yesterday, versus 30-day average). Example: “UPS: 87\% on-time today (versus 91\% daily avg); FedEx: 94\% (versus 92\% daily avg). UPS trending below normal—investigate”. Updates every hour as new delivery confirmations arrive.
+
+Warehouse Throughput (Orders Processed Per Hour): Real-time order processing rate per warehouse location. Anomalies indicate bottlenecks requiring immediate attention. Example: “Newark warehouse: 340 orders/hr (normal: 380); 12\% below target; investigate conveyor system”. Updates every 15 minutes.
+
+Open Exceptions/Alerts: Count of outstanding issues requiring merchant action (damaged goods in transit, customs delays, carrier missed pickup window). Example: “3 open exceptions: 1 damaged shipment for customer service response, 2 customs delays awaiting documentation”. Real-time updates as exceptions are created or resolved.
+
+\subsubsection{Tactical KPIs: Weekly Batch Monitoring for Operational Adjustment}
+Tactical KPIs provide weekly summaries revealing operational trends and guiding short-term adjustments to carrier mix, warehouse operations, or staffing. These naturally fit batch analytics computed nightly or weekly.
+
+Weekly On-Time Delivery Rate (OTDR) by Carrier: Percentage of shipments arriving on-time (within promised window) aggregated by carrier. Enables carrier selection adjustments for next week. Example: “Week of January 6: UPS 89\% OTDR, FedEx 93\%, DHL 84\%. Consider shifting volume from DHL to FedEx for next week”. Computation: aggregate across all shipments delivered in the week, compare delivery timestamp to promised date, calculate percentage.
+
+Fill Rate (Orders Completely Fulfilled First Attempt): Percentage of orders shipped complete without backorder or split shipment. Example: “Fill rate 96.2\% (target: >98\%). Root cause: 3 SKUs experiencing stockouts. Coordinating with procurement”. Indicates inventory planning effectiveness.
+
+Return Rate by Fulfillment Center: Percentage of orders returned for any reason (damaged in transit, picked incorrectly, customer dissatisfied). Proxy for fulfillment quality. Example: “Newark FC return rate 2.1\% (target: <1.5\%), Chicago FC 1.3\% (target: <1.5\%), Dallas FC 0.8\% (exceptional). Investigate Newark quality issues”. Batch computation: count returned orders by originating FC for the week.
+Cost per Order: Total shipping cost divided by order count. Includes carrier fees, packaging, handling. Example: “Week average: \$3.42 per order (target: <\$3.25). Cost increase driven by expedited shipments for SLA recovery (+\$0.08/order); non-expedited average \$3.30/order (within target)”. Enables cost control and price negotiation with carriers.
+
+Inventory Turnover Rate: Average time inventory sits before sale (measured in days). Indicates whether capital is efficiently deployed. Example: “Fast movers (electronics): 8 day turnover; Slow movers (seasonal): 45 day turnover. Recommend promotional push on slow movers”. Higher turnover reduces carrying costs and obsolescence risk.
+
+\subsubsection{Strategic KPIs: Batch Monthly/Quarterly Monitoring for Tactical Planning}
+Strategic KPIs provide quarterly or annual trend analysis feeding executive-level and multi-month strategic decisions. These require comprehensive historical data aggregation impossible in real-time systems.
+
+Quarterly OTDR Trend: On-time delivery percentage across all carriers/regions, tracked quarter-over-quarter. Indicates whether service quality is improving or degrading. Example: “Q4 2025: 93.2% OTDR versus Q4 2024: 91.1% OTDR (+2.1 percentage points improvement). Attributed to Q4 investments in regional distribution centers”. Justifies continued investment or identifies need for operational changes.
+
+Carrier Spend and Performance Matrix: Comparing carrier spend (cost) versus performance (OTDR, damage rate) to identify cost-benefit balance. Example: “UPS (\$450k spend): 91\% OTDR, 0.8\% damage rate (premium carrier, high service); Regional carrier (\$120k): 84\% OTDR, 2.1\% damage rate (budget option, lower service). Consider 10\% volume shift from UPS to regional for cost reduction”. Informs long-term contract negotiations.
+
+Year-over-Year Demand Seasonality: Historical order volume patterns by month, enabling inventory planning. Example: “Q4 peak: October 120\%, November 145\%, December 165\% of baseline; Q1 trough: January 85\%, February 78\%, March 82\%. Use to pre-position inventory in September-October”. Critical for capital planning and supplier lead time negotiation.
+
+Total Cost to Serve by Region: All logistics costs (shipping, warehousing, damage, returns) by geographic region. Identifies high-cost regions for efficiency projects. Example: “West Coast region: \$4.12 per order all-in cost; average Midwest: \$2.85/order. High density in West Coast causes inefficiency; consider consolidation distribution point”. Guides distribution network design decisions.
+
+\subsection{Evaluation Methods: From Technical Validation to Business Impact}
+Comprehensive evaluation of shipping monitoring systems requires multiple methodological approaches, each providing different insights into system value.
+
+\subsubsection{Technical Benchmarking Against Performance Targets}
+Define operational targets for real-time and batch processes, then continuously measure actual performance. Real-time operational latency targets should reflect decision windows:
+	•	SLA alert detection to merchant notification: <5 minutes (decision window is 2-6 hours)
+	•	Inventory stockout to alert: <2 minutes (decision window is 30 minutes to 2 hours)
+	•	Shipment delay detection to dashboard update: <1 minute
+Batch (throughput targets):
+	•	Nightly OTDR calculation: Complete by 6 AM, <6 hours processing time for 24 hours of data
+	•	Demand forecasting run: Weekly, complete by Monday AM before merchants make purchasing decisions
+	•	Weekly carrier performance analysis: Complete by Monday AM
+Performance measurement should use percentile-based metrics (p50 median, p95, p99) rather than averages. If 95\% of SLA alerts arrive within 3 minutes but 5\% take >30 minutes, the p95 metric correctly captures performance; average alone would be misleading.
+Tools like Prometheus/Grafana enable continuous collection and visualization.
+
+\subsubsection{Task Completion Testing: Validating Essential Workflows}
+Define representative tasks merchants need to complete, then measure completion rate, time, and error rate:
+Task completion rate: Can users successfully complete task using dashboard? (Target: >95\%)
+Time to task completion: How long does task take? (Benchmark: <3 minutes for routine tasks)
+Error rate: What percentage of task completions are incorrect? (Target: <5\% errors)
+Example task test:
+Task: “Identify which carrier had the lowest on-time delivery percentage last week and explain why you would or would not shift volume to a different carrier.”
+Completion rate: 92/100 merchants successfully completed task using dashboard (92\%)
+Time: Median 2.1 minutes (target: <3 min)
+Error rate: 6\% made calculation errors or drew incorrect conclusions (target: <5\%) — minor gap
+Results inform dashboard redesign: 8\% who could not complete indicates navigation issue or feature missing; 6\% error rate suggests visualization could be clearer.
+
+\subsubsection{Mixed-Methods Evaluation: Qualitative Discovery + Quantitative Measurement}
+Comprehensive evaluation combines qualitative and quantitative methods to capture both usability issues and adoption/satisfaction metrics.
+
+Qualitative Phase:
+	•	Conduct 12 structured interviews with merchants across different segments (SMB, mid-market, enterprise) and roles (operations, finance, executive). Document pain points, unmet needs, workarounds, feature requests.
+	•	Perform 5 think-aloud sessions where merchants complete standard dashboard tasks while verbalizing thoughts. Document confusion points and mental model gaps.
+	•	Deliverable: List of 20-30 usability issues categorized by severity.
+Quantitative Phase:
+	•	Deploy survey to 150+ merchants measuring: adoption (daily/weekly access), feature usage, satisfaction (NPS, SUS score), perceived impact
+	•	Task-based testing: 50 merchants complete 5 standard tasks; measure completion rate, time-on-task, error rate
+	•	Deliverable: Statistical summary of adoption, satisfaction, task completion with confidence intervals.
+Analytics Phase:
+	•	Enable dashboard telemetry tracking feature usage (button clicks, report generation, drill-down frequency)
+	•	Correlate usage with KPI outcomes: do merchants using predictive alerts show better SLA compliance?
+	•	Deliverable: Evidence of business impact, or identification that system is used but not driving outcomes
+
+\subsection{Summary: Design Principles for Effective Shipping Monitoring Systems}
+Effective shipping monitoring systems balance competing demands through deliberate architectural and evaluation choices:
+
+	1.	Real-Time and Batch Are Complementary: Real-time systems enable immediate operational response to disruptions; batch systems enable strategic planning based on historical patterns. Hybrid architectures combining both provide the most complete decision support.
+	2.	Decision Windows Drive Latency Requirements: Latency targets should not be universal “as fast as possible” but tied to merchant decision windows. Some decisions require sub-minute response; others tolerate day-long latency. Aligning latency to decision windows avoids over-engineering less-critical paths.
+	3.	Domain-Specific KPIs Over Generic Metrics: Shipping monitoring should emphasize operational, tactical, and strategic KPIs specific to logistics, not generic infrastructure metrics. Real-time tier captures inventory, SLA, and carrier status; batch tier captures cost and performance trends; strategic tier enables long-term planning.
+	4.	Evaluation Requires Multiple Methods: Technical benchmarking validates infrastructure performance; correlation analysis validates business impact; task testing validates usability. Each method reveals different information; comprehensive evaluation uses all three.
+  
+These principles, grounded in logistics operations research and system design best practices, provide a foundation for designing and evaluating shipping monitoring systems that generate genuine merchant value.
 
 \chapter{Methodology}
 \label{ch:methods}
