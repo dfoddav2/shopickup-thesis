@@ -1,33 +1,25 @@
-% shopickup-thesis.tex
-\documentclass[12pt,oneside]{report}
+% template for IMC Krems
+\documentclass{imc-inf}
+
+% --- Document metadata ---
+\title{Architecture for Extensible Multi-Carrier API Adapters in E-Commerce}
+\subtitle{From Integration to KPI-Based Evaluation}
+\thesistype{Bachelor Expos\'e} % or Bachelor Expos\'e / Bachelor Thesis
+\author{David Fodor BSc}
+\supervisor{Rubén Ruiz, Torrubiano, Prof. (FH) Dr.}
+\copyrightyear{2025}
+\submissiondate{\today}
+\keywords {API Integration, KPI, E-Commerce, Shipping} % add keywords here 
 
 % --- Encoding & language (adjust if using XeLaTeX/LuaLaTeX) ---
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{csquotes}
-
-% --- Page layout ---
-\usepackage[a4paper,left=3.5cm,right=2cm,top=3cm,bottom=3cm,headsep=1.5cm,footskip=1.5cm]{geometry}
-
-% Fonts: use Arial-like sans; switch document to sans family
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
-
-% Spacing utilities
-\usepackage{setspace}
-\onehalfspacing                    % main text 1.5 spaced
-\setlength{\parskip}{8pt}          % paragraph spacing after 8pt
-
-% Footnotes: 10pt, single spaced, hanging 0.75cm
-\usepackage[hang,flushmargin]{footmisc}
-\renewcommand{\footnotesize}{\fontsize{10}{12}\selectfont}
-\setlength{\footnotemargin}{0.75cm} % best-effort; footmisc provides hanging formatting
+% \usepackage[T1]{fontenc}
+% \usepackage[utf8]{inputenc}
+% \usepackage[english]{babel}
 
 % Captions: 11pt single spaced
-\usepackage{caption}
-\DeclareCaptionFont{capfont}{\fontsize{11}{13}\selectfont}
-\captionsetup{font=capfont,justification=justified}
+% \usepackage{caption}
+% \DeclareCaptionFont{capfont}{\fontsize{11}{13}\selectfont}
+% \captionsetup{font=capfont,justification=justified}
 
 % Graphics, math, tables
 \usepackage{graphicx}
@@ -35,49 +27,6 @@
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
 \usepackage{subcaption}
-
-% Hyperlinks (hidden)
-\usepackage[hidelinks]{hyperref}
-
-% Header/footer: single line, 11pt, page number right (Arabic numerals)
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\fontsize{11}{13}\selectfont\leftmark}   % header left
-\fancyfoot[R]{\fontsize{11}{13}\selectfont\thepage}    % page number right
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\footrulewidth}{0pt}
-% ensure header/footer single spaced
-\newcommand{\headfootfont}{\fontsize{11}{13}\selectfont}
-\fancyhead[L]{\headfootfont\leftmark}
-\fancyfoot[R]{\headfootfont\thepage}
-
-\fancypagestyle{plain}{
-  \fancyhf{}                      % clear header/footer
-  \fancyfoot[R]{\headfootfont\thepage}
-  \renewcommand{\headrulewidth}{0pt}
-}
-
-% Section headings: sizes, weights, spacing (titlesec)
-\usepackage{titlesec}
-% Level 1 -> \chapter (16pt bold, new page, left)
-\titleformat{\chapter}[hang]{\normalfont\bfseries\fontsize{16}{19}\selectfont}{\thechapter}{1em}{}
-\titlespacing*{\chapter}{0pt}{24pt}{12pt}
-% Level 2 -> \section (14pt bold)
-\titleformat{\section}[hang]{\normalfont\bfseries\fontsize{14}{17}\selectfont}{\thesection}{1em}{}
-\titlespacing*{\section}{0pt}{22pt}{10pt}
-% Level 3 -> \subsection (12pt bold)
-\titleformat{\subsection}[hang]{\normalfont\bfseries\fontsize{12}{15}\selectfont}{\thesubsection}{1em}{}
-\titlespacing*{\subsection}{0pt}{20pt}{8pt}
-% Level 4 -> \subsubsection (12pt normal)
-\titleformat{\subsubsection}[hang]{\normalfont\fontsize{12}{14}\selectfont}{\thesubsubsection}{1em}{}
-\titlespacing*{\subsubsection}{0pt}{20pt}{8pt}
-% Level 5 -> \paragraph (12pt italics)
-\titleformat{\paragraph}[hang]{\normalfont\itshape\fontsize{12}{14}\selectfont}{\theparagraph}{1em}{}
-\titlespacing*{\paragraph}{0pt}{20pt}{8pt}
-
-% Ensure automatic hyphenation (LaTeX default)
-\hyphenpenalty=1000
 
 % Bibliography: use biblatex with IEEE style (Zotero -> export references.bib via Better BibTeX)
 \usepackage[backend=biber,style=ieee]{biblatex}
@@ -93,79 +42,18 @@
 % Quotes
 \usepackage{csquotes}
 
-% --- Document metadata ---
-\title{Shopickup: Thesis Title Goes Here}
-\author{David Fodor}
-\date{\today}
+% Table float placement
+\usepackage{float}    % provides [H]
+\usepackage{placeins} % provides \FloatBarrier
+
 
 \begin{document}
 
-% ----- Front matter (roman numerals) -----
-\pagenumbering{roman}
-\pagestyle{empty}
-
 % Styled cover page (supports optional logo file `logo.png` in project root)
-\begin{titlepage}
-  \thispagestyle{empty}
-  \centering
-
-  % Top colour band (reduced height and lighter)
-  % \begin{tikzpicture}[remember picture,overlay]
-  %   \fill[black!15] (current page.north west) rectangle ([yshift=-2cm]current page.north east);
-  %   % % Alternative: use brand colour and opacity
-  %   % \fill[fill=blue!60,opacity=0.9] (current page.north west) rectangle ([yshift=-2cm]current page.north east);
-  % \end{tikzpicture}
-  \vspace{1cm}
-
-  \begingroup
-  % title (use larger size)
-  {\fontsize{20}{24}\selectfont\bfseries Architecture for Extensible Multi-Carrier API Adapters in E-Commerce\par}
-  \vspace{1cm}
-
-  % subtitle
-  {\fontsize{14}{18}\selectfont\bfseries From Integration to KPI-Based Evaluation\par}
-  \vspace{1cm}
-
-  {\fontsize{20}{24}\selectfont\bfseries BACHELOR PAPER\par}
-  \vspace{1cm}
-
-  % submitted at
-  {\fontsize{14}{18}\selectfont\bfseries submitted at\\
-    IMC Krems\\
-    (University of Applied Sciences)\par}
-  \vspace{1cm}
-
-  % optional logo
-  \IfFileExists{./src/imc-logo.png}{\includegraphics[height=2cm]{./src/imc-logo.png}\\[1cm]}{}
-
-  % bachelor program
-  {\fontsize{14}{18}\selectfont\bfseries Bachelor Programme\\
-    Informatics\par}
-  \vspace{1cm}
-
-  % author block
-  {\fontsize{14}{22}\selectfont\bfseries by\\
-    \fontsize{20}{22}\selectfont David Fodor BSc\\
-    \fontsize{14}{18}\selectfont for the award of the academic degree\\
-    \fontsize{20}{22}\selectfont Bachelor of Science in Engineering (BSc)
-    \par}
-  \vspace{1cm}
-
-  % degree block
-  {\fontsize{14}{18}\selectfont\raggedright
-    \textbf{Supervisor:}\enspace Rubén Ruiz, Torrubiano, Prof. (FH) Dr.\\[4pt]
-    \fontsize{12}{14}\textbf Submitted on: TBD\par
-  }
-
-  \endgroup
-
-  \vfill
-  \null
-\end{titlepage}
+\frontmatter\maketitle{}
 
 % Declaration of honour (placeholder)
-\chapter*{Declaration of Honour}
-I hereby confirm that I have written the thesis by myself and has not used any unauthorized material. All parts taken from other sources have been clearly indicated and I have not submitted the thesis as academic research paper for an exam somewhere else before.
+\begin{declarations}\end{declarations}
 
 % Clause of confidentiality (optional)
 % \chapter*{Clause of Confidentiality}
@@ -176,40 +64,56 @@ I hereby confirm that I have written the thesis by myself and has not used any u
 % ...optional text...
 
 % Preface (optional) — roman numerals continue
-\chapter*{Preface}
+% \chapter*{Preface}
 % ...preface text...
 
 % Abstract (English)
 \begin{abstract}
-  A short abstract (approx. 1/2 A4 page) summarising aims, methods, results.
+  E-commerce merchants, especially SMEs, often face fragmented shipping workflows due to heterogeneous carrier APIs and limited end-to-end visibility into shipping performance.
+  This bachelor thesis investigates how an extensible, multi-carrier integration layer can be designed to reduce coupling to individual carriers while enabling a KPI-driven analytics dashboard that supports both operational monitoring (near real-time) and strategic evaluation (batch reporting). Building on a literature review of service-oriented integration patterns (e.g., adapters and API gateways) and monitoring/analytics architectures (e.g., hybrid real-time and batch processing reference models), the work formulates design criteria and research questions for Shopickup, a prototype system integrating Shopify with selected carriers.
+  The intended outcome is a validated architectural design and a functional prototype that demonstrates pluggable carrier adapters and a dashboard capable of producing actionable shipping KPIs for merchant decision-making.
+  At the time of writing, the thesis is a work in progress: the related-work and research foundation are completed, and the methodology and implementation/evaluation phases are starting.
 \end{abstract}
 
-\tableofcontents
-\listoffigures
+% Acknowledgements (optional)
+% \begin{acknowledgements}
+%   This is an \textbf{optional} page. Use your choice of paragraph style for text on this page. Usually, this space is for thanking your supporters and getting emotional about how grateful you are to everyone.
+% \end{acknowledgements}
+
+% Table of Contents
+\addtoToC{Table of Contents}%
+\tableofcontents%
+\clearpage
+
+% Table of Tables
+\addtoToC{List of Tables}%
 \listoftables
+\clearpage
+
+% Table of Figures
+\addtoToC{List of Figures}%
+\listoffigures
+% \clearpage
 
 % List of abbreviations
 \chapter*{List of Abbreviations}
 \begin{tabular}{@{}p{3cm}p{10cm}@{}}
-  \textbf{API}  & Application Programming Interface — a set of routines, protocols and tools that enable communication between software components.              \\[6pt]
-  \textbf{KPI}  & Key Performance Indicator — a measurable value used to evaluate the success of an activity in meeting strategic or operational objectives.     \\[6pt]
-  \textbf{REST} & Representational State Transfer — an architectural style for networked applications, commonly used for web APIs.                               \\[6pt]
-  \textbf{JSON} & JavaScript Object Notation — a lightweight data-interchange format, often used in APIs.                                                        \\[6pt]
-  \textbf{SME}  & Small and Medium-sized Enterprises — businesses with a limited number of employees and revenue, typically defined by specific thresholds.      \\[6pt]
-  \textbf{MRQ}  & Main Research Question — the primary question that guides the research objectives of the thesis.                                               \\[6pt]
-  \textbf{SRQ}  & Sub-Research Question — secondary questions that support and elaborate on the main research question.                                          \\[6pt]
-  \textbf{EU}   & European Union — a political and economic union of member states located primarily in Europe.                                                  \\[6pt]
-  \textbf{EEA}  & European Economic Area — an international agreement which enables the extension of the European Union's single market to non-EU member states. \\[6pt]
-  \textbf{SOA}  & Service-Oriented Architecture — a design pattern where services are provided to other components by application components, through a network. \\
+  \textbf{KPI}  & Key Performance Indicator — a measurable value used to evaluate the success of an activity in meeting strategic or operational objectives.                                             \\[6pt]
+  \textbf{REST} & Representational State Transfer — an architectural style for networked applications, commonly used for web APIs.                                                                       \\[6pt]
+  \textbf{SME}  & Small and Medium-sized Enterprises — businesses with a limited number of employees and revenue.                                                                                        \\[6pt]
+  \textbf{SOA}  & Service-Oriented Architecture — a design pattern where services are provided to other components by application components, through a network.                                         \\[6pt]
+  \textbf{OTDR} & On Time Delivery Rate — a KPI measuring the percentage of shipments delivered on or before the promised delivery date.                                                                 \\[6pt]
+  \textbf{BI}   & Business Intelligence — technologies and strategies used by enterprises for data analysis and management of business information.                                                      \\[6pt]
+  \textbf{SLA}  & Service Level Agreement — a formal contract that defines the level of service expected. In shipping, commonly max delivery time.                                                       \\[6pt]
+  \textbf{ETL}  & Extract, Transform, Load — a data integration process that involves extracting data from various sources, transforming it into a suitable format, and loading it into a target system. \\[6pt]
+  \textbf{DRY}  & Don't Repeat Yourself — a software development principle aimed at reducing repetition of information or code.                                                                          \\[6pt]
 \end{tabular}
+% \clearpage
 
 % ----- Main text (Arabic numerals starting at 1) -----
-\clearpage
-\pagenumbering{arabic}
-\pagestyle{fancy}   % <- restore fancy headers for main chapters
-
+\mainmatter
 \chapter{Introduction}
-\label{ch:intro}
+\label{ch:introduction}
 
 E-commerce has revolutionized the retail landscape, enabling businesses of all sizes to reach domestic and global markets with unprecedented ease, meanwhile consumers benefit from unparalleled convenience and choice.
 Consequently, online shopping has seen strong growth over the past two decades, a trend accelerated by technological advancements and shifting consumer behaviors. As per Capital One's 2025 report, online sales accounted for 20.5\% of total retail sales worldwide \cite{capitaloneECommerceStatistics20252025} and has been steadily climbing over the past decade.
@@ -250,36 +154,20 @@ Inevitably, to present the whole picture, I will have to cover some of the other
 \subsection{Architecture and Extensibility}
 The first part of this study focuses on the structural design of the Shopickup application, going into more detail about the architecture and extensibility aspects.
 
-% \begin{enumerate}[label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
-%   \item What is the most suitable architecture for a common, extensible API adapter that integrates multiple shipping carriers with heterogeneous APIs?
-%         \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
-%           \item (Platform Agnosticity) What is the most appropriate architecture for a platform-agnostic integration layer that enables the application to support multiple e-commerce platforms?
-%           \item (Extensibility) How can the adapter be structured to minimise per-carrier boilerplate and allow pluggable driver modules?
-%         \end{enumerate}
-% \end{enumerate}
-
 \begin{enumerate}[label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=3pt]
   \item What is the most appropriate architecture for a common, extensible API adapter that integrates multiple shipping carriers with heterogeneous APIs, data formats and workflows, and what are the advantages and disadvantages of the candidate architectures?
-        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=3pt]
-          \item What is the most appropriate architecture for a platform-agnostic integration layer that enables the application to support multiple e-commerce platforms, and what are the advantages and disadvantages of alternative approaches?
-        \end{enumerate}
+        % \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=3pt]
+        %   \item What is the most appropriate architecture for a platform-agnostic integration layer that enables the application to support multiple e-commerce platforms, and what are the advantages and disadvantages of alternative approaches?
+        % \end{enumerate}
 \end{enumerate}
 
 \subsection{Evaluation and Analytics}
 The second part of this study focuses on the usability and effectiveness of the proposed system.
 
-% \begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=8pt]
-%   \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance?
-%         \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=4pt]
-%           \item (Effectiveness \& KPIs) How can the effectiveness of such a system in shipping operations be objectively evaluated using Key Performance Indicators (KPIs)?
-%           \item (Usability) Which dashboard interactions and visualisations best support merchant decision-making?
-%         \end{enumerate}
-% \end{enumerate}
-
 \begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=3pt]
-  \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance and customer preferences while balancing usability, scalability, and real-time needs, and what are the advantages and disadvantages of alternative dashboard architectures?
+  \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance and customer preferences while balancing usability, scalability, and real-time needs?
         \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=3pt]
-          \item How can the effectiveness of such a system in shipping operations be objectively evaluated, which KPIs should be used, and what are the advantages and disadvantages of different evaluation methods?
+          \item How can the effectiveness of such a system in shipping operations be evaluated, which KPIs are most relevant to merchants?
         \end{enumerate}
 \end{enumerate}
 
@@ -292,7 +180,7 @@ Implementation of the analytical dashboard and the overall application will be e
 Throughout this thesis, the standard IMRAD structure (Introduction, Methods, Results, and Discussion) is followed, mirroring the process of scientific discovery, as well as my journey of development along the way.
 The remainder of this thesis is structured as follows, as per the IMC Krems guidelines:
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \begin{tabular}{@{}p{3cm}p{3cm}p{9cm}@{}}
     \toprule
@@ -446,7 +334,7 @@ Extensibility has been mentioned multiple times as a key design goal for this th
 The technical report by the Software Engineering Institute (SEI) at CMU discusses extensibility as a specific architectural concern and outlines how extension points and extension strategies should be identified and evaluated.
 In the following table I will present their view on what a system's extensibility can be assessed based on and how these criteria map to the thesis domain of multi-carrier shipping integration.
 
-\begin{table}
+\begin{table}[H]
   \centering
   \begin{tabular}{@{}p{8cm}p{8cm}@{}}
     \toprule
@@ -579,7 +467,7 @@ At the same time, it avoids some of the operational complexity of full event-dri
 
 \subsection{Event-Driven Microservices}
 
-The most advanced architecture considered in the literature combines an API Gateway with a fully event-driven microservice back end. In such systems, individual business capabilities—Orders, Shipping, Tracking, Notifications—are each implemented as independent services that communicate via events on a message bus (e.g., Kafka). 
+The most advanced architecture considered in the literature combines an API Gateway with a fully event-driven microservice back end. In such systems, individual business capabilities—Orders, Shipping, Tracking, Notifications—are each implemented as independent services that communicate via events on a message bus (e.g., Kafka).
 The advantages of this style include:
 
 \begin{itemize}[itemsep=3pt]
@@ -596,7 +484,7 @@ For this thesis, event-driven microservices are therefore considered primarily a
 
 Synthesizing the above subsections, the architectural options can be compared along the axes that matter for this thesis: extensibility, complexity, and fitness for the SME/Shopickup context.
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \small
   \begin{tabular}{@{}p{3.5cm}p{5.5cm}p{5.5cm}@{}}
@@ -651,187 +539,300 @@ It is also worth mentioning that some similar commercial and even open-source so
 \section{Design, Evaluation and Analytics of Shipping Monitoring Systems}
 The second half of my literature review focuses on the more usability focused aspect of the application with the following two research questions in mind:
 
-\begin{enumerate}[resume, label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=3pt]
-  \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance and customer preferences while balancing usability, scalability, and real-time needs, and what are the advantages and disadvantages of alternative dashboard architectures?
-        \begin{enumerate}[label=\textbf{SRQ\arabic{enumi}.\arabic*.}, left=1.8em, itemsep=3pt]
-          \item How can the effectiveness of such a system in shipping operations be objectively evaluated, which KPIs should be used, and what are the advantages and disadvantages of different evaluation methods?
+\begin{enumerate}[resume, label=\textbf{MRQ2}, left=0pt, itemsep=3pt]
+  \item How can a data analytics dashboard be designed such that merchants receive actionable insights into shipping performance and customer preferences while balancing usability, scalability, and real-time needs?
+        \begin{enumerate}[label=\textbf{SRQ2.1}, left=1.8em, itemsep=3pt]
+          \item How can the effectiveness of such a system in shipping operations be evaluated, which KPIs are most relevant to merchants?
         \end{enumerate}
 \end{enumerate}
 
-Analytical dashboards and monitoring systems are widely used in various domains, including e-commerce logistics.
+Analytical dashboards and monitoring systems are widely used in various domains, including e-commerce logistics and
 However, it is not immediately clear how to best design and evaluate such a system, that is both efficient and provides real value to merchants.
 In cases like this, we can not just simply measure system performance in just technical terms, such as the Google SRE team's Four Golden Signals \cite{GoogleSREMonitoring} (latency, traffic, errors, saturation), but also need to consider user-centric and domain specific metrics as well.
 The following subsections explore relevant literature on dashboard design architectures, KPIs and evaluation methods in the context of shipping monitoring systems.
 
-\subsection{Beyond Technical Metrics: Understanding Monitoring System Effectiveness}
-Technical infrastructure metrics—uptime percentages, query response latencies, and system throughput—represent necessary conditions for effective monitoring systems but are not sufficient indicators of value. A shipping monitoring dashboard with 99.95\% uptime and sub-second query response means little if merchants cannot understand the information presented or if the system fails to trigger alerts when decisions are needed. Thus, evaluation of monitoring systems must address two interconnected layers: technical performance that enables service delivery, and business impact that determines whether the system actually improves operational decisions and merchant outcomes.
+\subsection{On the Importance of Technical Metrics}
+Technical infrastructure metrics—uptime percentages, query response latencies, and system throughput—represent necessary conditions for effective monitoring systems but are not sufficient indicators of value.
+A shipping monitoring dashboard with near perfect uptime and zero latency means little if the presented information is not understandable or actionable.
+Thus, evaluation of monitoring systems must be addressed on both technical and user-centric dimensions.
 
-Infrastructure metrics serve as enablers of business value rather than measures of value themselves. The Four Golden Signals framework provides useful infrastructure monitoring patterns, but requires contextualization for shipping domains. Latency matters only when it affects decision quality—a 500-millisecond query response time acceptable for a merchant analyzing last month's trend analysis may be unacceptable for a system alerting an SLA breach while a shipment is still in transit. Traffic and throughput indicate system load but reveal nothing about whether the dashboard drives better merchant decisions. Error rates measure system reliability, critical for alerts (SLA breach detection must never fail silently) but less critical for exploratory queries where merchants can retry. Saturation indicates when scaling is needed but not whether the system generates merchant value.
+Infrastructure metrics often simply serve as enablers of business value rather than measures of value themselves.
+Google's Four Golden Signals framework \cite{GoogleSREMonitoring} provides useful infrastructure monitoring patterns, but requires contextualization for shipping domains:
 
-This distinction leads to a tiered performance strategy: critical-path metrics (SLA alerts, inventory shortage warnings) justify 99.95\% uptime targets and sub-2-second latency; operational dashboards (daily status monitoring) reasonably tolerate 99.9\% uptime and 5-second latency; analytical queries (trend analysis, forecasting) accept 99.5\% uptime and 30-second latencies. Effective evaluation contexts performance targets by decision-making criticality rather than pursuing universal high-performance targets.
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Latency} for example in case of our application is not as crucial as in some other real-time systems, such as financial trading platforms for example. The main importance of latency in our case is more about user experience when merchants interact with the dashboard, rather than strict real-time constraints.
+  \item \textbf{Traffic} and throughput indicate system load but reveal nothing about whether the dashboard drives better merchant decisions. It is, however an important factor when considering scalability, as in our case we are very often also constrained by external API rate limits we must respect, such as carrier APIs or Shopify's Admin API.
+  \item \textbf{Error rates} measure system reliability, and are critical for both trustworthiness and usability. It must be monitored closely with each added integration and feature.
+  \item \textbf{Saturation} indicates when scaling is needed but not whether the system generates merchant value. It is also not much of a concern in our case, as there are not many computationally intensive operations, and due to the web technologies used, scaling is often handled automatically by the cloud provider.
+\end{itemize}
 
-\subsection{Real-Time vs. Batch Analytics: Architectural Choice}
-A fundamental architectural decision in shipping monitoring systems is the choice between real-time and batch analytics approaches. This decision is not primarily technical but rather reflects what decision-making problems the system is designed to solve. Understanding this distinction is essential for evaluating which architectures provide value for specific merchant needs.
+Evidently, in our case, while technical metrics are important for ensuring reliable operation, what we are really looking for are user-centric KPIs that reflect the dashboard's effectiveness in driving merchant decisions.
 
-\subsubsection{Operational Intelligence vs. Business Intelligence: Different Decision Horizons}
-Real-time analytics processes data continuously as events occur, enabling decisions in motion while situations are still unfolding. When a shipment status update arrives from a carrier’s GPS system, real-time systems can immediately: (1) detect that the shipment is trending late, (2) alert the merchant, (3) present suggested actions (contact customer, offer discount, authorize expedited redelivery). This rapid response window—often measured in minutes rather than hours—enables operational intelligence: acting on what is happening right now.
+\subsection{Real-Time vs. Batch Analytics}
+Now let us address the main topic of MRQ2, which is the architectural and design choice of our proposed dashboard system.
+A fundamental architectural decision in shipping monitoring systems is the choice between real-time and batch analytics approaches.
+This decision is not primarily technical but rather reflects what decision-making problems, time horizons and type of data analysis the system aims to support.
 
-Batch analytics processes accumulated data in scheduled bulk operations (typically nightly), enabling comprehensive analysis of patterns. A batch job running at midnight might analyze all shipments from the previous day, identifying patterns: “Tuesday deliveries are 12\% more likely to be late than Monday deliveries; Carrier X has 8\% worse on-time performance in rainy conditions.” This analysis feeds strategic decisions made the next day or week: should we shift Tuesday volume to faster carriers? Should we allocate extra buffers for rainy-forecast days? This represents business intelligence: learning from historical patterns to make better future decisions.
+\subsubsection{Operational Intelligence vs. Business Intelligence and Their Different Needs}
+To understand the distinction, we first need to clarify the difference between operational intelligence and business intelligence.
+For this, I turn to Sandu's definitions \cite{sanduOperationalRealtimeBusiness2008}:
 
-These two intelligence types serve different decision problems and cannot easily substitute for each other. Operational intelligence requires sub-minute latency (decisions expire quickly), handles immediate tactical responses (contact customer now), and tolerates less comprehensive analysis (only the most critical metrics matter). Business intelligence tolerates hour-to-day latency (decisions apply to future decisions, not current situations), requires deep historical aggregation (looking for patterns across months), and prioritizes analytical completeness over speed.
+\begin{displayquote}
+  "BI enables business users to report on, analyze and optimize business operations to reduce costs and increase revenues. Organizations use BI for strategic and tactical decision making where the decision-making cycle may span a time period of several weeks or months.
+  ... there is now a need to use BI to help drive and optimize business operations on a daily basis ...  usually called operational business intelligence and real-time business intelligence." \parencite{sanduOperationalRealtimeBusiness2008}
+\end{displayquote}
 
-The architectural implications are profound. Real-time systems (streaming ETL with event processing engines) prioritize latency by accepting operational complexity. Data flows through Apache Kafka or AWS Kinesis pipelines where events trigger immediate responses. A shipment delay triggers an alert within seconds. However, streaming systems are operationally complex (managing event brokers, handling backpressure, ensuring exactly-once semantics), expensive (maintaining 24/7 streaming infrastructure), and poorly suited for complex historical queries (aggregating billions of events to answer “What was the correlation between weather and delivery failures last quarter?”).
+Batch analytics usually processes accumulated data in scheduled bulk operations, enabling comprehensive analysis of patterns over longer time horizons and greater amounts of data.
+A batch job that runs weekly might analyze all shipments of the given week to give greater insight on carrier performance, cost trends, or customer preferences.
 
-Batch systems (traditional ETL to data warehouse) prioritize analytical comprehensiveness by accepting latency. Data is extracted from operational systems, transformed through staged pipelines, and loaded into dimensional data warehouses where complex SQL queries execute efficiently. Historical data is preserved for deep analysis. However, data arrives with significant latency (typically 4-24 hours after events occur), limiting responsiveness to immediate disruptions. A batch system discovering an inventory stockout the next morning is too late when the merchant needed to respond within 2 hours.
+Operational intelligence focuses on current situations, and thus they require low-latency, real time data processing.
+Real-time analytics processes data continuously as events occur, enabling decisions in motion while situations are still unfolding.
+This rapid response window—often measured in minutes rather than hours—enables operational intelligence, acting on immediate situations, such as shipment delays or inventory shortages.
 
-\subsubsection{Decision Windows and Latency Requirements: The Critical Link}
-Latency requirements are not continuous spectrums but discrete decision-windows. If a merchant has a 4-hour decision window (time to take corrective action before a problem escalates), then 1-hour latency and 3-hour latency are functionally equivalent—both provide adequate warning. However, 6-hour latency fails completely because action becomes impossible. Thus, architectural choices should be driven by decision-window requirements, not by philosophical preferences for “always real-time”.
+These two intelligence types serve different decision problems and cannot easily substitute for each other.
+The architectural implications are profound as well.
+On one hand, real-time systems prioritize latency by accepting operational complexity. When discussing big data scale, real-time analytics are especially hard, as evidenced by the research of Zheng et al. \cite{zhengRealtimeBigData2025} in which they find that real-time big data systems must simultaneously satisfy strict timeliness, high stability and availability on different levels of scale which leads to substantially higher system complexity compared to traditional batch-oriented data warehouses.
+On the other hand, batch systems prioritize analytical comprehensiveness by accepting latency. Data is extracted from operational systems, transformed through staged pipelines, and in case of great amounts of data loaded into dimensional data warehouses where complex SQL queries execute efficiently.
+Historical data is preserved for deep analysis. However, data arrives with significant latency and usually based on scheduled intervals, limiting responsiveness to immediate disruptions.
+A batch system discovering that a carrier had a 20\% delay rate last week due to issues specific to it is useful for strategic planning, but too late for immediate action on current shipments such as switching on turning off the carrier.
 
-Decision problems and corresponding latency requirements drive architectural choices. Latency requirements are not continuous but represent discrete decision windows.
+It is apparent, that most business use cases require both types of intelligence and thus the corresponding analytical methods and architectures.
+A good way to decide between real-time and batch analytics for given problems is by considering the decision-window requirements for them.
 
-Research on supply chain disruptions confirms the business case for real-time systems: companies that detect and respond to disruptions within 4 hours achieve 40\% lower disruption costs than companies responding within 24 hours. This quantified impact justifies infrastructure investment in real-time systems for critical alerts, while batch systems remain cost-effective for non-critical strategic analysis.
+Here are two illustrative use cases for shipping monitoring systems:
 
-\subsubsection{Concrete Shipping Use Cases Illustrating the Distinction}
-A practical example illuminates why both approaches are necessary in shipping monitoring:
+\begin{itemize}[itemsep=3pt]
+  \item\textbf{Real-time use case (Operational Intelligence)}: Shipment Service Level Agreement (SLA) breach alerts. Shipping carriers often offer promised delivery windows, such as "delivery within 2 business days", and merchants need to be able to monitor these SLAs, both to proactively manage customer expectations and to take corrective actions against carriers when breaches occur.
+  \item\textbf{Batch use case (Business Intelligence)}: Weekly carrier performance reports. Merchants need to analyze carrier performance over longer periods to inform strategic decisions about carrier selection and customer preferences, contract negotiations, and logistics planning.
+\end{itemize}
 
-{Real-time use case (Operational Intelligence)}: Inventory stockout risk. When a customer orders the last unit of a fast-moving SKU and the reorder point is not met, the system must alert the merchant within seconds, not hours, enabling them to: (1) contact supplier for emergency replenishment, (2) offer customer expedited shipping if partial fulfillment, or (3) cancel order and offer alternative product. A batch system discovering the stockout the next morning is too late—the customer has already left a negative review or cancelled the order entirely. This requires real-time streaming: inventory events → immediate processing → alert within 60 seconds.
+\subsubsection{Lambda Architecture as a Hybrid Reference Model}
+To formalize the hybrid approach described above, I turn to the Lambda Architecture, a data-processing design pattern introduced by Nathan Marz \cite{marzHowBeatCAP2011} to handle massive quantities of data by taking advantage of both batch and stream-processing methods.
+While originally conceived to address the complexities of “Big Data” and the CAP theorem in distributed systems, the core principles of the Lambda Architecture provide a robust reference model for this project's monitoring system, even at a smaller scale.
+Marz argues that traditional databases conflate two distinct problems: storage of immutable facts and the computation of views (queries) on those facts \cite{marzHowBeatCAP2011}.
+In purely real-time or mutable systems, ensuring consistency while maintaining availability (as per the CAP theorem) introduces significant complexity, such as read-repair logic, vector clocks, and the risk of permanent data corruption from buggy writes.
+To “beat” this complexity, the Lambda Architecture proposes separating the system into three distinct layers, a structure that aligns directly with the hybrid requirements identified in the previous section:
 
-{Batch use case (Business Intelligence)}: Demand forecasting. Analyzing seasonal patterns, day-of-week effects, and product correlations requires historical data aggregation across months. A batch job analyzing the previous 12 months of order data can identify that “Black Friday creates 8x spike in orders for electronics; we should pre-position inventory accordingly.” This analysis is computationally intensive (requires sophisticated statistical models) and only needs to run weekly or monthly. Real-time processing cannot reasonably maintain complex ML models that process millions of historical records every time a new order arrives. The value emerges from patterns, not from processing speed.
+\begin{enumerate}[label=\arabic*., left=0pt, itemsep=3pt]
+  \item \textbf{Batch Layer (Master Dataset):} Marz defines the “master dataset” as an immutable, append-only set of raw data \cite{marzHowBeatCAP2011}. Because data is never overwritten, human errors or buggy code cannot permanently corrupt the system; views can simply be recomputed. In the context of shipping monitoring, this corresponds to the nightly storage of all raw shipment events and carrier updates. This layer precomputes complex, heavy views (e.g., weekly carrier performance reports) that don't need to be up-to-the-second but must be accurate and comprehensive.
+  \item \textbf{Speed Layer (Real-Time):} Since batch views are inherently out of date by the duration of the batch interval, a separate "Speed Layer" compensates for this "data lag" \cite{marzHowBeatCAP2011}. This layer processes only the most recent data (the delta) to provide low-latency views. Marz notes that while this layer requires complex incremental algorithms and eventual consistency, any errors here are transient—they are eventually overwritten by the correct Batch Layer views.
+  \item \textbf{Serving Layer:} "The serving layer pulls together the results from both the speed and batch layers, which makes an easy single view for the applications and users, which consume the data." as defined by Lekkala \cite{lekkalaLeveragingLambdaArchitecture2020}.
+\end{enumerate}
 
-{Hybrid use case (Both types needed)}: SLA compliance monitoring. The real-time layer monitors shipment ETAs against promised delivery dates and alerts when trending-late, enabling immediate customer communication. Simultaneously, the batch layer analyzes historical on-time performance by carrier/region/product, identifying systemic improvements needed for strategic carrier selection and capacity planning.
+While Marz's original proposal suggests heavy industrial technologies like Apache Hadoop for the speed layer \cite{marzHowBeatCAP2011}, the pattern is technology-agnostic, which is made apparent by how different papers implement it or suggest implementing it via different technologies \cite{lekkalaLeveragingLambdaArchitecture2020, hasaniLambdaArchitectureReal2014}.
+For a focused application like Shopickup, strictly adhering to these “Big Data” technologies would introduce unnecessary operational overhead, which is a common issue noted by critics, such as Krep who points out that maintaining two parallel codebases (one for batch, one for streaming) for the same purposes violates the “Don't Repeat Yourself” (DRY) principle and increases maintenance costs \cite{krepsQuestioningLambdaArchitecture2014}.
+However, the functional separation remains valid and valuable. Instead of Hadoop and Storm, Shopickup can implement a lightweight approach that takes inspiration from the Lambda architecture:
 
-\subsection{Hybrid Architectures: Combining Real-Time and Batch Analytics}
-Modern shipping monitoring systems increasingly employ hybrid architectures combining streaming and batch processing layers, each optimized for its purpose. This approach is increasingly formalized as the Change Data Capture (CDC)-First architecture pattern: capture all data changes from source systems (orders, shipments, inventory) via streaming CDC, then route streams to both operational and analytical destinations.
+\begin{itemize}[itemsep=3pt]
+  \item The \textbf{Batch Layer} can be implemented effectively using standard relational database aggregations or scheduled cron jobs that run during off-peak hours to generate static reporting tables, which later could be replaced by a more robust ETL pipeline if needed.
+  \item The \textbf{Speed Layer} does not require a complex event-streaming engine (like Kafka) if the data volume does not demand it. Instead, frequent polling of carrier APIs (e.g., every 5 minutes) or lightweight webhook handlers if available can serve the same functional purpose: capturing the latest state to alert merchants of immediate issues.
+  \item The \textbf{Serving Layer} can be a simple API that merges results from both layers, serving real-time alerts from the Speed Layer and historical reports from the Batch Layer to the dashboard.
+\end{itemize}
 
-\subsubsection{Hybrid Architecture Components}
-A reference architecture for shipping monitoring (applicable to platforms like Shopickup) contains four integrated layers:
-
-CDC/Streaming Ingestion Layer: Change Data Capture captures all order, inventory, and shipment status changes from source systems in real-time (sub-second latency). This creates an immutable event stream serving as the single source of truth. For example, when a shipment status changes from “In Transit” to “Out for Delivery”, this event is captured and published to the event stream immediately, ensuring all downstream systems process the same data from the same source.
-
-Real-Time (Speed Layer): Streaming processors (Apache Flink, Kafka Streams) consume events and compute operational metrics: current inventory levels by SKU by warehouse, shipments trending late, SLA breach predictions. Results stream to the operational dashboard via WebSockets enabling <2 second display updates. Alerts trigger automatically (SMS/email) when thresholds exceed defined bounds. For example, when a shipment enters the “Out for Delivery” state, a Flink job immediately checks: (1) is the current timestamp within the promised delivery window? (2) if not, calculate likely arrival time—will it miss? (3) if trending late, trigger alert. All computations complete within 60 seconds from event to alert delivery.
-
-Batch (Cold Layer): Nightly batch jobs consume accumulated events and compute comprehensive metrics: daily on-time delivery rate by carrier, cost analysis by region, damage rate analysis. Results load into a dimensional data warehouse enabling complex historical analysis and ML model training. These jobs run during off-peak hours (1-6 AM) when infrastructure is least utilized, reducing costs.
-
-Serving Layer: Operational dashboards connect to the real-time layer for live metrics (inventory levels update within seconds, SLA alerts trigger within minutes). Analytical dashboards connect to the data warehouse for historical analysis (merchants can drill down into previous weeks/months of data). Merchants see both—real-time alerts for immediate action, historical trends for strategic decisions.
-
-\subsubsection{Cost-Benefit of Hybrid Approaches}
-
-This hybrid approach incurs higher upfront infrastructure costs (maintaining two processing paths, operational complexity of event brokers, staffing expertise in both streaming and batch systems). However, it enables solving both operational and analytical problems, whereas choosing only real-time or only batch forces impossible compromises: real-time-only systems cannot economically support complex historical analysis; batch-only systems miss disruptive events until too late.
-
-Data streaming platforms like Estuary Flow exemplify this hybrid approach at scale: simultaneous sub-second streaming (for real-time alerts) and batch ETL (for historical analysis) in unified pipelines, with throughput of 7GB+/second in production environments. Similarly, Gartner's 2025 assessment affirms the hybrid direction: “Operational Intelligence that embeds analytics within business transactions, eliminating delays from separate ETL activities, can reduce governance efforts, time, and infrastructure costs compared to maintaining separate analytical systems.” This validates the CDC-First hybrid approach as industry direction.
-
-The business case emerges from reduced cost of inaction: if real-time alerts save even one major SLA breach per month (customer churn, reputational damage), the infrastructure investment is justified. If batch analytics enable even a 1-2\% improvement in carrier efficiency (cost per shipment), the investment pays for itself across large merchant bases.
+Based on the literature research this hybrid approach seems to be a suitable candidate for our project, which I will further explore in the design chapter.
+Were the scope of the project larger, Lambda's alternative, the Kappa architecture proposed by Kreps \cite{krepsQuestioningLambdaArchitecture2014} or even a CQRS + Event Sourcing approach \cite{pachecoMicroservicePatternsBest2018} might be considered.
 
 \subsection{Domain-Specific KPIs for Shipping Operations}
-With understanding of the real-time/batch distinction established, we now define domain-specific KPIs appropriate for merchant evaluation and decision-making. KPIs are organized into three tiers reflecting decision frequency and architectural requirements.
+With understanding of the real-time/batch distinction established, we can now continue with the SRQ2.1 and define domain-specific KPIs appropriate for merchant evaluation and decision-making.
+KPIs of organizations are, as Piela summarized usually organized by factors most relevant to the company, such as whether they are financial or non-financial, primary or secondary metrics, etc. \cite{pielaKeyPerformanceIndicator2017}.
+We however, categorize them into tiers reflecting the different decision horizons they support, as described earlier.
+This serves both to clarify their purpose and to guide the underlying data architecture needed to support them.
+We will be in a later chapter attempt to implement these KPIs into our own project's dashboard according to SMART criteria \cite{ishakSMARTKPIManagement2019}, then evaluate their effectiveness based on merchant feedback and the IS system success model by DeLone and McLean \cite{savolainenPerformanceDashboardEffectiveness2023}. % TODO: Here I took this idea from a master's thesis, but they themselves are pointing to DeLone and McLean's model, so rework this part
 
 \subsubsection{Operational KPIs: Real-Time Monitoring for Immediate Action}
-Operational KPIs appear on real-time dashboards and trigger automated alerts when thresholds breach. Merchants check these during operational crises or daily standard operations.
+Operational KPIs are designed to support immediate decision-making, often in response to unfolding events.
+These KPIs are typically displayed on real-time dashboards and trigger automated alerts when thresholds are breached.
+The following table summarizes domain-specific operational KPIs relevant to shipping monitoring systems and their sources:
+(Note that KPI research is still ongoing, so this table and the references are not yet complete)
 
-Current Inventory Position by SKU by Warehouse: Live count of available units by product and location. When inventory drops to reorder point, system triggers alert and initiates purchase order. Example: “Shoppe SKU-4421 (Widget X) dropped to 85 units at Newark warehouse (reorder point: 100); purchase order initiated; arrival date: 3 days”. Alert latency requirement: <2 minutes from inventory depletion to merchant notification.
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{@{}p{4cm}p{8cm}p{4cm}@{}}
+    \toprule
+    \textbf{KPI}                                                                                                                                                       & \textbf{Description} & \textbf{Source} \\
+    \midrule
+    On Time Delivery Rate (OTDR)                                                                                                                                       &
+    What percentage of shipments are delivered on time according to the promised delivery date.                                                                        &
+    Piela \cite{pielaKeyPerformanceIndicator2017}                                                                                                                                                               \\[6pt]
 
-Shipments Currently at SLA Risk: Number and list of shipments where current location/velocity indicates they will miss promised delivery date without intervention. Example: “14 shipments at risk. Most critical: Order \#ORD-892341 promised delivery Thursday 6 PM, currently in Memphis distribution, on track for Friday 2 PM delivery (8 hours late). Recommend: Contact customer now, offer \$5 discount + expedited reroute”. Alert latency: <5 minutes from SLA risk detection to merchant notification.
+    OTDR SLA                                                                                                                                                           &
+    Here I believe it is important to differentiate for merchants the measure of OTDR as suggested by the merchant for customers and the OTDR in regard to broken SLAs &
+    None                                                                                                                                                                                                        \\[6pt]
 
-Carrier Performance Today: Real-time on-time delivery percentage for each carrier today (versus yesterday, versus 30-day average). Example: “UPS: 87\% on-time today (versus 91\% daily avg); FedEx: 94\% (versus 92\% daily avg). UPS trending below normal—investigate”. Updates every hour as new delivery confirmations arrive.
+    \bottomrule
+  \end{tabular}
+  \caption{Operational KPIs for shipping monitoring systems}
+\end{table}
 
-Warehouse Throughput (Orders Processed Per Hour): Real-time order processing rate per warehouse location. Anomalies indicate bottlenecks requiring immediate attention. Example: “Newark warehouse: 340 orders/hr (normal: 380); 12\% below target; investigate conveyor system”. Updates every 15 minutes.
+\subsubsection{Strategic KPIs: Batch Monitoring for Tactical Planning}
+Strategic KPIs are designed to inform long-term planning and strategic decision-making, based on comprehensive historical data.
 
-Open Exceptions/Alerts: Count of outstanding issues requiring merchant action (damaged goods in transit, customs delays, carrier missed pickup window). Example: “3 open exceptions: 1 damaged shipment for customer service response, 2 customs delays awaiting documentation”. Real-time updates as exceptions are created or resolved.
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{@{}p{4cm}p{8cm}p{4cm}@{}}
+    \toprule
+    \textbf{KPI}                                                                                                                             & \textbf{Description} & \textbf{Source} \\
+    \midrule
+    Accuracy of Forecasting                                                                                                                  &
+    Measures how accurately the system predicts the delivery times and volumes.                                                              &
+    \\[6pt]
 
-\subsubsection{Tactical KPIs: Weekly Batch Monitoring for Operational Adjustment}
-Tactical KPIs provide weekly summaries revealing operational trends and guiding short-term adjustments to carrier mix, warehouse operations, or staffing. These naturally fit batch analytics computed nightly or weekly.
+    Carrier Cost per Shipment                                                                                                                &
+    Average cost incurred per shipment by each carrier. Helps in negotiating contracts and selecting carriers.                               &
+    \\[6pt]
 
-Weekly On-Time Delivery Rate (OTDR) by Carrier: Percentage of shipments arriving on-time (within promised window) aggregated by carrier. Enables carrier selection adjustments for next week. Example: “Week of January 6: UPS 89\% OTDR, FedEx 93\%, DHL 84\%. Consider shifting volume from DHL to FedEx for next week”. Computation: aggregate across all shipments delivered in the week, compare delivery timestamp to promised date, calculate percentage.
+    Damage Rate                                                                                                                              &
+    Percentage of shipments that are reported as damaged upon delivery. Indicates carrier handling quality.                                  &
+    Piela \cite{caiImprovingSupplyChain2009}                                                                                                                                          \\[6pt]
 
-Fill Rate (Orders Completely Fulfilled First Attempt): Percentage of orders shipped complete without backorder or split shipment. Example: “Fill rate 96.2\% (target: >98\%). Root cause: 3 SKUs experiencing stockouts. Coordinating with procurement”. Indicates inventory planning effectiveness.
+    Return Rate                                                                                                                              &
+    Percentage of shipments that are returned by customers. High return rates may indicate issues with product quality or shipping accuracy. &
+    \\[6pt]
 
-Return Rate by Fulfillment Center: Percentage of orders returned for any reason (damaged in transit, picked incorrectly, customer dissatisfied). Proxy for fulfillment quality. Example: “Newark FC return rate 2.1\% (target: <1.5\%), Chicago FC 1.3\% (target: <1.5\%), Dallas FC 0.8\% (exceptional). Investigate Newark quality issues”. Batch computation: count returned orders by originating FC for the week.
-Cost per Order: Total shipping cost divided by order count. Includes carrier fees, packaging, handling. Example: “Week average: \$3.42 per order (target: <\$3.25). Cost increase driven by expedited shipments for SLA recovery (+\$0.08/order); non-expedited average \$3.30/order (within target)”. Enables cost control and price negotiation with carriers.
+    \bottomrule
+  \end{tabular}
+  \caption{Strategic KPIs for shipping monitoring systems}
+\end{table}
 
-Inventory Turnover Rate: Average time inventory sits before sale (measured in days). Indicates whether capital is efficiently deployed. Example: “Fast movers (electronics): 8 day turnover; Slow movers (seasonal): 45 day turnover. Recommend promotional push on slow movers”. Higher turnover reduces carrying costs and obsolescence risk.
+% \subsubsection{Operational KPIs: Real-Time Monitoring for Immediate Action}
+% Operational KPIs appear on real-time dashboards and trigger automated alerts when thresholds breach. Merchants check these during operational crises or daily standard operations.
 
-\subsubsection{Strategic KPIs: Batch Monthly/Quarterly Monitoring for Tactical Planning}
-Strategic KPIs provide quarterly or annual trend analysis feeding executive-level and multi-month strategic decisions. These require comprehensive historical data aggregation impossible in real-time systems.
+% Current Inventory Position by SKU by Warehouse: Live count of available units by product and location. When inventory drops to reorder point, system triggers alert and initiates purchase order. Example: “Shoppe SKU-4421 (Widget X) dropped to 85 units at Newark warehouse (reorder point: 100); purchase order initiated; arrival date: 3 days”. Alert latency requirement: <2 minutes from inventory depletion to merchant notification.
 
-Quarterly OTDR Trend: On-time delivery percentage across all carriers/regions, tracked quarter-over-quarter. Indicates whether service quality is improving or degrading. Example: “Q4 2025: 93.2% OTDR versus Q4 2024: 91.1% OTDR (+2.1 percentage points improvement). Attributed to Q4 investments in regional distribution centers”. Justifies continued investment or identifies need for operational changes.
+% Shipments Currently at SLA Risk: Number and list of shipments where current location/velocity indicates they will miss promised delivery date without intervention. Example: “14 shipments at risk. Most critical: Order \#ORD-892341 promised delivery Thursday 6 PM, currently in Memphis distribution, on track for Friday 2 PM delivery (8 hours late). Recommend: Contact customer now, offer \$5 discount + expedited reroute”. Alert latency: <5 minutes from SLA risk detection to merchant notification.
 
-Carrier Spend and Performance Matrix: Comparing carrier spend (cost) versus performance (OTDR, damage rate) to identify cost-benefit balance. Example: “UPS (\$450k spend): 91\% OTDR, 0.8\% damage rate (premium carrier, high service); Regional carrier (\$120k): 84\% OTDR, 2.1\% damage rate (budget option, lower service). Consider 10\% volume shift from UPS to regional for cost reduction”. Informs long-term contract negotiations.
+% Carrier Performance Today: Real-time on-time delivery percentage for each carrier today (versus yesterday, versus 30-day average). Example: “UPS: 87\% on-time today (versus 91\% daily avg); FedEx: 94\% (versus 92\% daily avg). UPS trending below normal—investigate”. Updates every hour as new delivery confirmations arrive.
 
-Year-over-Year Demand Seasonality: Historical order volume patterns by month, enabling inventory planning. Example: “Q4 peak: October 120\%, November 145\%, December 165\% of baseline; Q1 trough: January 85\%, February 78\%, March 82\%. Use to pre-position inventory in September-October”. Critical for capital planning and supplier lead time negotiation.
+% Warehouse Throughput (Orders Processed Per Hour): Real-time order processing rate per warehouse location. Anomalies indicate bottlenecks requiring immediate attention. Example: “Newark warehouse: 340 orders/hr (normal: 380); 12\% below target; investigate conveyor system”. Updates every 15 minutes.
 
-Total Cost to Serve by Region: All logistics costs (shipping, warehousing, damage, returns) by geographic region. Identifies high-cost regions for efficiency projects. Example: “West Coast region: \$4.12 per order all-in cost; average Midwest: \$2.85/order. High density in West Coast causes inefficiency; consider consolidation distribution point”. Guides distribution network design decisions.
+% Open Exceptions/Alerts: Count of outstanding issues requiring merchant action (damaged goods in transit, customs delays, carrier missed pickup window). Example: “3 open exceptions: 1 damaged shipment for customer service response, 2 customs delays awaiting documentation”. Real-time updates as exceptions are created or resolved.
 
-\subsection{Evaluation Methods: From Technical Validation to Business Impact}
-Comprehensive evaluation of shipping monitoring systems requires multiple methodological approaches, each providing different insights into system value.
+% \subsubsection{Tactical KPIs: Weekly Batch Monitoring for Operational Adjustment}
+% Tactical KPIs provide weekly summaries revealing operational trends and guiding short-term adjustments to carrier mix, warehouse operations, or staffing. These naturally fit batch analytics computed nightly or weekly.
 
-\subsubsection{Technical Benchmarking Against Performance Targets}
-Define operational targets for real-time and batch processes, then continuously measure actual performance. Real-time operational latency targets should reflect decision windows:
-	•	SLA alert detection to merchant notification: <5 minutes (decision window is 2-6 hours)
-	•	Inventory stockout to alert: <2 minutes (decision window is 30 minutes to 2 hours)
-	•	Shipment delay detection to dashboard update: <1 minute
-Batch (throughput targets):
-	•	Nightly OTDR calculation: Complete by 6 AM, <6 hours processing time for 24 hours of data
-	•	Demand forecasting run: Weekly, complete by Monday AM before merchants make purchasing decisions
-	•	Weekly carrier performance analysis: Complete by Monday AM
-Performance measurement should use percentile-based metrics (p50 median, p95, p99) rather than averages. If 95\% of SLA alerts arrive within 3 minutes but 5\% take >30 minutes, the p95 metric correctly captures performance; average alone would be misleading.
-Tools like Prometheus/Grafana enable continuous collection and visualization.
+% Weekly On-Time Delivery Rate (OTDR) by Carrier: Percentage of shipments arriving on-time (within promised window) aggregated by carrier. Enables carrier selection adjustments for next week. Example: “Week of January 6: UPS 89\% OTDR, FedEx 93\%, DHL 84\%. Consider shifting volume from DHL to FedEx for next week”. Computation: aggregate across all shipments delivered in the week, compare delivery timestamp to promised date, calculate percentage.
 
-\subsubsection{Task Completion Testing: Validating Essential Workflows}
-Define representative tasks merchants need to complete, then measure completion rate, time, and error rate:
-Task completion rate: Can users successfully complete task using dashboard? (Target: >95\%)
-Time to task completion: How long does task take? (Benchmark: <3 minutes for routine tasks)
-Error rate: What percentage of task completions are incorrect? (Target: <5\% errors)
-Example task test:
-Task: “Identify which carrier had the lowest on-time delivery percentage last week and explain why you would or would not shift volume to a different carrier.”
-Completion rate: 92/100 merchants successfully completed task using dashboard (92\%)
-Time: Median 2.1 minutes (target: <3 min)
-Error rate: 6\% made calculation errors or drew incorrect conclusions (target: <5\%) — minor gap
-Results inform dashboard redesign: 8\% who could not complete indicates navigation issue or feature missing; 6\% error rate suggests visualization could be clearer.
+% Fill Rate (Orders Completely Fulfilled First Attempt): Percentage of orders shipped complete without backorder or split shipment. Example: “Fill rate 96.2\% (target: >98\%). Root cause: 3 SKUs experiencing stockouts. Coordinating with procurement”. Indicates inventory planning effectiveness.
 
-\subsubsection{Mixed-Methods Evaluation: Qualitative Discovery + Quantitative Measurement}
-Comprehensive evaluation combines qualitative and quantitative methods to capture both usability issues and adoption/satisfaction metrics.
+% Return Rate by Fulfillment Center: Percentage of orders returned for any reason (damaged in transit, picked incorrectly, customer dissatisfied). Proxy for fulfillment quality. Example: “Newark FC return rate 2.1\% (target: <1.5\%), Chicago FC 1.3\% (target: <1.5\%), Dallas FC 0.8\% (exceptional). Investigate Newark quality issues”. Batch computation: count returned orders by originating FC for the week.
+% Cost per Order: Total shipping cost divided by order count. Includes carrier fees, packaging, handling. Example: “Week average: \$3.42 per order (target: <\$3.25). Cost increase driven by expedited shipments for SLA recovery (+\$0.08/order); non-expedited average \$3.30/order (within target)”. Enables cost control and price negotiation with carriers.
 
-Qualitative Phase:
-	•	Conduct 12 structured interviews with merchants across different segments (SMB, mid-market, enterprise) and roles (operations, finance, executive). Document pain points, unmet needs, workarounds, feature requests.
-	•	Perform 5 think-aloud sessions where merchants complete standard dashboard tasks while verbalizing thoughts. Document confusion points and mental model gaps.
-	•	Deliverable: List of 20-30 usability issues categorized by severity.
-Quantitative Phase:
-	•	Deploy survey to 150+ merchants measuring: adoption (daily/weekly access), feature usage, satisfaction (NPS, SUS score), perceived impact
-	•	Task-based testing: 50 merchants complete 5 standard tasks; measure completion rate, time-on-task, error rate
-	•	Deliverable: Statistical summary of adoption, satisfaction, task completion with confidence intervals.
-Analytics Phase:
-	•	Enable dashboard telemetry tracking feature usage (button clicks, report generation, drill-down frequency)
-	•	Correlate usage with KPI outcomes: do merchants using predictive alerts show better SLA compliance?
-	•	Deliverable: Evidence of business impact, or identification that system is used but not driving outcomes
+% Inventory Turnover Rate: Average time inventory sits before sale (measured in days). Indicates whether capital is efficiently deployed. Example: “Fast movers (electronics): 8 day turnover; Slow movers (seasonal): 45 day turnover. Recommend promotional push on slow movers”. Higher turnover reduces carrying costs and obsolescence risk.
 
-\subsection{Summary: Design Principles for Effective Shipping Monitoring Systems}
-Effective shipping monitoring systems balance competing demands through deliberate architectural and evaluation choices:
+% \subsubsection{Strategic KPIs: Batch Monthly/Quarterly Monitoring for Tactical Planning}
+% Strategic KPIs provide quarterly or annual trend analysis feeding executive-level and multi-month strategic decisions. These require comprehensive historical data aggregation impossible in real-time systems.
 
-	1.	Real-Time and Batch Are Complementary: Real-time systems enable immediate operational response to disruptions; batch systems enable strategic planning based on historical patterns. Hybrid architectures combining both provide the most complete decision support.
-	2.	Decision Windows Drive Latency Requirements: Latency targets should not be universal “as fast as possible” but tied to merchant decision windows. Some decisions require sub-minute response; others tolerate day-long latency. Aligning latency to decision windows avoids over-engineering less-critical paths.
-	3.	Domain-Specific KPIs Over Generic Metrics: Shipping monitoring should emphasize operational, tactical, and strategic KPIs specific to logistics, not generic infrastructure metrics. Real-time tier captures inventory, SLA, and carrier status; batch tier captures cost and performance trends; strategic tier enables long-term planning.
-	4.	Evaluation Requires Multiple Methods: Technical benchmarking validates infrastructure performance; correlation analysis validates business impact; task testing validates usability. Each method reveals different information; comprehensive evaluation uses all three.
-  
-These principles, grounded in logistics operations research and system design best practices, provide a foundation for designing and evaluating shipping monitoring systems that generate genuine merchant value.
+% Quarterly OTDR Trend: On-time delivery percentage across all carriers/regions, tracked quarter-over-quarter. Indicates whether service quality is improving or degrading. Example: “Q4 2025: 93.2% OTDR versus Q4 2024: 91.1% OTDR (+2.1 percentage points improvement). Attributed to Q4 investments in regional distribution centers”. Justifies continued investment or identifies need for operational changes.
+
+% Carrier Spend and Performance Matrix: Comparing carrier spend (cost) versus performance (OTDR, damage rate) to identify cost-benefit balance. Example: “UPS (\$450k spend): 91\% OTDR, 0.8\% damage rate (premium carrier, high service); Regional carrier (\$120k): 84\% OTDR, 2.1\% damage rate (budget option, lower service). Consider 10\% volume shift from UPS to regional for cost reduction”. Informs long-term contract negotiations.
+
+% Year-over-Year Demand Seasonality: Historical order volume patterns by month, enabling inventory planning. Example: “Q4 peak: October 120\%, November 145\%, December 165\% of baseline; Q1 trough: January 85\%, February 78\%, March 82\%. Use to pre-position inventory in September-October”. Critical for capital planning and supplier lead time negotiation.
+
+% Total Cost to Serve by Region: All logistics costs (shipping, warehousing, damage, returns) by geographic region. Identifies high-cost regions for efficiency projects. Example: “West Coast region: \$4.12 per order all-in cost; average Midwest: \$2.85/order. High density in West Coast causes inefficiency; consider consolidation distribution point”. Guides distribution network design decisions.
+
 
 \chapter{Methodology}
-\label{ch:methods}
-Describe algorithms, models, experimental setup, data, and implementation details.
+\label{ch:methodology}
+This chapter first describes, with an emphasis of technical details, the commercial implementation of my application known as Shopickup.
+This serves as context for the two other main parts of this chapter, which describe how based on the literature review, what design choices were chosen for the carrier integration architecture and the monitoring dashboard respectively.
+For each of the latter two sections, I first describe and argue for the chosen design, then follow up with strategies for evaluation.
 
-\chapter{Implementation and Results}
-\label{ch:results}
-Present experiments, results, and discussion.
+\section{Shopickup Application Overview}
+Shopickup is a multi-carrier shipping integration and monitoring platform designed for e-commerce merchants.
+It allows merchants to extend their online stores with a unified interface for managing shipments across multiple carriers, print labels, track packages, and gain insights into shipping performance through a dedicated dashboard.
+Customers of these stores also have the benefit of selecting from multiple shipping options, including pickup points through an interactive map interface.
 
-\chapter{Conclusion and Future Work}
-\label{ch:conclusion}
-Summarise findings and outline future directions.
+\subsection{User Flows}
+The best way to understand the user flows of Shopickup is through the following diagram, which will illustrate the main interactions both for merchants and customers here.
 
+% TODO: HERE CREATE A BPMN DIAGRAM OF THE USER FLOWS
+
+Then we will describe the labeled user flows, both for merchants and customers, giving an idea of how the application is used in practice.
+
+\subsection{Architectural Overview and Tech Stack}
+Here will be an overall high-level overview of the system architecture, describing the main components and the technology stack used for each of them.
+For this purpose, a detailed and labeled UML diagram of the system will be provided here...
+
+% TODO: HERE DESIGN A LABELED UML DIAGRAM OF THE SYSTEM
+
+...which will then be followed by a description of each component and the technologies used.
+
+\subsection{Limitations and Scope}
+It is also important to address some of the shortcomings of the practically implemented system:
+
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Platform agnosticism:} While the backend is built in a way where most of it is platform-agnostic and reusable, at the time of writing the frontend is primarily designed to integrate with Shopify's admin dashboard via an embedded app.
+  \item \textbf{International carriers:} Although the carrier integration system verifiably works with multiple national carriers (such as MPL for Hungary and Österreichische Post for Austria), the practical application was only released for the Hungarian market.
+\end{itemize}
+
+\section{Carrier Integration Architecture Design}
+As described in the literature review, after considering various architectural options, an API gateway-centric architecture combined with adapter-based carrier integrations was chosen as the most suitable trade-off for the carrier integration system of Shopickup.
+This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
+
+At the time of writing, this part of the system has not been developed yet, so a technology-agnostic design description will be provided instead:
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{@{}p{3cm}p{9cm}@{}}
+    \toprule
+    \textbf{Component}                  & \textbf{Description}                                                                                                                                                                                                                                                                                                     \\
+    \midrule
+    API Gateway (edge)                  & Single ingress for clients; handles auth, tenant routing, rate limiting, request validation, caching, and routing to internal services. Routes requests to: Adapter Orchestrator, Tracking Service, or Analytics/Reporting endpoints.                                                                                    \\[6pt]
+    Adapter Orchestrator / Broker       & Small coordinator that selects the correct carrier adapter based on routing rules (carrier ID, destination, merchant settings). Implements retries, backoff, circuit breakers, and synchronous vs asynchronous dispatch choices.                                                                                         \\[6pt]
+    Carrier Adapters (one per carrier)  & Implement a fixed internal interface (e.g., createShipment, getLabel, track, cancel). Responsible for mapping canonical domain model -> carrier request, calling carrier API (including auth), interpreting responses and errors, and returning normalized output. Packaged as independently deployable modules/plugins. \\[6pt]
+    Canonical Data Model / Normalizer   & Shared domain schema used inside the platform; adapters translate between canonical and carrier models.                                                                                                                                                                                                                  \\[6pt]
+    Tracking Service / State Reconciler & Periodic polling or webhook consumer that ingests carrier state changes, normalizes them, and updates shipment state; emits events for alerts/analytics.                                                                                                                                                                 \\[6pt]
+  \end{tabular}
+\end{table}
+
+After a more detailed and technical description of the implementation comes a section describing the typical request flows through the system for common operations such as creating shipments, printing labels, and tracking packages.
+
+In the final part of this section, I will also describe it in more detail, regarding our most important criteria, which is extensibility and maintainability.
+
+\section{Monitoring Dashboard Design}
+Based on the literature review, a hybrid Lambda Architecture-inspired design was chosen for the monitoring dashboard of Shopickup.
+This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
+
+\section{Evaluation Methodology}
+Describe the planned evaluation methods of the dashboard system and used KPIs.
+Both qualitative interviews and quantitative perhaps according to the DeLone and McLean IS success model.
+
+The plan is to conduct user interviews with merchants using the dashboard to gather qualitative feedback on usability, usefulness, and overall satisfaction.
+Additionally, system usage analytics will be collected to measure engagement metrics such as session duration, feature usage frequency, and task completion rates.
+These quantitative metrics in conjunction with survey data will help assess the effectiveness of the dashboard in improving shipping operations.
+
+A combination of these methods will provide a comprehensive evaluation of the dashboard's impact on merchant decision-making and operational efficiency.
+One planned way to get merchants on board for this evaluation is to offer them heavily discounted or favorable pricing plans in the initial launch phase in exchange for their participation in the study.
+
+\chapter{Summary}
+\label{ch:summary}
+
+This exposé summarizes the current state of the thesis.
+The research phase is essentially complete: the literature review has established the architectural foundations for multi-carrier integration and the dashboard layer, with an API gateway-centric adapter architecture identified as the most appropriate trade-off for extensibility and operational effort, and a hybrid real-time/batch analytics model selected for KPI-driven monitoring, with defined operational and strategic KPIs tailored to shipping contexts.
+
+Based on these findings, the methodology has been defined to guide the subsequent implementation and evaluation phases.
+The next steps are to operationalize this methodology by detailing the concrete system design, implementing the prototype components, and executing the planned evaluation through qualitative interviews and quantitative measurements.
+This work will commence immediately following this exposé's approval.
+
+% \chapter{Results}
+% \label{ch:results}
+% Present experiments, results, and discussion.
+
+% \chapter{Conclusion and Future Work}
+% \label{ch:conclusion}
+% Summarise findings and outline future directions.
+
+% ----- Bibliography and Appendices -----
+\backmatter
 % Bibliography
 \printbibliography
 
-\appendix
-\chapter{Appendix A}
-Supplementary material.
+% \begin{appendices}
+%   \chapter{Appendix A}
+%   Supplementary material.
+% \end{appendices}
 
 \end{document}
-% ...existing code...
