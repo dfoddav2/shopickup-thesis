@@ -23,6 +23,7 @@
 
 % Graphics, math, tables
 \usepackage{graphicx}
+\usepackage{svg}
 \usepackage{booktabs}
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
@@ -260,7 +261,7 @@ This pattern has two primary implementation variants, one commonly referred to a
 In the context of this project, the latter one is more appropriate, as we are dealing with external carrier APIs with no benefit of inheritance.
 The following is a simplified illustration of how the Adapter pattern can be applied to the multi-carrier shipping integration problem:
 
-\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:dispatch]
+\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:carrier-adapter-interface]
 interface CarrierAdapter {
     createLabel(order): Label
     trackShipment(trackingId): TrackingInfo
@@ -270,7 +271,7 @@ interface CarrierAdapter {
 
 For each carrier, a dedicated adapter implements this interface:
 
-\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:dispatch]
+\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:carrier-adapter-implementations]
 class DHLAdapter implements CarrierAdapter { ... }
 class GLSAdapter implements CarrierAdapter { ... }
 class AustrianPostAdapter implements CarrierAdapter { ... }
@@ -376,7 +377,7 @@ The following subsections describe each of these in turn, discuss their advantag
 \subsection{Point-to-Point Integration}
 In a point-to-point architecture, the application establishes direct connections to each external system. For the thesis project, this would mean that the backend directly invokes the DHL, GLS, Austrian Post, etc. APIs wherever shipping functionality is needed, often with branching logic such as:
 
-\begin{lstlisting}[language=Python,caption={Carrier dispatch example},label=lst:dispatch]
+\begin{lstlisting}[language=Python,caption={Carrier dispatch example},label=lst:carrier-dispatch-example]
 if carrier == "DHL": call_dhl_api(...)
 elif carrier == "GLS": call_gls_api(...)
 ...
@@ -735,40 +736,12 @@ Strategic KPIs are designed to inform long-term planning and strategic decision-
 
 \chapter{Methodology}
 \label{ch:methodology}
-This chapter first describes, with an emphasis of technical details, the commercial implementation of my application known as Shopickup.
-This serves as context for the two other main parts of this chapter, which describe how based on the literature review, what design choices were chosen for the carrier integration architecture and the monitoring dashboard respectively.
-For each of the latter two sections, I first describe and argue for the chosen design, then follow up with strategies for evaluation.
-
-\section{Shopickup Application Overview}
-Shopickup is a multi-carrier shipping integration and monitoring platform designed for e-commerce merchants.
-It allows merchants to extend their online stores with a unified interface for managing shipments across multiple carriers, print labels, track packages, and gain insights into shipping performance through a dedicated dashboard.
-Customers of these stores also have the benefit of selecting from multiple shipping options, including pickup points through an interactive map interface.
-
-\subsection{User Flows}
-The best way to understand the user flows of Shopickup is through the following diagram, which will illustrate the main interactions both for merchants and customers here.
-
-% TODO: HERE CREATE A BPMN DIAGRAM OF THE USER FLOWS
-
-Then we will describe the labeled user flows, both for merchants and customers, giving an idea of how the application is used in practice.
-
-\subsection{Architectural Overview and Tech Stack}
-Here will be an overall high-level overview of the system architecture, describing the main components and the technology stack used for each of them.
-For this purpose, a detailed and labeled UML diagram of the system will be provided here...
-
-% TODO: HERE DESIGN A LABELED UML DIAGRAM OF THE SYSTEM
-
-...which will then be followed by a description of each component and the technologies used.
-
-\subsection{Limitations and Scope}
-It is also important to address some of the shortcomings of the practically implemented system:
-
-\begin{itemize}[itemsep=3pt]
-  \item \textbf{Platform agnosticism:} While the backend is built in a way where most of it is platform-agnostic and reusable, at the time of writing the frontend is primarily designed to integrate with Shopify's admin dashboard via an embedded app.
-  \item \textbf{International carriers:} Although the carrier integration system verifiably works with multiple national carriers (such as MPL for Hungary and Österreichische Post for Austria), the practical application was only released for the Hungarian market.
-\end{itemize}
+With this chapter's layout, I am following the natural order of the design and development process of the project, throughout which I first created the practical implementation of the carrier integration system based on the principles discussed in the literature review.
+Following that, I built a real commercial application that implements this system as a core component, and started exploring the topic of the monitoring dashboard through this application as well.
+The chapter is structured accordingly, starting with the design of the carrier integration system, then giving an overview of the Shopickup application, and finally describing the design and evaluation of the monitoring dashboard.
 
 \section{Carrier Integration Architecture Design}
-As described in the literature review, after considering various architectural options, an API gateway-centric architecture combined with adapter-based carrier integrations was chosen as the most suitable trade-off for the carrier integration system of Shopickup.
+As described in the literature review, after considering various architectural options, an API gateway-centric architecture combined with adapter-based carrier integrations was chosen as the most suitable trade-off for the carrier integration system.
 This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
 
 At the time of writing, this part of the system has not been developed yet, so a technology-agnostic design description will be provided instead:
@@ -792,6 +765,77 @@ After a more detailed and technical description of the implementation comes a se
 
 In the final part of this section, I will also describe it in more detail, regarding our most important criteria, which is extensibility and maintainability.
 
+https://www.npmjs.com/org/shopickup
+
+\section{Shopickup Application Overview}
+Shopickup is a multi-carrier shipping integration and monitoring platform designed for e-commerce merchants, that implements the integration layer as packages and builds around it an application that follows the principles set forth in the literature review.
+It allows merchants to extend their online stores with a unified interface for managing shipments across multiple carriers, print labels, track packages, and gain insights into shipping performance through a dedicated dashboard.
+Customers of these stores also have the benefit of utilizing the platform's pickup point picker widget, which provides them with a seamless experience for selecting their preferred delivery options during checkout.
+
+%TODO: Here a collage of screenshots of the dashboard / pickup point picker widget / settings page etc. would be nice
+
+Since this is a commercial application with proprietary license, unlike the integration layer itself, I will not be giving access to the source code. I will instead provide a high level overview of it, only going into greater detail for the parts relevant to the thesis's main research questions.
+While the app itself does not directly answer any of our research questions, it serves as context on how the proposed carrier integration system can be applied in the real world, and also as a vector for me to explore the design and evaluation of the monitoring dashboard.
+
+To give a better understanding of the application, I will first describe its functionality concisely in terms of user flows, then I will give an architectural overview of the system and the technologies used paying special attention to the parts relevant to the thesis.
+
+\subsection{User Flows}
+Perhaps, the best way to understand the user flows of Shopickup is through diagrams. There are two main user categories: customers and merchants, each with their own distinct flows and motivations for using the platform.
+To make the flows easily readable I followed the following color scheme: blue for customer actions, yellow for choices, green for automatic system actions and purple for metadata or information.
+
+\subsubsection{Customer Flow}
+I will start with the customer flow, as it is perhaps the easiest to relate to and their motivations are simple as well: they want to receive their orders in the most convenient way possible, which is often not just home delivery, but also pickup points, which are becoming increasingly popular.
+The customer flow starts once they have added items to their cart and decided to go ahead with the checkout process.
+
+Following this, the flow splits into three distinct paths, depending on whether they directly navigate to the checkout page and based on how they interact with the pickup point picker widget on the cart page.
+The reason for the first split based on navigation is due to a limitation of the Shopify platform, which does not allow widgets directly on the checkout page, leaving merchants with the only choice of setting the pickup point picker on the cart page. (Shopify Plus merchants are exempt from this limitation, which is supported by the app as well, but for the vast majority of stores this is the case.)
+Logically, in case the user automatically navigates to the checkout page, they may miss the other two flows completely.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{src/diagrams/shopickup-user-flows-customer.png}
+  \caption{Shopickup customer flows for pickup-point selection and home delivery}
+  \label{fig:shopickup-user-flows}
+\end{figure}
+
+Throughout the flow, we have to set and collect data passively via the user's cart metadata, which is a common way to store custom data to be later read through the event webhook sent out by Shopify and make sure that customers are only presented with the valid shipping and payment options according to their choices.
+The flow ends with the customer placing the order, which then triggers Shopify to send out a webhook event that we catch and process in edge runtimes.
+The customer flow is designed to be as unobtrusive and the user facing UI was built using SolidJS to be as lightweight and fast as possible in a WebAssembly buildable format.
+
+\subsubsection{Merchant Flow}
+The merchant flow is more interesting and can be divided based on the main actions that merchants can take on the platform, which are: managing integrations, managing shipments and orders, and monitoring performance through the dashboard.
+I will not go into too much detail on any of these flows, but rather give a high level overview of what purpose they serve and how these flows enable merchants to achieve their goals.
+
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Integration Management}: Screens that are meant to allow users to easily connect their preferred providers through API keys and configure most relevant settings made available through the carriers' APIs, such as delivery times, label formats and extra services for example. This step essentially exposes each available carrier adapters' options to the user in an indirect way. This section is also responsible for mapping available shipping and payment methods to the different carriers, which is a crucial step for the customer flow described before.
+  \item \textbf{Shipment and Order Management}: Allows merchants to quickly overview their shipments through a sortable and filterable table and take common actions such as printing labels, tracking packages with just a few clicks. In case of further needs, they can click on a shipment to see a detailed view and take more specific actions, such as changing delivery address, method, carrier or even canceling the shipment. This section is related to the carrier integration system through tracking and manual updates, which are also exposed by the adapters.
+  \item \textbf{Performance Monitoring}: Is done through the central dashboard, which is a common, tiled layout that can be customized by the merchant to only show the KPIs and metrics that are most relevant to them. This section also shows any warnings or alerts related to the shipments or services, such as SLA breaches or carrier delays. The dashboard's design and implementation is further explored in the next section of the methodology.
+\end{itemize}
+
+% TODO: HERE DESIGN A CUSTOM DIAGRAM WITH THE MAIN SCREENS OF THE APP AS PART OF THE FLOW CHARTS
+
+\subsection{Architectural Overview and Technology Stack}
+Now that we have seen the user flows of the application, we can go into the architectural details of where the carrier integration layer plugs into the application, and also to give an overview of the technologies used and effort required to build such a system.
+Most of the tech stack consists of modern standard tools and frameworks that are commonly used in the industry, however in some specific regards the choices have been limited or influenced by Shopify's platform requirements for embedded apps.
+
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Backend + Frontend}: The backend + frontend is specified by Shopify to be built using \textbf{React Router v7} in the server-side rendering framework mode, which means that for small applications such as this one, both the backend and frontend needs can be fulfilled by this single server from a classical web development perspective. This all was served through \textbf{Render} with future scalability in mind.
+  \item \textbf{Integration Layer - Backend}: 
+  \item \textbf{Database}: 
+  \item \textbf{Edge Functions}: 
+  \item \textbf{Integration Layer - Edge}: 
+  \item \textbf{Cron Jobs}: 
+  \item \textbf{Monitoring and Analytics}: 
+  \item \textbf{Shopify Theme Extension}: 
+\end{itemize}
+
+% TODO: HERE DESIGN A DIAGRAM SHOWING THE ARCHITECTURE OF THE APP AND INTEGRATION POINTS
+
+It is apparent from the diagram that there are many different components that interact with each other inside and outside of the system's boundaries.
+One of the main challenges is interactions with external systems, such as the shipping providers, because we have no control over their APIs, nor their transparency. %TODO: Is this the right expression here?
+Being able to communicate with multiple providers using a unified and consistent interface could save a lot of time and effort for developers and allow them to focus on the business logic, rather than the brittle, custom one-to-one function mappings that are usually built.
+In this case, overall development time was not shortened, as not only the provider adapters, but the core also needed to be built from scratch, but once it was time to implement the capabilities in the app, it was much more convenient and quicker.
+
 \section{Monitoring Dashboard Design}
 Based on the literature review, a hybrid Lambda Architecture-inspired design was chosen for the monitoring dashboard of Shopickup.
 This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
@@ -806,6 +850,14 @@ These quantitative metrics in conjunction with survey data will help assess the 
 
 A combination of these methods will provide a comprehensive evaluation of the dashboard's impact on merchant decision-making and operational efficiency.
 One planned way to get merchants on board for this evaluation is to offer them heavily discounted or favorable pricing plans in the initial launch phase in exchange for their participation in the study.
+
+\subsection{Limitations and Scope}
+It is also important to address some of the shortcomings of the practically implemented system:
+
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Platform agnosticism}: While the backend is built in a way where most of it is platform-agnostic and reusable, at the time of writing the frontend is primarily designed to integrate with Shopify's admin dashboard via an embedded app.
+  \item \textbf{International carriers}: Although the carrier integration system verifiably works with multiple domestic carriers (such as MPL or Foxpost), the practical application was only released for the Hungarian market and thus does not yet support international providers.
+\end{itemize}
 
 \chapter{Summary}
 \label{ch:summary}

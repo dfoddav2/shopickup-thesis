@@ -1,0 +1,63 @@
+%%{init: {"theme": "neutral", "themeVariables": {"fontSize": "16px"}, "flowchart": {"nodeSpacing": 80, "rankSpacing": 60}}}%%
+flowchart TB
+    Start([Checkout starts]) --> CartChoice{Visit cart page?}
+    CartWebhook[[Catch and process order webhook]]
+
+    CartChoice -->|No| DirectHomeStart
+    CartChoice -->|Yes| MethodChoice{Shipping option<br/>on cart page?}
+
+    DirectHomeTitle@{ shape: text, label: "Subflow 1: Skip cart page" }
+    subgraph DirectHome["Subflow 1"]
+        direction TB
+        DirectHomeStart[Proceed directly to checkout with<br/>home delivery]
+        DirectHomeMeta[(Cart metadata retains home delivery default)]
+        DirectHomeAPI[[Shopify Delivery/Payment Customization API]]
+        DirectHomeOrder[Place order]
+        DirectHomeStart --> DirectHomeMeta --> DirectHomeAPI --> DirectHomeOrder
+    end
+    DirectHomeTitle ~~~ DirectHomeStart
+
+    CartHomeTitle@{ shape: text, label: "Subflow 2: Cart page, home delivery chosen" }
+    subgraph CartHome["Subflow 2"]
+        direction TB
+        CartHomeDefault[Keep default home delivery or explicitly select it]
+        CartHomeMeta[(Cart metadata retains home delivery default)]
+        CartHomeAPI[[Shopify Delivery/Payment Customization API]]
+        CartHomeOrder[Place order]
+        CartHomeDefault --> CartHomeMeta --> CartHomeAPI --> CartHomeOrder
+    end
+    CartHomeTitle ~~~ CartHomeDefault
+
+    PickupTitle@{ shape: text, label: "Subflow 3: Cart page, pickup point selected" }
+    subgraph PickupFlow["Subflow 3"]
+        direction TB
+        PickupStart[Open pickup point picker]
+        PickupFetch[Fetch available pickup points from merchant configuration]
+        PickupSelect[User selects pickup point]
+        PickupMeta[(Update cart metadata with pickup point details)]
+        PickupAPI[[Shopify Delivery/Payment Customization API]]
+        PickupOrder[Place order]
+        PickupStart --> PickupFetch --> PickupSelect --> PickupMeta --> PickupAPI --> PickupOrder
+    end
+    PickupTitle ~~~ PickupStart
+
+    MethodChoice -->|Home delivery / default| CartHomeDefault
+    MethodChoice -->|Pickup point| PickupStart
+
+    DirectHomeOrder --> CartWebhook
+    CartHomeOrder --> CartWebhook
+    PickupOrder --> CartWebhook
+
+    classDef user fill:#dbeafe,stroke:#2563eb,color:#0f172a,stroke-width:1px;
+    classDef decision fill:#fef3c7,stroke:#d97706,color:#1f2937,stroke-width:1px;
+    classDef shopify fill:#dcfce7,stroke:#16a34a,color:#14532d,stroke-width:1px;
+    classDef metadata fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764,stroke-width:1px;
+    classDef auto fill:#ecfdf5,stroke:#059669,color:#064e3b,stroke-width:1px;
+    classDef subflowTitle color:#111827,font-weight:700;
+
+    class Start,DirectHomeStart,CartHomeDefault,PickupStart,PickupFetch,PickupSelect,DirectHomeOrder,CartHomeOrder,PickupOrder user;
+    class CartChoice,MethodChoice decision;
+    class DirectHomeAPI,CartHomeAPI,PickupAPI shopify;
+    class DirectHomeMeta,CartHomeMeta,PickupMeta metadata;
+    class CartWebhook auto;
+    class DirectHomeTitle,CartHomeTitle,PickupTitle subflowTitle;
