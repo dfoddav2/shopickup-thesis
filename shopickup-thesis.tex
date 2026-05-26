@@ -40,6 +40,8 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\small,breaklines=true,captionpos=b}
 
+\usepackage{minted}
+
 % Quotes
 \usepackage{csquotes}
 
@@ -121,13 +123,13 @@ Consequently, online shopping has seen strong growth over the past two decades, 
 Similar trends can be observed in various regional markets and their respective research reports, such as in Eurostat's EEA specific data  showing that more and more stores are adopting online sales channels, with 23.83\% of all enterprises having one in 2023, compared to just 17.21\% ten years prior \cite{eurostatEcommerceStatistics2025}, with the share of total sales following suit.
 On the individual level, Eurostat surveyed that 94\% of EU citizens used the internet in 2024 and 77\% have made online purchases in the past year \cite{eurostatEcommerceStatisticsIndividuals2025}, with younger demographics leading the way, showing that this growth is likely to continue in the foreseeable future.
 
-We have watched the rise of giants like Amazon and the Alibaba group, who have set new standards for customer experience, logistics, and supply chain management on a global scale. These large enterprises have proven that efficient e-commerce operations can drive significant revenue growth and to this day in Europe, larger enterprises are more likely to sell online than smaller ones, with 24.44\% of turnover coming from online sales in large companies, compared to just 14.99\% for medium and 9.49\% for small enterprises \cite{eurostatEcommerceStatistics2025}.
+We have vitnessed the rise of giants like Amazon and the Alibaba group, who have set new standards for customer experience, logistics, and supply chain management on a global scale. These large enterprises have proven that efficient e-commerce operations can drive significant revenue growth and to this day in Europe, larger enterprises are more likely to sell online than smaller ones, with 24.44\% of turnover coming from online sales in large companies, compared to just 14.99\% for medium and 9.49\% for small enterprises \cite{eurostatEcommerceStatistics2025}.
 However, the e-commerce boom is not limited to large players, small and medium-sized enterprises (SMEs) have more opportunities and tools under their disposal than ever before to establish and grow their online presence.
 Webshop engines like Shopify, Wix and Wordpress based solutions like WooCommerce have democratized access to e-commerce, allowing SMEs to set up online stores with relative ease and minimal upfront investment.
 This lowers the barrier to entry for many small businesses and aspiring entrepreneurs, leading to a remarkable number of 24.1 million online stores globally \cite{capitaloneHowManyOnline2025}.
 We can also see that most of the online stores are created with a just a handful of these popular platforms, with Shopify alone powering 23.6\% of them \cite{capitaloneHowManyOnline2025}.
 These giant platforms can not by themselves cover all the needs of the diverse e-commerce landscape across different regions, industries and business models, thus they need some help from third-party applications and services to fill in the gaps.
-This thesis project, referred to as Shopickup, comes into play, to solve a major pain point for SMEs in the e-commerce space: the integration and management of shipping carriers.
+This thesis project, commonly referred to as Shopickup for the practical implementation, comes into play, to solve a major pain point for SMEs in the e-commerce space: the integration and management of shipping carriers.
 
 \section{Motivation and Problem Statement}
 While e-commerce platforms provide solid foundations for online sales, due to their general-purpose large-scale international nature, they can not possibly cover all shipping providers of all regions they operate in.
@@ -516,7 +518,9 @@ Synthesizing the above subsections, the architectural options can be compared al
   \caption{Comparative assessment of candidate architectures for Shopickup}
 \end{table}
 
-Given the project scope and the desire for a balance between extensibility and operational effort, lightness, the API gateway-centric architecture combined with adapter-based carrier integrations is selected as the most suitable trade-off.
+Given the project scope and the desire for a balance between extensibility and operational effort, lightness, the API gateway-centric architecture combined with adapter-based carrier integrations is selected as the most suitable trade-off and the answer to our first main research question (MRQ1).
+This architecture directly supports the extensibility goals by isolating carrier-specific logic in adapter services, while providing a unified interface to clients and centralizing cross-cutting concerns in the gateway.
+It also aligns well with modern software development practices and available tooling, making it a practical choice for implementation within the constraints of a smaller application and a bachelor thesis timeline.
 
 \section{Preexisting Solutions and Papers in this Domain}
 As I have previously mentioned, there is a lack of academic literature directly addressing multi-carrier shipping integration at the API level.
@@ -621,24 +625,25 @@ To “beat” this complexity, the Lambda Architecture proposes separating the s
 \end{enumerate}
 
 While Marz's original proposal suggests heavy industrial technologies like Apache Hadoop for the speed layer \cite{marzHowBeatCAP2011}, the pattern is technology-agnostic, which is made apparent by how different papers implement it or suggest implementing it via different technologies \cite{lekkalaLeveragingLambdaArchitecture2020, hasaniLambdaArchitectureReal2014}.
-For a focused application like Shopickup, strictly adhering to these “Big Data” technologies would introduce unnecessary operational overhead, which is a common issue noted by critics, such as Krep who points out that maintaining two parallel codebases (one for batch, one for streaming) for the same purposes violates the “Don't Repeat Yourself” (DRY) principle and increases maintenance costs \cite{krepsQuestioningLambdaArchitecture2014}.
-However, the functional separation remains valid and valuable. Instead of Hadoop and Storm, Shopickup can implement a lightweight approach that takes inspiration from the Lambda architecture:
+For a small-sized, focused application like Shopickup, strictly adhering to these “Big Data” technologies would introduce unnecessary operational overhead, which is a common issue noted by critics, such as Krep who points out that maintaining two parallel codebases (one for batch, one for streaming) for the same purposes violates the “Don't Repeat Yourself” (DRY) principle and increases maintenance costs \cite{krepsQuestioningLambdaArchitecture2014}.
+However, the functional separation remains valid and valuable. Instead of Hadoop and Storm, such applications could implement a lightweight approach that takes inspiration from the Lambda architecture:
 
 \begin{itemize}[itemsep=3pt]
-  \item The \textbf{Batch Layer} can be implemented effectively using standard relational database aggregations or scheduled cron jobs that run during off-peak hours to generate static reporting tables, which later could be replaced by a more robust ETL pipeline if needed.
-  \item The \textbf{Speed Layer} does not require a complex event-streaming engine (like Kafka) if the data volume does not demand it. Instead, frequent polling of carrier APIs (e.g., every 5 minutes) or lightweight webhook handlers if available can serve the same functional purpose: capturing the latest state to alert merchants of immediate issues.
-  \item The \textbf{Serving Layer} can be a simple API that merges results from both layers, serving real-time alerts from the Speed Layer and historical reports from the Batch Layer to the dashboard.
+  \item \textbf{Batch Layer}: can be implemented effectively using standard relational database aggregations or scheduled cron jobs that run during off-peak hours to generate static reporting tables, which later could be replaced by a more robust ETL pipeline if needed.
+  \item \textbf{Speed Layer}: does not require a complex event-streaming engine (like Kafka) if the data volume does not demand it. Instead, frequent polling of carrier APIs (e.g., every 5 minutes, depending on the provider's limits) or lightweight webhook handlers if available can serve the same functional purpose: capturing the latest state to alert merchants of immediate issues.
+  \item \textbf{Serving Layer}: can be a simple API that merges results from both layers, serving real-time alerts from the Speed Layer and historical reports from the Batch Layer to the dashboard.
 \end{itemize}
 
-Based on the literature research this hybrid approach seems to be a suitable candidate for our project, which I will further explore in the design chapter.
-Were the scope of the project larger, Lambda's alternative, the Kappa architecture proposed by Kreps \cite{krepsQuestioningLambdaArchitecture2014} or even a CQRS + Event Sourcing approach \cite{pachecoMicroservicePatternsBest2018} might be considered.
+Based on the literature research this hybrid approach seems to be a suitable candidate for our project, which I will further explore in the corresponding subsection of the methodology. %TODO: Link to the section
+Were the scope of the project larger, Lambda's alternative, the Kappa architecture proposed by Kreps \cite{krepsQuestioningLambdaArchitecture2014} or even a CQRS + Event Sourcing approach \cite{pachecoMicroservicePatternsBest2018} might be considered better.
 
 \subsection{Domain-Specific KPIs for Shipping Operations}
 With understanding of the real-time/batch distinction established, we can now continue with the SRQ2.1 and define domain-specific KPIs appropriate for merchant evaluation and decision-making.
 KPIs of organizations are, as Piela summarized usually organized by factors most relevant to the company, such as whether they are financial or non-financial, primary or secondary metrics, etc. \cite{pielaKeyPerformanceIndicator2017}.
 We however, categorize them into tiers reflecting the different decision horizons they support, as described earlier.
-This serves both to clarify their purpose and to guide the underlying data architecture needed to support them.
-We will be in a later chapter attempt to implement these KPIs into our own project's dashboard according to SMART criteria \cite{ishakSMARTKPIManagement2019}, then evaluate their effectiveness based on merchant feedback and the IS system success model by DeLone and McLean \cite{savolainenPerformanceDashboardEffectiveness2023}. % TODO: Here I took this idea from a master's thesis, but they themselves are pointing to DeLone and McLean's model, so rework this part
+This serves both to clarify their purpose and to guide the underlying data architecture needed to support them in practice.
+We will in the methodology attempt to implement some of these KPIs into our own project's dashboard according to SMART criteria \cite{ishakSMARTKPIManagement2019}, then evaluate their effectiveness based on merchant feedback and the IS system success model by DeLone and McLean \cite{savolainenPerformanceDashboardEffectiveness2023}. % TODO: Here I took this idea from a master's thesis, but they themselves are pointing to DeLone and McLean's model, so rework this part
+% TODO: Link to section here
 
 \subsubsection{Operational KPIs: Real-Time Monitoring for Immediate Action}
 Operational KPIs are designed to support immediate decision-making, often in response to unfolding events.
@@ -738,41 +743,171 @@ Strategic KPIs are designed to inform long-term planning and strategic decision-
 \label{ch:methodology}
 With this chapter's layout, I am following the natural order of the design and development process of the project, throughout which I first created the practical implementation of the carrier integration system based on the principles discussed in the literature review.
 Following that, I built a real commercial application that implements this system as a core component, and started exploring the topic of the monitoring dashboard through this application as well.
-The chapter is structured accordingly, starting with the design of the carrier integration system, then giving an overview of the Shopickup application, and finally describing the design and evaluation of the monitoring dashboard.
+
+The combination of the integration layer and the commercial application serves as a proof of concept that attests the validity and feasibility of the literature review's proposed architecture and answer of the first research question.
+A central part of this proof of concept is the dashboard, for which most of the feasible KPIs and design choices were implemented, then further evaluated based on in-depth interviews with two merchants using the application, and based on the IS system success model by DeLone and McLean \cite{savolainenPerformanceDashboardEffectiveness2023}.
 
 \section{Carrier Integration Architecture Design}
-As described in the literature review, after considering various architectural options, an API gateway-centric architecture combined with adapter-based carrier integrations was chosen as the most suitable trade-off for the carrier integration system.
+As described in the literature review, after considering various architectural options, an adapter + API gateway architecture was chosen as the most suitable trade-off for the carrier integration system.
 This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
-
-At the time of writing, this part of the system has not been developed yet, so a technology-agnostic design description will be provided instead:
+Through development, I found the following components to be essential for such system, which are also the ones implemented in the practical project.
 
 \begin{table}[H]
   \centering
   \small
-  \begin{tabular}{@{}p{3cm}p{9cm}@{}}
+  \begin{tabular}{@{}p{3cm}p{8cm}p{4cm}@{}}
     \toprule
-    \textbf{Component}                  & \textbf{Description}                                                                                                                                                                                                                                                                                                     \\
-    \midrule
-    API Gateway (edge)                  & Single ingress for clients; handles auth, tenant routing, rate limiting, request validation, caching, and routing to internal services. Routes requests to: Adapter Orchestrator, Tracking Service, or Analytics/Reporting endpoints.                                                                                    \\[6pt]
-    Adapter Orchestrator / Broker       & Small coordinator that selects the correct carrier adapter based on routing rules (carrier ID, destination, merchant settings). Implements retries, backoff, circuit breakers, and synchronous vs asynchronous dispatch choices.                                                                                         \\[6pt]
-    Carrier Adapters (one per carrier)  & Implement a fixed internal interface (e.g., createShipment, getLabel, track, cancel). Responsible for mapping canonical domain model -> carrier request, calling carrier API (including auth), interpreting responses and errors, and returning normalized output. Packaged as independently deployable modules/plugins. \\[6pt]
-    Canonical Data Model / Normalizer   & Shared domain schema used inside the platform; adapters translate between canonical and carrier models.                                                                                                                                                                                                                  \\[6pt]
-    Tracking Service / State Reconciler & Periodic polling or webhook consumer that ingests carrier state changes, normalizes them, and updates shipment state; emits events for alerts/analytics.                                                                                                                                                                 \\[6pt]
+    \textbf{Component}                 & \textbf{Description}                                                                                                                                                                                                                                                                                & \textbf{Responsibility}    \\
+    \midrule                                                                                                                                                                                                                                                                                                                                                              \\[6pt]
+    Core contract (used by adapters)   & Defines base interface contracts for both input and output of the canonical domain model via optional advertised capabilities available to all adapters.                                                                                                                                            & Integration developers     \\[6pt]
+    Carrier Adapters (one per carrier) & Defines which capabilities of the core contract are implemented. Responsible for mapping canonical domain model to carrier request, calling carrier API (including auth), interpreting responses and errors, and returning normalized output. Packaged as independently deployable modules/plugins. & Integration developers     \\[6pt]
+    API Gateway                        & Single ingress for clients handling cross-cutting concerns between requests, such as auth, rate limiting and internal services.                                                                                                                                                                     & End-application developers \\[6pt]
+    Extra components: Tracking Service & Periodic polling or webhook consumer that ingests carrier state changes, normalizes them, and updates shipment state; emits events for alerts/analytics.                                                                                                                                            & End-application developers \\[6pt]
+    \bottomrule
   \end{tabular}
 \end{table}
 
-After a more detailed and technical description of the implementation comes a section describing the typical request flows through the system for common operations such as creating shipments, printing labels, and tracking packages.
+These components layer-by-layer build to more specific and higher-level functionalities, with the core contract being the most abstract and the API gateway being the most concrete and specific to the end application.
+The following figure gives an overview of a theoretical complete system architecture is built up of these components.
 
-In the final part of this section, I will also describe it in more detail, regarding our most important criteria, which is extensibility and maintainability.
+% TODO: Diagram of the overall architecture of the system here
 
-https://www.npmjs.com/org/shopickup
+In a practical context, the domain independent parts are referred to as the \textit{carrier integration layer} throughout this paper. It was deliberately built for Node.js,the most popular web framework and runtime in the industry\parencite{stackoverflowDeveloperSurvey2025} and was made completely available as an open-source package, which can be found on \textbf{npmjs}\parencite{shopickupNpmOrganization2026} for integrators and in raw code format on \textbf{GitHub}\parencite{shopickupIntegrationLayerGitHub2026} for developers and reviewers.
+The rationale behind the MIT license and open-source approach is two-fold: first, it allows the research to be more transparent and allows insight for review, second, it could potentially be used by other developers and integrators in the future, perhaps even evolving into a common, "crowdsourced" solution for the problem of carrier integration.
+Multiple developers getting on board would also allow for continuous updates and improvements and relatively fast reaction to changes in the carrier APIs.
+This is also one of the reasons why extensibility was a key design principle for the system.
+The public repository follows a monorepo structure on GitHub, while the core package and all adapters are published separately under the \textit{shopickup} npm organization.
+
+As of the time of writing, three shipping providers are supported for on average five of the main capabilities required by merchants, such as label creation, tracking, pickup point retrieval, etc.
+The currently supported carriers are Magyar Posta Logisztika (MPL), GLS and Foxpost, which are Hungary's three largest carriers\parencite{gkidEvertekelesEsLogisztika2020}, each with their own automated postal lockers and pickup points.
+Three further providers are in the process of being added, including Austrian Post, and two more regional carriers.
+
+% TODO: Image collage of the GitHub repo and npm packages here
+
+The following subsections will go over the components one by one, with much greater detail for the core contract and carrier adapters, as they are the most relevant to the research question and are application domain independent, unlike the others.
+For the end-application dependent components, simpler guidelines and overviews will be given without going into much technical detail.
+
+\subsection{Integration Layer - Core}
+As mentioned before, the core contract is the most abstract element of the system. It serves the following purposes:
+
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Abstract capability and flow definitions}: it defines the capabilities carrier adapters can implement, such as label creation, parcel creation, tracking, etc. Adapters can then choose which of these capabilities they implement based on the carrier's available API endpoints and clearly advertise them as available. Taking this idea one step further, the core can also define flows that combine multiple capabilities into higher-level sequences, such as "create label" that would first create a parcel, then print its label in a singular step.
+  \item \textbf{Canonical models and type safety}: the whole project was built with TypeScript and is strongly typed, the core accordingly defines the canonical domain models via base types for the adapters. The adapters import these types, extend them with carrier-specific fields where required and return the output in a similar predefined format. This enforces a certain level of consistency across adapters and promotes predictability. In the following figure, we can see for example through the example of a parcel creation flow how the core defines strict types such as `Parcel`, `CreateParcelsRequest` and `CreateParcelResponse`, defining the core types end to end.
+  \item \textbf{Pluggable central utilities and context}: the core also provides crucial utilities used by all adapters, such as http clients, logging, telemetry or store helpers. As of the time of writing, the http client and logging utilities are completely implemented and used. The core discipline is to keep these utilities generic and pluggable, the package does provide for example a simply initializable \textit{Axios} / \textit{Fetch} based http client, but developers also have the choice to use their own custom client as long as it adheres to or is mappable to the core's defined standard http interface type. Similarly, the logging utility provides a simple \textit{pino} logger setup, but implementers can bring their own logger instances if they can map to the standard info/debug/error level logs. The adapters then use these utilities for their internal operations.
+\end{itemize}
+
+% TODO: Here show show a diagram that shows the architecture of the Core through the flow of a `createParcel` request, such as Foxpost
+
+\subsubsection{Core Issue: Specificity vs. Generality}
+One of the main challenges in designing the core contract was finding the right balance of what should be included in the core and what should be left out.
+On one hand, the core should be general enough to be applicable to a wide range of carriers, but as we have seen through the literature, these APIs are not uniform at all, with each carrier having their own unique requirements and quirks.
+On the other hand, the core should be specific enough to provide real value and guidance to adapter developers to avoid regressing to the one to one mapping antipattern.
+
+The compromise for this issue was to define the contract in a way where the types provide a base structure with predefined points for extension on the input and raw response field for the result.
+Perhaps, the best way to understand this is through an example, such as the `createParcel` flow mentioned before.
+On the input side, the core defines a `CreateParcelRequest` type with the usual expected fields for the incoming data, such as `Parcel`.
+It is apparent however, that different carriers offer unique features and services that require additional fields, such as express delivery flags, insurance options, etc.
+To accommodate this, the core defines a custom field in the type of `RequestOptions`, which is deliberately left up to the adapter to define and use as they see fit.
+
+\begin{listing}[H]
+\caption{Request options extensibility in \texttt{src/core/request-options.ts}}
+\label{lst:request-options}
+\begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
+/**
+ * Request options
+ * Per-call options that adapters can use to modify behavior
+ */
+export interface RequestOptions {
+  /**
+   * Use test/sandbox API endpoint instead of production
+   * Some carriers have separate test APIs (e.g., Foxpost: webapi-test.foxpost.hu)
+   * Default: false
+   */
+  useTestApi?: boolean;
+
+  /**
+   * Custom options for future extensibility
+   */
+  [key: string]: unknown;
+}
+\end{minted}
+\end{listing}
+
+This lenient typing allows adapters to first extend the core types, then specify them to their needs, such as the following example for Foxpost's parcel creation, which extends the (aliased) core type we have seen before and specifies the `options` field with custom flags, such as `isWeb`, that indicates to the carrier whether the parcel shall be hidden in their own interface.
+
+\begin{listing}[H]
+\caption{Foxpost-specific request options in \texttt{src/adapters/foxpost/types.ts}}
+\label{lst:foxpost-request-options}
+\begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
+/**
+ * Foxpost-specific CreateParcelsRequest (narrowed credentials)
+ */
+export interface CreateParcelsRequestFoxpost extends CoreCreateParcelsRequest {
+  credentials: FoxpostCredentials;
+  options?: FoxpostParcelOptions;
+}
+
+/**
+ * Foxpost-specific parcel options.
+ *
+ * `useTestApi` controls the base URL selection.
+ * `foxpost.isWeb` and `foxpost.isRedirect` map to Foxpost parcel query flags.
+ */
+export interface FoxpostParcelOptions extends RequestOptions {
+  foxpost?: {
+    isWeb?: boolean;
+    isRedirect?: boolean;
+  };
+}
+\end{minted}
+\end{listing}
+
+Similarly, with the responses, the core defines a base structure for the output that includes all sensible and common fields, such as `trackingNumber` for instance in case of parcel creation, but integrators might need more details returned by the carriers.
+For this reason, the core defines `rawCarrierResponse` as a field in the output, which is simply a free-form serialized version of the carrier's original response body, allowing integrators access to all details they might need without locking in to the core's defined structure.
+
+% TODO: Diagram showing the extensibility on both ends
+
+\subsection{Integration Layer - Carrier Adapters}
+The carrier adapters are the concrete implementations of the core contract for each carrier.
+They all have a rather predictable structure, which is recommended to be followed by guidelines for new implementations.
+Here is an example structure for a carrier adapter, excluding miscellaneous files, helpers and directories.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.20\textwidth]{src/diagrams/integration-layer-carrier-adapters-file-structure.png}
+  \caption{File structure of the integration layer - carrier adapters}
+  \label{fig:integration-layer-carrier-adapters-file-structure}
+\end{figure}
+
+The main functionalities that define and differentiate the adapters are the following:
+
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Capabilities}: One file recommended per each group of capability exposed by the carrier. Defines the actual functions that utilize the pluggable context, such as the http client and logger to then make requests to the carrier's API and return the normalized output. Orchestrates from the mapping of the core's canonical domain model to the carrier's expected request, handles the API call according to the carrier's specification and expected format (e.g. JSON or XML), response, potential errors, and finally maps the carrier's response back to the core's canonical output format.
+  \item \textbf{Mappers}: Are imported as functions by the capability functions and are responsible for the mapping to and from the core's canonical domain model. It would be easy to just think of them as simple field mappers, but they do actually hold functionality, which should as per the documentation guidelines set forth be described in detail. One of the best examples for parcel creation is package sizes, most carriers have predefined package size categories, such as small, medium and large, defined by the dimensions and weight of the parcel. The mappers in this case can implement logic from provided documentations and based on the incoming `Parcel` data, automatically determine the correct size category (unless deliberately overridden via custom options).
+  \item \textbf{Types}: A central types file imports the core types, extends them with carrier-specific fields where needed and then these are used by both the mappers and validators to ensure type safety and the core to adapter contract changeover.
+  \item \textbf{Validation}: This is another crucial part of the adapters, here we define \textbf{Zod} schemas to be used for validation throughout the capability functions. These are used to safely validate input variables beyond just the type (e.g. for strings length or format such as email), throughout the process to validate that the carrier's response is as expected as per the documentation, and also to validate the final output before returning results. Essentially, while the type safe approach throughout the project ensure developers have good and consistent experience when building or utilizing the packages, the validation ensures actual runtime safety and predictability of the system.
+  \item \textbf{Tests}: Each adapter comes with its own set of tests, which are crucial for ensuring the reliability and correctness of implementation. The tests cover various scenarios across different levels of concern, but since this is a big part of the adapter development's design philosophy, we will go over it in more detail in the next subsection.
+\end{itemize}
+
+Main design choice with the adapters was to keep them simple and focused on simply implementing the core contract in the provider's context.
+This way the contracts and already built implementations serve as a clear guide for new implementations, significantly reducing effort and time needed to add a new carrier.
+
+\subsubsection{Test-driven Approach}
+Right from the start of development, a test-driven approach was favored for the carrier adapters especially, as it has multiple benefits for both the long term reliability of the adapter and the development process itself.
+First, it ensures that the implementation is correct, and in case of truly end-to-end testing, the tests can at any time be repeated to see whether the 
+
+\subsection{End Application - API Gateway and Extra Components}
+
+
+\subsection{Example Usage}
+
 
 \section{Shopickup Application Overview}
 Shopickup is a multi-carrier shipping integration and monitoring platform designed for e-commerce merchants, that implements the integration layer as packages and builds around it an application that follows the principles set forth in the literature review.
 It allows merchants to extend their online stores with a unified interface for managing shipments across multiple carriers, print labels, track packages, and gain insights into shipping performance through a dedicated dashboard.
 Customers of these stores also have the benefit of utilizing the platform's pickup point picker widget, which provides them with a seamless experience for selecting their preferred delivery options during checkout.
 
-%TODO: Here a collage of screenshots of the dashboard / pickup point picker widget / settings page etc. would be nice
+% TODO: Here a collage of screenshots of the dashboard / pickup point picker widget / settings page etc. would be nice
 
 Since this is a commercial application with proprietary license, unlike the integration layer itself, I will not be giving access to the source code. I will instead provide a high level overview of it, only going into greater detail for the parts relevant to the thesis's main research questions.
 While the app itself does not directly answer any of our research questions, it serves as context on how the proposed carrier integration system can be applied in the real world, and also as a vector for me to explore the design and evaluation of the monitoring dashboard.
@@ -798,42 +933,45 @@ Logically, in case the user automatically navigates to the checkout page, they m
   \label{fig:shopickup-user-flows}
 \end{figure}
 
-Throughout the flow, we have to set and collect data passively via the user's cart metadata, which is a common way to store custom data to be later read through the event webhook sent out by Shopify and make sure that customers are only presented with the valid shipping and payment options according to their choices.
-The flow ends with the customer placing the order, which then triggers Shopify to send out a webhook event that we catch and process in edge runtimes.
-The customer flow is designed to be as unobtrusive and the user facing UI was built using SolidJS to be as lightweight and fast as possible in a WebAssembly buildable format.
-
-\subsubsection{Merchant Flow}
-The merchant flow is more interesting and can be divided based on the main actions that merchants can take on the platform, which are: managing integrations, managing shipments and orders, and monitoring performance through the dashboard.
-I will not go into too much detail on any of these flows, but rather give a high level overview of what purpose they serve and how these flows enable merchants to achieve their goals.
-
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Integration Management}: Screens that are meant to allow users to easily connect their preferred providers through API keys and configure most relevant settings made available through the carriers' APIs, such as delivery times, label formats and extra services for example. This step essentially exposes each available carrier adapters' options to the user in an indirect way. This section is also responsible for mapping available shipping and payment methods to the different carriers, which is a crucial step for the customer flow described before.
+  \item \textbf{Integration Management}: Screens that are meant to allow users to easily connect their preferred providers through API keys and configure most relevant settings made available through the carriers' APIs, such as delivery times, label formats and extra services for example. This step essentially exposes each available carrier adapters' options to the user in an indirect way.
+  \item \textbf{Shipping and Payment Methods Configuration}: Once there are connected and set up carriers in the system, merchants can create and connect shipping and payment methods to the shipping provider's available services. For example, the merchant can simply add a new shipping method called "Provider XYZ - Pickup Point" and connects it to the corresponding carrier, then is able to limit the payment method to for example Cash on Delivery. This allows seamless filtering of methods on the checkout page for merchant flows through Shopify's Payment and Shipping Customization APIs.
   \item \textbf{Shipment and Order Management}: Allows merchants to quickly overview their shipments through a sortable and filterable table and take common actions such as printing labels, tracking packages with just a few clicks. In case of further needs, they can click on a shipment to see a detailed view and take more specific actions, such as changing delivery address, method, carrier or even canceling the shipment. This section is related to the carrier integration system through tracking and manual updates, which are also exposed by the adapters.
   \item \textbf{Performance Monitoring}: Is done through the central dashboard, which is a common, tiled layout that can be customized by the merchant to only show the KPIs and metrics that are most relevant to them. This section also shows any warnings or alerts related to the shipments or services, such as SLA breaches or carrier delays. The dashboard's design and implementation is further explored in the next section of the methodology.
 \end{itemize}
 
-% TODO: HERE DESIGN A CUSTOM DIAGRAM WITH THE MAIN SCREENS OF THE APP AS PART OF THE FLOW CHARTS
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{src/diagrams/shopickup-user-flows-merchant-tb.png}
+  \caption{Shopickup merchant flows for integration, mappings, shipments, and monitoring}
+  \label{fig:shopickup-merchant-flows}
+\end{figure}
 
 \subsection{Architectural Overview and Technology Stack}
 Now that we have seen the user flows of the application, we can go into the architectural details of where the carrier integration layer plugs into the application, and also to give an overview of the technologies used and effort required to build such a system.
 Most of the tech stack consists of modern standard tools and frameworks that are commonly used in the industry, however in some specific regards the choices have been limited or influenced by Shopify's platform requirements for embedded apps.
 
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Backend + Frontend}: The backend + frontend is specified by Shopify to be built using \textbf{React Router v7} in the server-side rendering framework mode, which means that for small applications such as this one, both the backend and frontend needs can be fulfilled by this single server from a classical web development perspective. This all was served through \textbf{Render} with future scalability in mind.
-  \item \textbf{Integration Layer - Backend}: 
-  \item \textbf{Database}: 
-  \item \textbf{Edge Functions}: 
-  \item \textbf{Integration Layer - Edge}: 
-  \item \textbf{Cron Jobs}: 
-  \item \textbf{Monitoring and Analytics}: 
-  \item \textbf{Shopify Theme Extension}: 
+  \item \textbf{Backend + Frontend}: The backend + frontend is specified by Shopify to be built using \textbf{React Router v7} in the server-side rendering framework mode, which means that for small applications such as this one, both the backend and frontend needs can be fulfilled by this single server from a classical web development perspective. This all was served through \textbf{Render} with future scalability in mind. This serves the merchant flows we learned about before and hosts the dashboard as well.
+  \item \textbf{Integration Layer - Backend}: The carrier integration layer is built into many of the backend endpoints, and they mainly cover the integration management and shipment management flows described earlier. These are simply imported as regular \textbf{npm} packages and directly used to communicate with the carriers' APIs without any additional API gateway or broker, as each merchant is using their own instance and credentials, there are no shared resources or rate limits to worry about.
+  \item \textbf{Database}: The database was chosen to be as open as possible to avoid vendor lock-in and to allow for future flexibility via extensions. The choice ended on \textbf{PostgreSQL} hosted through \textbf{Supabase} and managed through \textbf{Prisma} as the ORM. This choice allows for a good balance between ease of use, scalability, and extensibility, as well as being a common choice in the industry.
+  \item \textbf{Edge Functions}: Edge functions were an indirect requirement of the Shopify platform, as they require webhook handlers to be as fast as possible. Since \textbf{Supabase} already supports \textbf{Deno} runtime edge functions, it was a natural choice to use them for this purpose as well.
+  \item \textbf{Cron Jobs}: Cron jobs are handled in a twofold way: for less critical jobs, such as cleanups we use \textbf{pg\_cron} if something can be directly handled on the database, and \textbf{node-cron} for more complex tasks. In case a task is more critical or requires longer runtimes, we delegate it to \textbf{Render Cron Jobs} to ensure consistency and reliability. (Dashboard data updates, batch analytics, package tracking, etc.)
+  \item \textbf{Integration Layer - Cron}: The integration layer is also used the cron jobs for tracking each merchant's shipments and updating their status in the database, as well as updating pickup points and other relevant data from the carriers. This is done through the same npm packages as the backend, but in a different context. Since these jobs are either on a larger system level scale, or even in case of per-merchant scale could run into hundreds of requests, in this case we did implement a simple API gateway as recommended by the literature review.
+  \item \textbf{Shopify Theme Extension}: The pickup point picker widget is a completely separate piece of frontend code that needs to build to WebAssembly as per Shopify's requirements. It was built using \textbf{SolidJS} and serves as an interface for customers to select their preferred delivery options during checkout. It needs to both communicate with our backend server and Shopify's APIs to function properly, and it is designed to be as lightweight and fast as possible to not overburden merchants' storefronts.
 \end{itemize}
 
-% TODO: HERE DESIGN A DIAGRAM SHOWING THE ARCHITECTURE OF THE APP AND INTEGRATION POINTS
+The following diagram shows an overview of the elements I have described before. The arrows represent connections with the direction showing which component initiates the interactions and dotted lines representing asynchronous interactions.
 
-It is apparent from the diagram that there are many different components that interact with each other inside and outside of the system's boundaries.
-One of the main challenges is interactions with external systems, such as the shipping providers, because we have no control over their APIs, nor their transparency. %TODO: Is this the right expression here?
-Being able to communicate with multiple providers using a unified and consistent interface could save a lot of time and effort for developers and allow them to focus on the business logic, rather than the brittle, custom one-to-one function mappings that are usually built.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{src/diagrams/shopickup-system-architecture-overview.png}
+  \caption{Shopickup system architecture overview}
+  \label{fig:shopickup-architecture-overview}
+\end{figure}
+
+One of the main challenges is interactions with external systems, such as the shipping providers, because we have no control over their APIs, nor have any idea of their inner workings.
+Being able to communicate with multiple providers using a unified and consistent interface could save a lot of time and effort for developers and allow them to focus on the business logic, rather than the brittle, custom one-to-one function mappings that are usually built on a per app basis.
 In this case, overall development time was not shortened, as not only the provider adapters, but the core also needed to be built from scratch, but once it was time to implement the capabilities in the app, it was much more convenient and quicker.
 
 \section{Monitoring Dashboard Design}

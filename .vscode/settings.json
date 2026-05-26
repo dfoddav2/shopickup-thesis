@@ -1,5 +1,33 @@
 {
   "latex-workshop.latex.outDir": "./out",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-shell-escape",
+      "command": "latexmk",
+      "env": {
+        "PATH": "/usr/bin:/Library/TeX/texbin:/opt/homebrew/bin:/usr/local/bin",
+        "TEXMF_OUTPUT_DIRECTORY": "out"
+      },
+      "args": [
+        "-pdf",
+        "-shell-escape",
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-outdir=out",
+        "%DOC%"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (shell-escape)",
+      "tools": [
+        "latexmk-shell-escape"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.autoClean.run": "onSucceeded",
   "latex-workshop.latex.clean.fileTypes": [
     "*.aux",

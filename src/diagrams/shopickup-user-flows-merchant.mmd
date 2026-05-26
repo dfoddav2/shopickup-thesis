@@ -1,0 +1,88 @@
+%%{init: {"theme": "neutral", "themeVariables": {"fontSize": "16px"}, "flowchart": {"nodeSpacing": 80, "rankSpacing": 60}}}%%
+flowchart LR
+    MerchantTitle@{ shape: text, label: "Merchant flows: Integration, Methods, Shipments, Monitoring" }
+
+    DashboardTitle@{ shape: text, label: "Performance Monitoring" }
+    subgraph DashboardFlow[Performance Monitoring]
+        direction TB
+        DashboardStart[Open central dashboard]
+        DashboardKpis[Customize KPI tiles and review trends]
+        DashboardDB[(Save dashboard customization)]
+        DashboardAlerts[Show warnings and alerts: SLA breaches, carrier delays]
+        DashboardAction{Need to<br/>take action?}
+        DashboardInvestigate[Drill into delayed shipments and other issues]
+        DashboardStart --> DashboardKpis --> DashboardAlerts --> DashboardAction
+        DashboardKpis --> DashboardDB
+        DashboardAction -->|Yes| DashboardInvestigate
+        DashboardAction -->|No| DashboardDone[Continue monitoring]
+    end
+    DashboardTitle ~~~ DashboardStart
+
+    ShipmentTitle@{ shape: text, label: "Shipment and Order Management" }
+    subgraph ShipmentFlow[Shipment and Order Management]
+        direction TB
+        ShipmentStart[Open shipments &<br/> orders table]
+        ShipmentFilter[Sortable, filterable overview of shipments]
+        ShipmentChoice{Quick actions<br/>or open detail?}
+        ShipmentQuick[Quick actions list]
+        ShipmentPrint[Print labels]
+        ShipmentTrack[Track package]
+        ShipmentDetail[Open shipment detail view for actions]
+        ShipmentDetailActions{Select<br/>detailed action}
+        ShipmentUpdate[Change address, method, carrier or other details]
+        ShipmentCancel[Cancel shipment]
+        ShipmentIntegration[[Integration layer<br/>Carrier API Calls]]
+
+        ShipmentStart --> ShipmentFilter --> ShipmentChoice
+        ShipmentChoice -->|Quick actions| ShipmentQuick
+        ShipmentChoice -->|Open detail| ShipmentDetail
+
+        ShipmentQuick --> ShipmentPrint
+        ShipmentQuick --> ShipmentTrack
+        ShipmentPrint --> ShipmentIntegration
+        ShipmentTrack --> ShipmentIntegration
+
+        ShipmentDetail --> ShipmentDetailActions
+        ShipmentDetailActions -->|Update| ShipmentUpdate
+        ShipmentDetailActions -->|Cancel| ShipmentCancel
+        ShipmentDB[(Update shipment record and results in DB)]
+        ShipmentUpdate --> ShipmentDB
+        ShipmentCancel --> ShipmentDB
+        ShipmentIntegration --> ShipmentDB
+    end
+    ShipmentTitle ~~~ ShipmentStart
+
+    MappingTitle@{ shape: text, label: "Shipping & Payment Methods Configuration" }
+    subgraph MappingFlow[Shipping and Payment Methods Configuration]
+        direction TB
+        MappingStart[Open shipping and payment method settings]
+        MappingDefine[Create shipping and payment methods and connect to carriers]
+        MappingAssign[(Store method mappings to the database)]
+        MappingShopify[[Set Shopify customization API rules]]
+        MappingStart --> MappingDefine --> MappingAssign --> MappingShopify
+    end
+    MappingTitle ~~~ MappingStart
+
+    CarrierSetupTitle@{ shape: text, label: "Integration Management" }
+    subgraph CarrierSetupFlow[Integration Management]
+        direction TB
+        CarrierSetupStart[Open integration settings screen]
+        CarrierConnect[[Connect preferred providers via API keys]]
+        CarrierConfig[Expose carrier adapter options to users<br/>delivery times, label formats, extra services]
+        CarrierSave[(Save carrier adapter configuration on DB)]
+        CarrierSetupStart --> CarrierConnect --> CarrierConfig --> CarrierSave
+    end
+    CarrierSetupTitle ~~~ CarrierSetupStart
+
+    classDef user fill:#dbeafe,stroke:#2563eb,color:#0f172a,stroke-width:1px;
+    classDef decision fill:#fef3c7,stroke:#d97706,color:#1f2937,stroke-width:1px;
+    classDef shopify fill:#dcfce7,stroke:#16a34a,color:#14532d,stroke-width:1px;
+    classDef metadata fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764,stroke-width:1px;
+    classDef auto fill:#ecfdf5,stroke:#059669,color:#064e3b,stroke-width:1px;
+    classDef subflowTitle color:#111827,font-weight:700;
+
+    class MerchantTitle,CarrierSetupTitle,MappingTitle,ShipmentTitle,DashboardTitle subflowTitle;
+    class CarrierSetupStart,CarrierConnect,CarrierConfig,ShipmentStart,ShipmentFilter,ShipmentDetail,ShipmentPrint,ShipmentTrack,ShipmentUpdate,ShipmentCancel,DashboardStart,DashboardKpis,DashboardAlerts,DashboardInvestigate,DashboardDone,MappingStart,MappingDefine user;
+    class ShipmentChoice,ShipmentDetailActions,DashboardAction,ShipmentQuick decision;
+    class CarrierConnect,MappingShopify,ShipmentIntegration,CarrierApi shopify;
+    class CarrierSave,MappingAssign,ShipmentDB,DashboardDB metadata;

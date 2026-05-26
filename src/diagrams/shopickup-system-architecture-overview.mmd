@@ -1,0 +1,61 @@
+%%{init: {"theme": "neutral", "themeVariables": {"fontSize": "16px"}, "flowchart": {"nodeSpacing": 60, "rankSpacing": 75, "htmlLabels": false}}}%%
+flowchart TB
+    subgraph Shopify[Shopify]
+        direction TB
+        merchantStore@{ shape: rounded, label: "Merchant Store" }
+        shopifyApi[[Shopify API / Backend]]
+        shopifyWebhook@{ shape: rounded, label: "Shopify Webhooks" }
+        merchantStore --> shopifyApi
+        shopifyApi -.-> shopifyWebhook
+    end
+
+    pickupWidget@{ shape: rounded, label: "Pickup Point Picker" }
+
+    subgraph OurSystem[Our System]
+        direction TB
+        subgraph App[App / SSR]
+            direction TB
+            ssr@{ shape: rect, label: "React Router v7 SSR App\n(Frontend, Dashboard, Backend Endpoints)" }
+            integration@{ shape: rect, label: "Carrier Integration Layer" }
+            cron@{ shape: rect, label: "Cron Jobs" }
+            ssr --> integration
+            cron -.-> integration
+        end
+
+        subgraph Data[Supabase / DB]
+            direction TB
+            edge@{ shape: rect, label: "Edge Functions" }
+            prisma[[Prisma ORM]]
+            db@{ shape: cyl, label: "PostgreSQL" }
+            edge --> db
+            prisma --> db
+        end
+
+        ssr --> prisma
+    end
+
+    subgraph Providers[Shipping Providers]
+        direction TB
+        carrierApi[[Carrier API]]
+        carrierBackend@{ shape: rect, label: "Carrier Backend" }
+        carrierApi --> carrierBackend
+    end
+
+    pickupWidget <--> merchantStore
+    pickupWidget --> shopifyApi
+    pickupWidget --> ssr
+    shopifyWebhook -.-> edge
+    integration --> carrierApi
+    ssr <--> shopifyApi
+
+    classDef bridge fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764,stroke-width:1px;
+    classDef shopify fill:#dcfce7,stroke:#16a34a,color:#14532d,stroke-width:1px;
+    classDef app fill:#e5e7eb,stroke:#64748b,color:#111827,stroke-width:1px;
+    classDef data fill:#f8fafc,stroke:#94a3b8,color:#0f172a,stroke-width:1px;
+    classDef provider fill:#ecfdf5,stroke:#059669,color:#064e3e,stroke-width:1px;
+
+    class pickupWidget bridge;
+    class merchantStore,shopifyApi,shopifyWebhook shopify;
+    class dashboard,ssr,backend,integration,cron app;
+    class edge,prisma,db data;
+    class carrierBackend,carrierApi provider;
