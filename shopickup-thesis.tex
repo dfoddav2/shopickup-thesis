@@ -123,13 +123,13 @@ Consequently, online shopping has seen strong growth over the past two decades, 
 Similar trends can be observed in various regional markets and their respective research reports, such as in Eurostat's EEA specific data  showing that more and more stores are adopting online sales channels, with 23.83\% of all enterprises having one in 2023, compared to just 17.21\% ten years prior \cite{eurostatEcommerceStatistics2025}, with the share of total sales following suit.
 On the individual level, Eurostat surveyed that 94\% of EU citizens used the internet in 2024 and 77\% have made online purchases in the past year \cite{eurostatEcommerceStatisticsIndividuals2025}, with younger demographics leading the way, showing that this growth is likely to continue in the foreseeable future.
 
-We have vitnessed the rise of giants like Amazon and the Alibaba group, who have set new standards for customer experience, logistics, and supply chain management on a global scale. These large enterprises have proven that efficient e-commerce operations can drive significant revenue growth and to this day in Europe, larger enterprises are more likely to sell online than smaller ones, with 24.44\% of turnover coming from online sales in large companies, compared to just 14.99\% for medium and 9.49\% for small enterprises \cite{eurostatEcommerceStatistics2025}.
+We have witnessed the rise of giants like Amazon and the Alibaba group, who have set new standards for customer experience, logistics, and supply chain management on a global scale. These large enterprises have proven that efficient e-commerce operations can drive significant revenue growth and to this day in Europe, larger enterprises are more likely to sell online than smaller ones, with 24.44\% of turnover coming from online sales in large companies, compared to just 14.99\% for medium and 9.49\% for small enterprises \cite{eurostatEcommerceStatistics2025}.
 However, the e-commerce boom is not limited to large players, small and medium-sized enterprises (SMEs) have more opportunities and tools under their disposal than ever before to establish and grow their online presence.
 Webshop engines like Shopify, Wix and Wordpress based solutions like WooCommerce have democratized access to e-commerce, allowing SMEs to set up online stores with relative ease and minimal upfront investment.
 This lowers the barrier to entry for many small businesses and aspiring entrepreneurs, leading to a remarkable number of 24.1 million online stores globally \cite{capitaloneHowManyOnline2025}.
 We can also see that most of the online stores are created with a just a handful of these popular platforms, with Shopify alone powering 23.6\% of them \cite{capitaloneHowManyOnline2025}.
 These giant platforms can not by themselves cover all the needs of the diverse e-commerce landscape across different regions, industries and business models, thus they need some help from third-party applications and services to fill in the gaps.
-This thesis project, commonly referred to as Shopickup for the practical implementation, comes into play, to solve a major pain point for SMEs in the e-commerce space: the integration and management of shipping carriers.
+This thesis project, commonly referred to as \textit{Shopickup} for the practical implementation, comes into play, to solve a major pain point for SMEs in the e-commerce space: the integration and management of shipping carriers.
 
 \section{Motivation and Problem Statement}
 While e-commerce platforms provide solid foundations for online sales, due to their general-purpose large-scale international nature, they can not possibly cover all shipping providers of all regions they operate in.
@@ -155,7 +155,7 @@ Research to be done can be divided into two main topics, each of which with thei
 Inevitably, to present the whole picture, I will have to cover some of the other aspects of the implementation as well, but the focus will remain on the most relevant technical aspects.
 
 \subsection{Architecture and Extensibility}
-The first part of this study focuses on the structural design of the Shopickup application, going into more detail about the architecture and extensibility aspects.
+The first part of this study focuses on the structural design of the \textit{Shopickup} application, going into more detail about the architecture and extensibility aspects.
 
 \begin{enumerate}[label=\textbf{MRQ\arabic*.}, left=0pt, itemsep=3pt]
   \item What is the most appropriate architecture for a common, extensible API adapter that integrates multiple shipping carriers with heterogeneous APIs, data formats and workflows, and what are the advantages and disadvantages of the candidate architectures?
@@ -175,9 +175,9 @@ The second part of this study focuses on the usability and effectiveness of the 
 \end{enumerate}
 
 \section{Scope and Limitations}
-This study focuses on the development of a functional prototype integrating Shopify with a selected set of international shipping providers (e.g.: GLS, Austrian Post, MPL and others) to demonstrate the proposed architecture.
+This study focuses on the development of a functional prototype integrating Shopify with a selected set of international shipping providers (e.g.: GLS, Foxpost, MPL and others) to demonstrate the proposed architecture.
 While the system is designed for extensibility, full integration with all major global carriers is beyond the scope of this bachelor thesis, but potentially open sourcing the shipping carrier adapter framework will allow future contributions to expand its capabilities if desired.
-Implementation of the analytical dashboard and the overall application will be evaluated on our own e-commerce store's data in-depth and to a lesser extent on surveys and feedback from other business owners using the system.
+Implementation of the integration layer and the analytical dashboard will be evaluated through the experience of real-world usage by two SME merchants.
 
 \section{Thesis Structure}
 Throughout this thesis, the standard IMRAD structure (Introduction, Methods, Results, and Discussion) is followed, mirroring the process of scientific discovery, as well as my journey of development along the way.
@@ -185,13 +185,13 @@ The remainder of this thesis is structured as follows, as per the IMC Krems guid
 
 \begin{table}[H]
   \centering
-  \begin{tabular}{@{}p{3cm}p{3cm}p{9cm}@{}}
+  \begin{tabular}{@{}p{1.5cm}p{4cm}p{9cm}@{}}
     \toprule
     \textbf{Chapter} & \textbf{Title}             & \textbf{Contents (summary)}                                                                                                                              \\
     \midrule
     2                & Related Work               & Reviews prior work in API integration, middleware for logistics, and related integration patterns; positions this thesis relative to existing solutions. \\
     3                & Methodology                & Details the theoretical framework, architectural choices, design criteria and evaluation methodology used for the proposed system.                       \\
-    4                & Implementation and Results & Describes the Shopickup prototype implementation, integration with selected carriers and platforms, and presents experimental results.                   \\
+    4                & Implementation and Results & Describes the \textit{Shopickup} prototype implementation, integration with selected carriers and platforms, and presents experimental results.          \\
     5                & Discussion                 & Interprets results, discusses limitations, trade-offs and lessons learned.                                                                               \\
     6                & Conclusion and Future Work & Summarises findings and outlines potential directions for further development and research.                                                              \\
     \bottomrule
@@ -201,7 +201,7 @@ The remainder of this thesis is structured as follows, as per the IMC Krems guid
 
 \chapter{Related Work}
 \label{ch:related}
-Finding existing literature that directly addresses the design of an extensible, multi-carrier shipping integration layer for SMEs is challenging. Most scientific work either focuses on logistics and supply chains (routing, last-mile optimization, warehouse management) or on general software architecture and integration patterns (SOA, microservices, API gateways). There is a clear gap when it comes to shipping integrations at the API level between e-commerce platforms and parcel carriers such as DHL, GLS, or national postal services.
+Finding existing literature that directly addresses the design of an extensible, multi-carrier shipping integration layer for SMEs is challenging. Most scientific work either focuses on logistics and supply chains (routing, last-mile optimization, warehouse management) or on general software architecture and integration patterns (SOA, microservices, API gateways). There is a clear gap when it comes to shipping integrations at the API level between e-commerce platforms and parcel carriers.
 This chapter therefore proceeds in two steps. First, it reviews general software architecture approaches for integrating heterogeneous APIs and argues how these can be applied to the domain of multi-carrier shipping. Second, it briefly positions existing commercial and open-source solutions relative to the architectural patterns discussed, thereby highlighting the research gap addressed by this thesis.
 
 \section{Software Architecture for API Integration}
@@ -217,18 +217,18 @@ While there is evidently no single agreed-upon definition of SOA \cite{niknejadU
 \begin{displayquote}
   "In short, it is an Enterprise Architecture where applications are designed to provide coarse-grained services, which are consumed by Business Processes or other integration applications.
   Service-Oriented Architecture is both a design concept and an architecture.
-  The design concept in SOA is about designing applications/systems that have well defined self-describing access interfaces, with the services being composed into business processes.
-  The architecture is about having simple mechanisms to use these access-interfaces for Integration of the Enterprise."
+  The design concept in SOA is about designing applications/systems that have well-defined self-describing access interfaces, with the services being composed into business processes.
+  The architecture is about having simple mechanisms to use these access-interfaces for Integration of the Enterprise." \cite{juricSOAApproachIntegration2007}
 \end{displayquote}
 
 It is easy to see how this thesis's projects calls for use of SOA practices, specifically the architectural approach of simple mechanisms for using different access-interfaces.
-Papazoglou emphasizes that it “captures the logical way of designing a software system to provide services to end-user applications or other services distributed over a network” \cite{papazoglouServiceOrientedArchitectures2007}.
+Papazoglou emphasizes that it “captures the logical way of designing a software system to provide services to end-user applications or other services distributed over a network”. \cite{papazoglouServiceOrientedArchitectures2007}
 The key principle is loose coupling, achieved by a clear separation between service interfaces and service implementations.
-In an SOA-based design, an application does not directly depend on the internal details of another application, instead it interacts with well-defined service contracts.
+In a SOA-based design, an application does not directly depend on the internal details of another application, instead it interacts with well-defined service contracts.
 For the problem at hand, this translates to the idea that our core system should not be tightly coupled to the internal details of DHL's, GLS's, or Austrian Post's APIs, as these are likely to change over time and differ significantly between providers anyway.
 Instead, it should rely on a stable, domain-specific interface (e.g., “create shipment,” “track shipment,” “cancel shipment”) outlining the capabilities required for users of our system, while carrier-specific logic is encapsulated in separate components behind these interfaces and abstractions.
 
-A systematic literature review by Niknejad et al. synthesizes 103 primary studies and concludes that much of the case studies and implementations of SOA show the positive impact of the before mentioned characteristics and that it has "proven to be a key paradigm in numerous industries" \cite{niknejadUnderstandingServiceOrientedArchitecture2020}.
+A systematic literature review by Niknejad et al. synthesizes 103 primary studies and concludes that much of the case studies and implementations of SOA show the positive impact of the before mentioned characteristics and that it has "proven to be a key paradigm in numerous industries". \cite{niknejadUnderstandingServiceOrientedArchitecture2020}
 It also highlighted however, that the biggest problem with SOA adoption is the topic of governance and the lack of empirical studies on measuring its success, however these are out of scope for this thesis.
 Applying these principles to this project, we can outline the following high-level architectural guidelines:
 
@@ -246,24 +246,25 @@ In practice, most modern integrations are realized via RESTful web APIs over HTT
 A common assumption in industry is that REST APIs are similar, implying that integration should be straightforward across different providers.
 However, this is not necessarily the truth in most cases.
 Neumann et al. concluded through an extensive empirical study of 522 public web service APIs that there is “high diversity in services, including differences in adherence to best practices, with only 0.8\% of services strictly complying with all REST principles.” \cite{neumannAnalysisPublicREST2021} and that even among “REST” APIs, there is only limited compliance to strict REST constraints.
-In other words, there is no real homogeneity at the API level—each provider does things slightly differently.
-One very common example many developers encounter day by day is for example the variety of authentication methods or the lack of a variety of available REST methods (GET, POST, PUT, DELETE, etc.) for operations that would logically map to them.
+In other words, there is no real homogeneity at the API level as each provider does things slightly differently.
+One very common example many developers encounter day by day is the variety of authentication methods or the lack of a variety of available REST methods (GET, POST, PUT, DELETE, etc.) for operations that would logically map to them.
 
 Translating this to the parcel-shipping context, even if DHL, GLS, Austrian Post, and others expose “REST” APIs, their URL structures, authentication, request bodies, responses, and error handling differ in non-trivial ways.
+In the context of shipping provider APIs there exist multiple levels of format heterogeneity, from the response itself varying between JSON and XML for legacy developers, to the label format of PDF or ZPL.
 A naive point-to-point design that integrates each carrier directly into the core application will inevitably accumulate a large amount of carrier-specific branching logic, making the system brittle and hard to maintain.
 The empirical heterogeneity demonstrated by Neumann et al. thus again provides a strong justification for an explicit abstraction and normalization layer aligning with SOA guidelines, rather than relying on ad-hoc HTTP calls scattered throughout the codebase.
 
 \subsection{Adapter Pattern for Carrier Abstraction}
 
 The challenge of integrating heterogeneous systems with incompatible interfaces is not new to software engineering.
-The Adapter pattern is a well-established structural design pattern introduced in the foundational work “Design Patterns: Elements of Reusable Object-Oriented Software” by Gamma et al. all the way back in 1994 \cite{gammaDesignPatternsElements1994}.
+The Adapter pattern is a well-established structural design pattern introduced in the foundational work “Design Patterns: Elements of Reusable Object-Oriented Software” by Gamma et al. all the way back in 1994. \cite{gammaDesignPatternsElements1994}
 It works by introducing an intermediary adapter that implements a target interface (the one the client expects) while internally delegating to an adaptee (the existing component with an incompatible interface).
 
 This pattern has two primary implementation variants, one commonly referred to as Class Adapter, which is inheritance based, and the other as Object Adapter, which is composition based.
 In the context of this project, the latter one is more appropriate, as we are dealing with external carrier APIs with no benefit of inheritance.
 The following is a simplified illustration of how the Adapter pattern can be applied to the multi-carrier shipping integration problem:
 
-\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:carrier-adapter-interface]
+\begin{lstlisting}[language=Python,caption={Carrier adapter interface pseudocode},label=lst:carrier-adapter-interface]
 interface CarrierAdapter {
     createLabel(order): Label
     trackShipment(trackingId): TrackingInfo
@@ -271,9 +272,9 @@ interface CarrierAdapter {
   }
 \end{lstlisting}
 
-For each carrier, a dedicated adapter implements this interface:
+For each carrier, a dedicated adapter implements this interface, endowing it with the abilities of the domain model while encapsulating the carrier-specific details:
 
-\begin{lstlisting}[language=Python,caption={Carrier adapter implementations},label=lst:carrier-adapter-implementations]
+\begin{lstlisting}[language=Python,caption={Carrier adapter implementation pseudocode},label=lst:carrier-adapter-implementations]
 class DHLAdapter implements CarrierAdapter { ... }
 class GLSAdapter implements CarrierAdapter { ... }
 class AustrianPostAdapter implements CarrierAdapter { ... }
@@ -282,7 +283,7 @@ class AustrianPostAdapter implements CarrierAdapter { ... }
 Each adapter is responsible for:
 
 \begin{itemize}[itemsep=3pt]
-  \item Translating the generic Shopickup domain model into the carrier-specific request model (e.g., mapping address fields, parcel dimensions, and service options).
+  \item Translating the generic \textit{Shopickup} domain model into the carrier-specific request model (e.g., mapping address fields, parcel dimensions, and service options).
   \item Calling the carrier's API, including managing authentication, endpoints, and error conditions.
   \item Translating the carrier's response into a normalized internal representation suitable for downstream processing and analytics.
 \end{itemize}
@@ -310,14 +311,14 @@ While the Adapter pattern addresses the structural coupling problem at the code 
 \end{itemize}
 
 In microservice and distributed architectures, these concerns are commonly handled using an API Gateway as an extra intermediary layer.
-Ochuba et al. have written an extensive review on API Gateway patterns \cite{ochubaSystematicReviewAPI2021} where they first argue that with the rise of SOA and microservices, and that API Gateways have become a foundational component in modern scalable, secure systems, particularly when integrating multiple backend services.
+Ochuba et al. have written an extensive review on API Gateway patterns \cite{ochubaSystematicReviewAPI2021} where they first argue that with the rise of SOA and microservices, API Gateways have become a foundational component in modern scalable, secure systems, particularly when integrating multiple backend services.
 
 \begin{displayquote}{}
   "As enterprises increasingly adopt service-oriented designs, the need for robust intermediary layers that can handle diverse client protocols and varied backend requirements has become essential.
   In this context, API gateways not only provide a unified interface but also act as enforcement points for both technical and business logic" \parencite{ochubaSystematicReviewAPI2021}
 \end{displayquote}
 
-They also identified a number of roles and patterns an API Gateway typically plays such as Aggregator, Proxy, Adapter for roles and patterns such as Edge Caching, which could be very relevant for some functionalities of our use case \cite{ochubaSystematicReviewAPI2021}.
+They also identified a number of roles and patterns an API Gateway typically plays such as Aggregator, Proxy, Adapter for roles and patterns such as Edge Caching, which could be very relevant for some functionalities of our use case. \cite{ochubaSystematicReviewAPI2021}
 Applied to Shopickup, an API Gateway would serve the following purposes:
 
 \begin{itemize}[itemsep=3pt]
@@ -333,13 +334,13 @@ This architectural combination directly supports the goal of building an extensi
 
 \subsection{Extensibility as a Measurable Architectural Quality}
 
-Extensibility has been mentioned multiple times as a key design goal for this thesis, so it is worth discussing it in more detail, as it is not only a design intention but can be treated as a measurable quality attribute.
-The technical report by the Software Engineering Institute (SEI) at CMU discusses extensibility as a specific architectural concern and outlines how extension points and extension strategies should be identified and evaluated.
-In the following table I will present their view on what a system's extensibility can be assessed based on and how these criteria map to the thesis domain of multi-carrier shipping integration.
+Extensibility has been mentioned multiple times as a key design goal for this thesis, making it a crucial aspect to evaluate. It is not only a design intention but can actually be treated as a measurable quality attribute.
+The technical report by the Software Engineering Institute (SEI) at CMU discusses extensibility as a specific architectural concern and outlines how extension points and extension strategies should be identified and evaluated. \cite{kazmanExtensibility2022}
+In the following table I will present their view on how a system's extensibility can be assessed, and how these criteria map to the thesis domain of multi-carrier shipping integration.
 
 \begin{table}[H]
   \centering
-  \begin{tabular}{@{}p{8cm}p{8cm}@{}}
+  \begin{tabular}{@{}p{6cm}p{9cm}@{}}
     \toprule
     \textbf{Criterion}                                          & \textbf{Thesis domain example}                                                                            \\
     \midrule
@@ -353,7 +354,7 @@ In the following table I will present their view on what a system's extensibilit
     Ease of unit/integration testing of adapters in isolation; expected performance impact; deployment/update workflow for individual adapters.                             \\
     \bottomrule
   \end{tabular}
-  \caption{Extensibility evaluation criteria as defined by SEI and how they map to the thesis domain}
+  \caption{Extensibility evaluation criteria as defined by Kazman et al. \cite{kazmanExtensibility2022} and how they map to the thesis domain}
 \end{table}
 
 In parallel, Petrillo et al. have done a literature review of 56 studies, showing which metrics are most commonly used by researchers.
@@ -364,7 +365,7 @@ These theoretical and metric-based perspectives support using extensibility, cou
 \section{Architectural Styles for Multi-Carrier Integration}
 
 Based on the literature and the guiding principles discussed above, several architectural styles can be considered for implementing a multi-carrier integration layer.
-The following candidates are neither exhaustive of all possible options, nor are some of them seriously considered for implementation, but they still serve as useful points of comparison to understand trade-offs.
+The following list of candidates is neither exhaustive of all possible options, nor are some of the choices seriously considered for implementation, but they still serve as useful points of comparison to understand trade-offs.
 
 \begin{enumerate}[label=\arabic*., left=0pt, itemsep=3pt]
   \item Point-to-point integration
@@ -377,25 +378,25 @@ The following candidates are neither exhaustive of all possible options, nor are
 The following subsections describe each of these in turn, discuss their advantages and disadvantages, and relate them to the goals of this thesis.
 
 \subsection{Point-to-Point Integration}
-In a point-to-point architecture, the application establishes direct connections to each external system. For the thesis project, this would mean that the backend directly invokes the DHL, GLS, Austrian Post, etc. APIs wherever shipping functionality is needed, often with branching logic such as:
+In a point-to-point architecture, the application establishes direct connections to each external system. For the thesis project, this would mean that the backend directly invokes the shipping provider APIs wherever the functionality is needed, often with branching logic such as:
 
-\begin{lstlisting}[language=Python,caption={Carrier dispatch example},label=lst:carrier-dispatch-example]
+\begin{lstlisting}[language=Python,caption={Point-to-point integration example pseudocode},label=lst:carrier-dispatch-example]
 if carrier == "DHL": call_dhl_api(...)
 elif carrier == "GLS": call_gls_api(...)
 ...
 \end{lstlisting}
 
-This approach is simple and often used in early-stage prototypes because it has a low upfront cost and development time, by having no additional infrastructure or architectural components.
-Actually, this approach was initially used first in the project, up until two carriers were integrated, to quickly validate and develop other core functionalities, which I will discuss in future chapters.
-Clearly, this is not very scalable and like I have also experienced in my own small project.
-Literature also consistently identifies point-to-point integration as problematic at scale, even describing it as an expensive approach and bad extreme on the scale of integration \cite{gulledgeWhatIntegration2006}.
+This approach is simple and often used in early-stage prototypes because it has a low upfront cost and development time, by saving time on additional infrastructure or architectural components.
+Actually, this approach was once utilized at the start of the project, up until two carriers were integrated, to quickly validate and develop other core functionalities, which I will discuss in future chapters.
+Clearly, this is not very scalable, nor does it promote any criteria of extensibility discussed prior.
+Literature also consistently identifies point-to-point integration as problematic at scale, even describing it as an expensive approach and bad extreme on the scale of integration. \cite{gulledgeWhatIntegration2006}
 Every new integration increases the number of dependencies and potential failure points, and changes in one system can ripple unpredictably through others.
-In the context of Shopickup, the main disadvantages of point-to-point integration, as experienced firsthand and reported in literature, include:
+In the context of \textit{Shopickup}, the main disadvantages of point-to-point integration, as experienced firsthand and reported in literature, include:
 
 \begin{itemize}[itemsep=3pt]
-  \item High coupling: The core application must “know” about the details of every carrier API, violating SOA principles and making change localized only with difficulty.
-  \item Poor extensibility: Adding a new carrier involves editing central business logic and testing the entire application, not just an isolated module.
-  \item Limited reuse: Any normalization or error-handling logic gets duplicated across multiple code paths.
+  \item \textbf{High coupling}: The core application must “know” about the details of every carrier API, violating SOA principles and making change localized and difficult.
+  \item \textbf{Poor extensibility}: Adding a new carrier involves editing central business logic and testing the entire application, not just an isolated module.
+  \item \textbf{Limited reuse}: Any normalization or error-handling logic gets duplicated across multiple code paths.
 \end{itemize}
 
 For these reasons, point-to-point integration can serve as a baseline or initial stage but is not a suitable architecture for the extensible multi-carrier platform targeted in this thesis.
@@ -439,7 +440,7 @@ In our practical example, a service bus architecture might work as follows:
   \item Once a label is created, the adapter publishes a \verb|ShipmentCreated| event, which the core application or other services consume to update their state or trigger notifications.
 \end{itemize}
 
-This approach has obvious advantages in terms of loose coupling, scalability, resilience and throughput.
+This approach has apparent advantages in terms of loose coupling, scalability, resilience and throughput.
 The disadvantages are mostly related to complexity:
 
 \begin{itemize}[itemsep=3pt]
@@ -448,7 +449,7 @@ The disadvantages are mostly related to complexity:
   \item Operating and securing a message bus comes with its own operational challenges and complexities.
 \end{itemize}
 
-Given the scope of a bachelor thesis and the requirement for near-real-time feedback in this e-commerce workflow (e.g., changing order states instantly), a fully asynchronous service bus architecture is likely too heavy and unnecessarily complex for our purposes and is more suitable on the higher level on a general e-commerce platform architecture, such as in Baraka and Al-Ashqar's paper \cite{barakaBuildingSOABasedModel2013}.
+Given the scope of a bachelor thesis and the requirement for near-real-time feedback in this e-commerce workflow (e.g., changing order states instantly), a fully asynchronous service bus architecture is likely too heavy and unnecessarily complex for our purposes and is more suitable on the higher level on a general e-commerce platform architecture, such as in Baraka and Al-Ashqar's paper. \cite{barakaBuildingSOABasedModel2013}
 However, other specific parts of the system, such as background tracking updates, scheduled tasks such as pickup location synchronization, or analytics data processing, could benefit from message-oriented designs in future iterations.
 
 \subsection{API Gateway-Centric Multi-Carrier Architecture}
@@ -479,13 +480,13 @@ The advantages of this style include:
   \item Fault tolerance and resilience: services can retry operations, handle backpressure, and recover from transient failures more gracefully.
 \end{itemize}
 
-However, systematic reviews of microservice systems also highlight the increased architectural complexity, the need for sophisticated monitoring and testing, and the challenge of managing eventual consistency across many services \cite{benaventeComparativeAnalysisMicroservices2022}. TODO: Check again
+However, systematic reviews of microservice systems also highlight the increased architectural complexity, the need for sophisticated monitoring and testing, and the challenge of managing eventual consistency across many services. \cite{benaventeComparativeAnalysisMicroservices2022}
 These factors make full event-driven microservice architectures more appropriate for large organizations with substantial engineering resources (e.g., Amazon, Netflix, Uber) than for SME-oriented projects or bachelor thesis prototypes.
 For this thesis, event-driven microservices are therefore considered primarily as a reference point for future evolution rather than as the immediate target architecture.
 
 \subsection{Comparative Assessment and Architectural Choice}
 
-Synthesizing the above subsections, the architectural options can be compared along the axes that matter for this thesis: extensibility, complexity, and fitness for the SME/Shopickup context.
+Synthesizing the above subsections, the architectural options can be compared along the axes that matter for this thesis: extensibility, complexity, and fitness for the project's context.
 
 \begin{table}[H]
   \centering
@@ -518,28 +519,28 @@ Synthesizing the above subsections, the architectural options can be compared al
   \caption{Comparative assessment of candidate architectures for Shopickup}
 \end{table}
 
-Given the project scope and the desire for a balance between extensibility and operational effort, lightness, the API gateway-centric architecture combined with adapter-based carrier integrations is selected as the most suitable trade-off and the answer to our first main research question (MRQ1).
+Given the project scope and the desire for a balance between extensibility and operational effort, the API gateway-centric architecture combined with adapter-based carrier integrations is selected as the most suitable trade-off and the answer to our first main research question (MRQ1).
 This architecture directly supports the extensibility goals by isolating carrier-specific logic in adapter services, while providing a unified interface to clients and centralizing cross-cutting concerns in the gateway.
 It also aligns well with modern software development practices and available tooling, making it a practical choice for implementation within the constraints of a smaller application and a bachelor thesis timeline.
 
 \section{Preexisting Solutions and Papers in this Domain}
-As I have previously mentioned, there is a lack of academic literature directly addressing multi-carrier shipping integration at the API level.
-Most relevant conference paper I could find is by Lin et al. in 2010, in which they also first emphasize the gap in this research topic, then follow up by proposing a SOA guided, J2EE based framework for integrating shipping providers \cite{linResearchShippingECommerce2010}.
+As previously mentioned, there is a lack of academic literature directly addressing multi-carrier shipping integration at the API level.
+Most relevant conference paper found is by Lin et al. in 2010, in which they similarly first emphasize the gap in this research topic, then follow up by proposing a SOA guided, J2EE based framework for integrating shipping providers. \cite{linResearchShippingECommerce2010}
 While their work is conceptually aligned with the principles discussed earlier, especially regarding coupling and extensibility, as also mentioned by the authors themselves, their implementation is now somewhat dated.
 The industry has since largely moved towards lightweight RESTful APIs and microservice architectures, not to mention the replacement of J2EE and XML-based web services with more modern frameworks.
-Therefore, while Lin et al.'s work provides a useful historical perspective and validation of SOA principles and wrapper patterns, even message brokers, it does not directly inform the design of a contemporary system like Shopickup.
+Therefore, while Lin et al.'s work provides a useful historical perspective and validation of SOA principles and wrapper patterns, even including message brokers, it does not directly influence the design of a contemporary system like \textit{Shopickup}.
 
 Most other existing literature in the domain are more general and aim to theorize a broader e-commerce architecture.
-These can still to some extent be relevant, as they often highlight the same challenges and propose similar SOA-based solutions, or may even address logistics and shipping as part of a larger system.
+These can still be relevant to some extent, as they often highlight the same challenges and propose similar SOA-based solutions, or may even address logistics and shipping as part of a larger system.
 Good examples include the following works:
 
 \begin{itemize}[itemsep=3pt]
-  \item The paper of Bhakar and Al-Ashqar, in which they propose an enterprise service bus the central integration layer for their purchase order management system, with a separate shipping service module \cite{barakaBuildingSOABasedModel2013}.
-  \item Xiong-yi similarly proposes SOA as the better alternative for e-commerce systems and highlights the heterogeneity of external systems, as we have also seen before in a more general context with APIs \cite{xiong-yiResearchApplicationSOA2009}.
-  \item Li's paper confirms that the adapter method is now a standard approach for encapsulating legacy service interfaces in modern SOA e-commerce platforms \cite{liDesignB2BEcommerce2019}.
+  \item The paper of Bhakar and Al-Ashqar, in which they propose an enterprise service bus as the central integration layer for their purchase order management system, with a separate shipping service module. \cite{barakaBuildingSOABasedModel2013}
+  \item Xiong-yi similarly proposes SOA as the better alternative for e-commerce systems and highlights the heterogeneity of external systems, as we have also seen before in a more general context with APIs. \cite{xiong-yiResearchApplicationSOA2009}
+  \item Li's paper confirms that the adapter method is now a standard approach for encapsulating legacy service interfaces in modern SOA e-commerce platforms. \cite{liDesignB2BEcommerce2019}
 \end{itemize}
 
-It is also worth mentioning that some similar commercial and even open-source solutions do exist to what we are trying to achieve, however they are often fully fledged applications with limited extensibility, such as karrio \cite{KarrioapiKarrio2026}, or are indeed lightweight, but limited to specific vendors or use-cases and follow more of a point-to-point approach, such as ShippingProAPICollection \cite{kevinvenclovasKevinvenclovasShippingProAPICollection2025}.
+It is also worth mentioning that some similar commercial and even open-source solutions do exist to what we are trying to achieve, however they are often fully fledged applications with limited extensibility, such as \textit{karrio} \cite{KarrioapiKarrio2026}, or are indeed lightweight, but limited to specific vendors or use-cases and follow more of a point-to-point approach, such as \textit{ShippingProAPICollection}. \cite{kevinvenclovasKevinvenclovasShippingProAPICollection2025}
 
 \section{Design, Evaluation and Analytics of Shipping Monitoring Systems}
 The second half of my literature review focuses on the more usability focused aspect of the application with the following two research questions in mind:
@@ -551,13 +552,14 @@ The second half of my literature review focuses on the more usability focused as
         \end{enumerate}
 \end{enumerate}
 
-Analytical dashboards and monitoring systems are widely used in various domains, including e-commerce logistics and
+Analytical dashboards and monitoring systems are widely used in various domains, ranging from IoT to e-commerce platforms.
+Their purpose is to provide users with a clear overview of key metrics, trends and anomalies, enabling informed decision-making.
 However, it is not immediately clear how to best design and evaluate such a system, that is both efficient and provides real value to merchants.
-In cases like this, we can not just simply measure system performance in just technical terms, such as the Google SRE team's Four Golden Signals \cite{GoogleSREMonitoring} (latency, traffic, errors, saturation), but also need to consider user-centric and domain specific metrics as well.
+We can not just simply measure system performance in just technical terms, such as the Google SRE team's Four Golden Signals \cite{GoogleSREMonitoring} (latency, traffic, errors, saturation), but also need to consider user-centric and domain specific metrics as well.
 The following subsections explore relevant literature on dashboard design architectures, KPIs and evaluation methods in the context of shipping monitoring systems.
 
 \subsection{On the Importance of Technical Metrics}
-Technical infrastructure metrics—uptime percentages, query response latencies, and system throughput—represent necessary conditions for effective monitoring systems but are not sufficient indicators of value.
+Technical infrastructure metrics such as uptime percentages, query response latencies, and system throughput represent necessary conditions for effective monitoring systems but are not sufficient indicators of value.
 A shipping monitoring dashboard with near perfect uptime and zero latency means little if the presented information is not understandable or actionable.
 Thus, evaluation of monitoring systems must be addressed on both technical and user-centric dimensions.
 
@@ -565,21 +567,21 @@ Infrastructure metrics often simply serve as enablers of business value rather t
 Google's Four Golden Signals framework \cite{GoogleSREMonitoring} provides useful infrastructure monitoring patterns, but requires contextualization for shipping domains:
 
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Latency} for example in case of our application is not as crucial as in some other real-time systems, such as financial trading platforms for example. The main importance of latency in our case is more about user experience when merchants interact with the dashboard, rather than strict real-time constraints.
-  \item \textbf{Traffic} and throughput indicate system load but reveal nothing about whether the dashboard drives better merchant decisions. It is, however an important factor when considering scalability, as in our case we are very often also constrained by external API rate limits we must respect, such as carrier APIs or Shopify's Admin API.
+  \item \textbf{Latency} for example in case of our application is not as crucial as in some other real-time systems, such as financial trading platforms. The main importance of latency in our case is more about user experience when merchants interact with the dashboard, rather than strict real-time constraints.
+  \item \textbf{Traffic and throughput} indicate system load but reveal nothing about whether the dashboard drives better merchant decisions. It is however, an important factor when considering scalability, as in this case we must respect external API rate limits, such as carrier APIs or Shopify's Admin API.
   \item \textbf{Error rates} measure system reliability, and are critical for both trustworthiness and usability. It must be monitored closely with each added integration and feature.
-  \item \textbf{Saturation} indicates when scaling is needed but not whether the system generates merchant value. It is also not much of a concern in our case, as there are not many computationally intensive operations, and due to the web technologies used, scaling is often handled automatically by the cloud provider.
+  \item \textbf{Saturation} indicates when scaling is needed but not whether the system generates merchant value. It is also not much of a concern in our case, as there are not many computationally intensive operations, and due to the web technologies used, scaling is often handled automatically by cloud providers.
 \end{itemize}
 
 Evidently, in our case, while technical metrics are important for ensuring reliable operation, what we are really looking for are user-centric KPIs that reflect the dashboard's effectiveness in driving merchant decisions.
 
 \subsection{Real-Time vs. Batch Analytics}
-Now let us address the main topic of MRQ2, which is the architectural and design choice of our proposed dashboard system.
+Now let us address the main topic of \textbf{MRQ2}, which is the architectural and design choice of our proposed dashboard system.
 A fundamental architectural decision in shipping monitoring systems is the choice between real-time and batch analytics approaches.
 This decision is not primarily technical but rather reflects what decision-making problems, time horizons and type of data analysis the system aims to support.
 
 \subsubsection{Operational Intelligence vs. Business Intelligence and Their Different Needs}
-To understand the distinction, we first need to clarify the difference between operational intelligence and business intelligence.
+To understand the distinction, we first need to clarify the difference between operational intelligence and business intelligence (BI).
 For this, I turn to Sandu's definitions \cite{sanduOperationalRealtimeBusiness2008}:
 
 \begin{displayquote}
@@ -599,7 +601,7 @@ The architectural implications are profound as well.
 On one hand, real-time systems prioritize latency by accepting operational complexity. When discussing big data scale, real-time analytics are especially hard, as evidenced by the research of Zheng et al. \cite{zhengRealtimeBigData2025} in which they find that real-time big data systems must simultaneously satisfy strict timeliness, high stability and availability on different levels of scale which leads to substantially higher system complexity compared to traditional batch-oriented data warehouses.
 On the other hand, batch systems prioritize analytical comprehensiveness by accepting latency. Data is extracted from operational systems, transformed through staged pipelines, and in case of great amounts of data loaded into dimensional data warehouses where complex SQL queries execute efficiently.
 Historical data is preserved for deep analysis. However, data arrives with significant latency and usually based on scheduled intervals, limiting responsiveness to immediate disruptions.
-A batch system discovering that a carrier had a 20\% delay rate last week due to issues specific to it is useful for strategic planning, but too late for immediate action on current shipments such as switching on turning off the carrier.
+A batch system discovering that a carrier had a 20\% delay rate last week due to issues specific to it is useful for strategic planning, but too late for immediate action on current shipments such as turning off the carrier or switching to an alternative.
 
 It is apparent, that most business use cases require both types of intelligence and thus the corresponding analytical methods and architectures.
 A good way to decide between real-time and batch analytics for given problems is by considering the decision-window requirements for them.
@@ -612,63 +614,93 @@ Here are two illustrative use cases for shipping monitoring systems:
 \end{itemize}
 
 \subsubsection{Lambda Architecture as a Hybrid Reference Model}
-To formalize the hybrid approach described above, I turn to the Lambda Architecture, a data-processing design pattern introduced by Nathan Marz \cite{marzHowBeatCAP2011} to handle massive quantities of data by taking advantage of both batch and stream-processing methods.
-While originally conceived to address the complexities of “Big Data” and the CAP theorem in distributed systems, the core principles of the Lambda Architecture provide a robust reference model for this project's monitoring system, even at a smaller scale.
-Marz argues that traditional databases conflate two distinct problems: storage of immutable facts and the computation of views (queries) on those facts \cite{marzHowBeatCAP2011}.
+To formalize the hybrid approach described above, we turn to the Lambda Architecture, a data-processing design pattern introduced by Nathan Marz \cite{marzHowBeatCAP2011} to handle massive quantities of data by taking advantage of both batch and stream-processing methods.
+While originally conceived to address the complexities of “Big Data” and the CAP theorem (Consistency, Availability, and Partition Tolerance) in distributed systems, the core principles of the Lambda Architecture provide a robust reference model for this project's monitoring system, even at a smaller scale.
+Marz argues that traditional databases conflate two distinct problems: storage of immutable facts and the computation of views (queries) on those facts. \cite{marzHowBeatCAP2011}
 In purely real-time or mutable systems, ensuring consistency while maintaining availability (as per the CAP theorem) introduces significant complexity, such as read-repair logic, vector clocks, and the risk of permanent data corruption from buggy writes.
-To “beat” this complexity, the Lambda Architecture proposes separating the system into three distinct layers, a structure that aligns directly with the hybrid requirements identified in the previous section:
+To “beat” this complexity, the Lambda Architecture proposes separating the system into three distinct layers, a structure that aligns directly with the hybrid requirements identified in the previous section.
 
 \begin{enumerate}[label=\arabic*., left=0pt, itemsep=3pt]
-  \item \textbf{Batch Layer (Master Dataset):} Marz defines the “master dataset” as an immutable, append-only set of raw data \cite{marzHowBeatCAP2011}. Because data is never overwritten, human errors or buggy code cannot permanently corrupt the system; views can simply be recomputed. In the context of shipping monitoring, this corresponds to the nightly storage of all raw shipment events and carrier updates. This layer precomputes complex, heavy views (e.g., weekly carrier performance reports) that don't need to be up-to-the-second but must be accurate and comprehensive.
-  \item \textbf{Speed Layer (Real-Time):} Since batch views are inherently out of date by the duration of the batch interval, a separate "Speed Layer" compensates for this "data lag" \cite{marzHowBeatCAP2011}. This layer processes only the most recent data (the delta) to provide low-latency views. Marz notes that while this layer requires complex incremental algorithms and eventual consistency, any errors here are transient—they are eventually overwritten by the correct Batch Layer views.
-  \item \textbf{Serving Layer:} "The serving layer pulls together the results from both the speed and batch layers, which makes an easy single view for the applications and users, which consume the data." as defined by Lekkala \cite{lekkalaLeveragingLambdaArchitecture2020}.
+  \item \textbf{Batch Layer (Master Dataset)}: Marz defines the “master dataset” as an immutable, append-only set of raw data. \cite{marzHowBeatCAP2011} Because data is never overwritten, human errors or buggy code cannot permanently corrupt the system, views can simply be recomputed. In the context of shipping monitoring, this corresponds to the nightly storage of all raw shipment events and carrier updates. This layer precomputes complex, heavy views (e.g.: weekly carrier performance reports) that don't need to be up-to-the-second but must be accurate and comprehensive.
+  \item \textbf{Speed Layer (Real-Time)}: Since batch views are inherently out of date by the duration of the batch interval, a separate "Speed Layer" compensates for this "data lag". \cite{marzHowBeatCAP2011} This layer processes only the most recent data (the delta) to provide low-latency views. Marz notes that while this layer requires complex incremental algorithms and eventual consistency, any errors here are transient—they are eventually overwritten by the correct Batch Layer views.
+  \item \textbf{Serving Layer}: "The serving layer pulls together the results from both the speed and batch layers, which makes an easy single view for the applications and users, which consume the data." as defined by Lekkala \cite{lekkalaLeveragingLambdaArchitecture2020}.
 \end{enumerate}
 
-While Marz's original proposal suggests heavy industrial technologies like Apache Hadoop for the speed layer \cite{marzHowBeatCAP2011}, the pattern is technology-agnostic, which is made apparent by how different papers implement it or suggest implementing it via different technologies \cite{lekkalaLeveragingLambdaArchitecture2020, hasaniLambdaArchitectureReal2014}.
-For a small-sized, focused application like Shopickup, strictly adhering to these “Big Data” technologies would introduce unnecessary operational overhead, which is a common issue noted by critics, such as Krep who points out that maintaining two parallel codebases (one for batch, one for streaming) for the same purposes violates the “Don't Repeat Yourself” (DRY) principle and increases maintenance costs \cite{krepsQuestioningLambdaArchitecture2014}.
-However, the functional separation remains valid and valuable. Instead of Hadoop and Storm, such applications could implement a lightweight approach that takes inspiration from the Lambda architecture:
+While Marz's original proposal suggests heavy industrial technologies like Apache Hadoop for the speed layer, the pattern is technology-agnostic, which is made apparent by how different papers implement it or suggest implementing it via different technologies. \cite{lekkalaLeveragingLambdaArchitecture2020, hasaniLambdaArchitectureReal2014}
+For a small-sized, focused application like ours, strictly adhering to these “Big Data” technologies would introduce unnecessary operational overhead, which is a common issue noted by critics, such as Krep who points out that maintaining two parallel codebases (one for batch, one for streaming) for the same purposes violates the “Don't Repeat Yourself” (DRY) principle and increases maintenance costs. \cite{krepsQuestioningLambdaArchitecture2014}
+However, the functional separation remains valid and valuable. Instead of Hadoop and Storm, such applications could implement a lightweight approach that takes inspiration from the Lambda architecture.
 
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Batch Layer}: can be implemented effectively using standard relational database aggregations or scheduled cron jobs that run during off-peak hours to generate static reporting tables, which later could be replaced by a more robust ETL pipeline if needed.
-  \item \textbf{Speed Layer}: does not require a complex event-streaming engine (like Kafka) if the data volume does not demand it. Instead, frequent polling of carrier APIs (e.g., every 5 minutes, depending on the provider's limits) or lightweight webhook handlers if available can serve the same functional purpose: capturing the latest state to alert merchants of immediate issues.
+  \item \textbf{Batch Layer (Master Dataset)}: can be implemented effectively using standard relational database aggregations or scheduled cron jobs that run during off-peak hours to generate static reporting tables, which later could be replaced by a more robust ETL pipeline if needed.
+  \item \textbf{Speed Layer (Real-Time)}: does not require a complex event-streaming engine (like Kafka) if the data volume does not demand it. Instead, frequent polling of carrier APIs (e.g.: every 15 minutes, depending on the provider's limits) or lightweight webhook handlers if available can serve the same functional purpose: capturing the latest state to alert merchants of immediate issues.
   \item \textbf{Serving Layer}: can be a simple API that merges results from both layers, serving real-time alerts from the Speed Layer and historical reports from the Batch Layer to the dashboard.
 \end{itemize}
 
-Based on the literature research this hybrid approach seems to be a suitable candidate for our project, which I will further explore in the corresponding subsection of the methodology. %TODO: Link to the section
-Were the scope of the project larger, Lambda's alternative, the Kappa architecture proposed by Kreps \cite{krepsQuestioningLambdaArchitecture2014} or even a CQRS + Event Sourcing approach \cite{pachecoMicroservicePatternsBest2018} might be considered better.
+Based on the literature research this hybrid approach seems to be a suitable candidate for our project, is further explored in the corresponding subsection \ref{sec:dashboard-design} of the methodology.
+Were the scope of the project larger, Lambda's alternative, the Kappa architecture proposed by Kreps \cite{krepsQuestioningLambdaArchitecture2014} or even a CQRS + Event Sourcing approach \cite{pachecoMicroservicePatternsBest2018} might be considered as better alternatives.
 
 \subsection{Domain-Specific KPIs for Shipping Operations}
-With understanding of the real-time/batch distinction established, we can now continue with the SRQ2.1 and define domain-specific KPIs appropriate for merchant evaluation and decision-making.
-KPIs of organizations are, as Piela summarized usually organized by factors most relevant to the company, such as whether they are financial or non-financial, primary or secondary metrics, etc. \cite{pielaKeyPerformanceIndicator2017}.
+With understanding of the real-time/batch distinction established, we can now continue with the \textbf{SRQ2.1} and define domain-specific KPIs appropriate for merchant evaluation and decision-making.
+For this, we primarily rely on the standard of \textbf{SCOR DS} (Supply Chain Operations Reference Digital Standard) set forth by the \textit{Association for Supply Chain Management} (ASCM), that describes and categorizes a framework of over \texttt{250} KPIs relevant to supply chain management. \cite{ascm2022scor}
+While not all of these KPIs are relevant to our specific domain, it still provides a comprehensive reference for core metrics and serves as the focal point of many related papers, such as the paper of Kusrini \& Miranda that addresses make-to-order scenarios, which is especially common for \textit{Shopify} SMEs. \cite{kusriniDeterminingPerformanceMetrics2021}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{src/screens/scor-ds-recap.png}
+  \caption{Quick Reference Guide of SCOR DS depicting categories of KPIs and list of orchestration processes}
+  \label{fig:scor-ds-quick-reference}
+\end{figure}
+
+There are many ways to categorize KPIs, and the literature does not provide a single standard.
+For instance, \textbf{SCOR DS} categorizes them into distinct hierarchies of process categories (Plan, Order, Source, Transform, Fulfill, and Return), while Piela organized by factors most relevant to the company, such as whether they are financial or non-financial, primary or secondary metrics and so on. \cite{ascm2022scor, pielaKeyPerformanceIndicator2017}
 We however, categorize them into tiers reflecting the different decision horizons they support, as described earlier.
 This serves both to clarify their purpose and to guide the underlying data architecture needed to support them in practice.
-We will in the methodology attempt to implement some of these KPIs into our own project's dashboard according to SMART criteria \cite{ishakSMARTKPIManagement2019}, then evaluate their effectiveness based on merchant feedback and the IS system success model by DeLone and McLean \cite{savolainenPerformanceDashboardEffectiveness2023}. % TODO: Here I took this idea from a master's thesis, but they themselves are pointing to DeLone and McLean's model, so rework this part
-% TODO: Link to section here
+
+% TODO: Clean up these sentences
+While SCOR DS provides an exhaustive dictionary of metrics, recent literature emphasizes that SMEs require a simplified, capability-linked subset of these KPIs that focus heavily on customer value outcomes and unit economics rather than complex network utilization \cite{kusriniDeterminingPerformanceMetrics2021, llivisacaKeyPerformanceIndicators2020}. For an SME merchant fulfilling orders (often utilizing a multi-carrier adapter), the focal point shifts toward end-to-end metrics like Total Order Cycle Time (TOCT) and Cost Per Order (CPO). Furthermore, as e-commerce fulfillment increasingly relies on omnichannel strategies and third-party logistics (3PL) integrations, metrics tracking item consolidation rates and failed first delivery attempts have emerged as critical drivers of both cost-efficiency and customer satisfaction \cite{yeContextualStochasticOptimization2024}.
+Implementation of some of these KPIs is then attempted in section \ref{sec:dashboard-design}, followed by an evaluation of their effectiveness based on merchant feedback and the IS system success model by DeLone and McLean. \cite{savolainenPerformanceDashboardEffectiveness2023}
+% TODO: Here I took this idea from a master's thesis, but they themselves are pointing to DeLone and McLean's model, so rework this part
+
+Operation KPIs can usually be turned into strategic ones by simply aggregating them over time.
+Similarly, we can make multiple versions of our strategic KPIs by aggregating them over different time horizons, such as weekly, monthly, quarterly or yearly and over different shipment providers.
+For the practical implementation, differentiating between carriers is especially important, as merchants often have multiple carriers and need to compare their performance, reliability and costs.
 
 \subsubsection{Operational KPIs: Real-Time Monitoring for Immediate Action}
 Operational KPIs are designed to support immediate decision-making, often in response to unfolding events.
 These KPIs are typically displayed on real-time dashboards and trigger automated alerts when thresholds are breached.
-The following table summarizes domain-specific operational KPIs relevant to shipping monitoring systems and their sources:
-(Note that KPI research is still ongoing, so this table and the references are not yet complete)
+The following table summarizes domain-specific operational KPIs relevant to shipment monitoring systems and their sources.
 
 \begin{table}[H]
   \centering
   \small
-  \begin{tabular}{@{}p{4cm}p{8cm}p{4cm}@{}}
+  \begin{tabular}{@{}p{4cm}p{8cm}p{3cm}@{}}
     \toprule
-    \textbf{KPI}                                                                                                                                                       & \textbf{Description} & \textbf{Source} \\
+    \textbf{KPI}                                                                                                                                                                                                                                                                                                                                & \textbf{Description} & \textbf{Source} \\
     \midrule
-    On Time Delivery Rate (OTDR)                                                                                                                                       &
-    What percentage of shipments are delivered on time according to the promised delivery date.                                                                        &
-    Piela \cite{pielaKeyPerformanceIndicator2017}                                                                                                                                                               \\[6pt]
+    On Time Delivery Rate (OTDR)                                                                                                                                                                                                                                                                                                                &
+    What percentage of shipments are delivered on time according to the promised delivery date. Surfacing these issues to merchants is crucial for maintaining customer satisfaction, manage expectations.                                                                                                                                      &
+    Piela \cite{pielaKeyPerformanceIndicator2017}; Raj et al. \cite{rajStochasticModelingIntegrated2024}; ASCM RL.2.2 and RL.3.3 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                 \\[6pt]
 
-    OTDR SLA                                                                                                                                                           &
-    Here I believe it is important to differentiate for merchants the measure of OTDR as suggested by the merchant for customers and the OTDR in regard to broken SLAs &
-    None                                                                                                                                                                                                        \\[6pt]
+    OTDR SLA                                                                                                                                                                                                                                                                                                                                    &
+    It is important to differentiate between the OTDR as measured for customer satisfaction and the OTDR in regard to broken SLAs, as the latter carries different implications for business performance. Merchant's may exercise their SLA rights when deliveries are not made on time.                                                        &
+    Piela \cite{pielaKeyPerformanceIndicator2017}; ASCM RL.3.3 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                                                                 \\[6pt]
+
+    Total Order Cycle Time (TOCT) / Order-to-delivery time (real or near-real-time)                                                                                                                                                                                                                                                                                             &
+    The time it takes from the order's creation to the moment it is handed over to the carrier. This can serve as an operational, near-real-time metric as well on a per-order basis, since often merchants not only promise overall shipping times, but fulfillment guarantees as well, especially in case of custom-made items. &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Llivisaca et al. \cite{llivisaca2020key}                                                                                                                                                                                                                                                                           \\[6pt]
+
+    Order entry accuracy and invoice accuracy                                                                                                                                                                                                                                                                                                   &
+    Defines on a per-order basis the accuracy of order entry as requested by the customer. Automatically shipping or invoicing orders to wrong or non-existing customers could lead to significant operational and financial losses. The system could on order creation validate and immediately warn merchants about potential discrepancies.  &
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; ASCM RL.3.4 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                                                                   \\[6pt]
+
+    Pending Orders / Order Backlog &
+    The count of orders accepted but not yet shipped. This serves as an early-warning agility KPI for SMEs to identify capacity constraints. &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Kusrini \& Miranda \cite{kusriniDeterminingPerformanceMetrics2021} \\[6pt]
 
     \bottomrule
   \end{tabular}
   \caption{Operational KPIs for shipping monitoring systems}
+  \label{tab:operational-kpis}
 \end{table}
 
 \subsubsection{Strategic KPIs: Batch Monitoring for Tactical Planning}
@@ -677,94 +709,77 @@ Strategic KPIs are designed to inform long-term planning and strategic decision-
 \begin{table}[H]
   \centering
   \small
-  \begin{tabular}{@{}p{4cm}p{8cm}p{4cm}@{}}
+  \begin{tabular}{@{}p{4cm}p{8cm}p{3cm}@{}}
     \toprule
-    \textbf{KPI}                                                                                                                             & \textbf{Description} & \textbf{Source} \\
+    \textbf{KPI}                                                                                                                                                                                                                                                            & \textbf{Description} & \textbf{Source} \\
     \midrule
-    Accuracy of Forecasting                                                                                                                  &
-    Measures how accurately the system predicts the delivery times and volumes.                                                              &
-    \\[6pt]
+    Delivery time                                                                                                                                                                                                                                               &
+    The average time it takes for a shipment to be delivered from the moment it is sent, over a period of time.                                                                                                                                                             &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}                                                                                                                                                                                                                                                            \\[6pt]
 
-    Carrier Cost per Shipment                                                                                                                &
-    Average cost incurred per shipment by each carrier. Helps in negotiating contracts and selecting carriers.                               &
-    \\[6pt]
+    Order-to-delivery time (batch)                                                                                                                                                                                                                                          &
+    The average time it takes for an order to be handed over to the carrier from the moment it is placed, over a period of time.                                                                                                                                            &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}                                                                                                                                                                                                       \\[6pt]
 
-    Damage Rate                                                                                                                              &
-    Percentage of shipments that are reported as damaged upon delivery. Indicates carrier handling quality.                                  &
-    Piela \cite{caiImprovingSupplyChain2009}                                                                                                                                          \\[6pt]
+    Time to Completion / Customer Order Fulfillment Cycle Time                                                                                                                                                                                                              &
+    Often differently named by authors, essentially the average actual cycle time consistently achieved to fulfill customer orders. From order receipt to customer acceptance of the order.                                                                                 &
+    ASCM RS.1.1 / RS.2.4. \cite{ascm2022scor}                                                                                                                                                                                                                                                                                  \\[6pt]
 
-    Return Rate                                                                                                                              &
-    Percentage of shipments that are returned by customers. High return rates may indicate issues with product quality or shipping accuracy. &
-    \\[6pt]
+    Damage Rate                                                                                                                                                                                                                                                             &
+    Percentage of shipments that are reported as damaged upon delivery. Indicates carrier handling quality.                                                                                                                                                                 &
+    Piela \cite{caiImprovingSupplyChain2009}; ASCM RL.3.10 \cite{ascm2022scor}                                                                                                                                                                                                                                                                        \\[6pt]
+
+    Return Rate                                                                                                                                                                                                                                                             &
+    Percentage of shipments that are returned by customers. High return rates may indicate issues with product quality or shipping accuracy. Comparing the return rates between carriers could expose issues with their relative performance.                               &
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}                                                                                                                                                                                                                                                              \\[6pt]
+
+    Perfect Order / Fulfillment Rate                                                                                                                                                                                                                                        &
+    The percentage of orders that were delivered as expected, on time, in full and undamaged. It essentially "combines" carrier measures of OTDR, damage and return rate with extra dimensionality of merchant performance of having no mistakes at all. Shows overall service quality. &
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; ASCM RL.1.1 \cite{ascm2022scor}                                                                                                                                                                                                                             \\[6pt]
+
+    Carrier Cost per Shipment                                                                                                                                                                                                                                               &
+    Average cost incurred per shipment by each carrier. Comparing carrier costs helps in negotiating contracts and selecting carriers or pricing shipment options accordingly.                                                                                                                                                              &
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; Partially ASCM CO.3.6 \cite{ascm2022scor}                                                                                                                                                                                                                                                              \\[6pt]
+
+    Shipping Cost vs. Carrier Performance (Value Balance) &
+    A composite strategic view plotting cost per order by carrier against OTDR, damage rate, and transit time. Enables SMEs lacking analytical staff to make informed contract and routing decisions. &
+    Ye et al. \cite{yeContextualStochasticOptimization2025} \\[6pt]
 
     \bottomrule
   \end{tabular}
   \caption{Strategic KPIs for shipping monitoring systems}
+  \label{tab:strategic-kpis}
 \end{table}
-
-% \subsubsection{Operational KPIs: Real-Time Monitoring for Immediate Action}
-% Operational KPIs appear on real-time dashboards and trigger automated alerts when thresholds breach. Merchants check these during operational crises or daily standard operations.
-
-% Current Inventory Position by SKU by Warehouse: Live count of available units by product and location. When inventory drops to reorder point, system triggers alert and initiates purchase order. Example: “Shoppe SKU-4421 (Widget X) dropped to 85 units at Newark warehouse (reorder point: 100); purchase order initiated; arrival date: 3 days”. Alert latency requirement: <2 minutes from inventory depletion to merchant notification.
-
-% Shipments Currently at SLA Risk: Number and list of shipments where current location/velocity indicates they will miss promised delivery date without intervention. Example: “14 shipments at risk. Most critical: Order \#ORD-892341 promised delivery Thursday 6 PM, currently in Memphis distribution, on track for Friday 2 PM delivery (8 hours late). Recommend: Contact customer now, offer \$5 discount + expedited reroute”. Alert latency: <5 minutes from SLA risk detection to merchant notification.
-
-% Carrier Performance Today: Real-time on-time delivery percentage for each carrier today (versus yesterday, versus 30-day average). Example: “UPS: 87\% on-time today (versus 91\% daily avg); FedEx: 94\% (versus 92\% daily avg). UPS trending below normal—investigate”. Updates every hour as new delivery confirmations arrive.
-
-% Warehouse Throughput (Orders Processed Per Hour): Real-time order processing rate per warehouse location. Anomalies indicate bottlenecks requiring immediate attention. Example: “Newark warehouse: 340 orders/hr (normal: 380); 12\% below target; investigate conveyor system”. Updates every 15 minutes.
-
-% Open Exceptions/Alerts: Count of outstanding issues requiring merchant action (damaged goods in transit, customs delays, carrier missed pickup window). Example: “3 open exceptions: 1 damaged shipment for customer service response, 2 customs delays awaiting documentation”. Real-time updates as exceptions are created or resolved.
-
-% \subsubsection{Tactical KPIs: Weekly Batch Monitoring for Operational Adjustment}
-% Tactical KPIs provide weekly summaries revealing operational trends and guiding short-term adjustments to carrier mix, warehouse operations, or staffing. These naturally fit batch analytics computed nightly or weekly.
-
-% Weekly On-Time Delivery Rate (OTDR) by Carrier: Percentage of shipments arriving on-time (within promised window) aggregated by carrier. Enables carrier selection adjustments for next week. Example: “Week of January 6: UPS 89\% OTDR, FedEx 93\%, DHL 84\%. Consider shifting volume from DHL to FedEx for next week”. Computation: aggregate across all shipments delivered in the week, compare delivery timestamp to promised date, calculate percentage.
-
-% Fill Rate (Orders Completely Fulfilled First Attempt): Percentage of orders shipped complete without backorder or split shipment. Example: “Fill rate 96.2\% (target: >98\%). Root cause: 3 SKUs experiencing stockouts. Coordinating with procurement”. Indicates inventory planning effectiveness.
-
-% Return Rate by Fulfillment Center: Percentage of orders returned for any reason (damaged in transit, picked incorrectly, customer dissatisfied). Proxy for fulfillment quality. Example: “Newark FC return rate 2.1\% (target: <1.5\%), Chicago FC 1.3\% (target: <1.5\%), Dallas FC 0.8\% (exceptional). Investigate Newark quality issues”. Batch computation: count returned orders by originating FC for the week.
-% Cost per Order: Total shipping cost divided by order count. Includes carrier fees, packaging, handling. Example: “Week average: \$3.42 per order (target: <\$3.25). Cost increase driven by expedited shipments for SLA recovery (+\$0.08/order); non-expedited average \$3.30/order (within target)”. Enables cost control and price negotiation with carriers.
-
-% Inventory Turnover Rate: Average time inventory sits before sale (measured in days). Indicates whether capital is efficiently deployed. Example: “Fast movers (electronics): 8 day turnover; Slow movers (seasonal): 45 day turnover. Recommend promotional push on slow movers”. Higher turnover reduces carrying costs and obsolescence risk.
-
-% \subsubsection{Strategic KPIs: Batch Monthly/Quarterly Monitoring for Tactical Planning}
-% Strategic KPIs provide quarterly or annual trend analysis feeding executive-level and multi-month strategic decisions. These require comprehensive historical data aggregation impossible in real-time systems.
-
-% Quarterly OTDR Trend: On-time delivery percentage across all carriers/regions, tracked quarter-over-quarter. Indicates whether service quality is improving or degrading. Example: “Q4 2025: 93.2% OTDR versus Q4 2024: 91.1% OTDR (+2.1 percentage points improvement). Attributed to Q4 investments in regional distribution centers”. Justifies continued investment or identifies need for operational changes.
-
-% Carrier Spend and Performance Matrix: Comparing carrier spend (cost) versus performance (OTDR, damage rate) to identify cost-benefit balance. Example: “UPS (\$450k spend): 91\% OTDR, 0.8\% damage rate (premium carrier, high service); Regional carrier (\$120k): 84\% OTDR, 2.1\% damage rate (budget option, lower service). Consider 10\% volume shift from UPS to regional for cost reduction”. Informs long-term contract negotiations.
-
-% Year-over-Year Demand Seasonality: Historical order volume patterns by month, enabling inventory planning. Example: “Q4 peak: October 120\%, November 145\%, December 165\% of baseline; Q1 trough: January 85\%, February 78\%, March 82\%. Use to pre-position inventory in September-October”. Critical for capital planning and supplier lead time negotiation.
-
-% Total Cost to Serve by Region: All logistics costs (shipping, warehousing, damage, returns) by geographic region. Identifies high-cost regions for efficiency projects. Example: “West Coast region: \$4.12 per order all-in cost; average Midwest: \$2.85/order. High density in West Coast causes inefficiency; consider consolidation distribution point”. Guides distribution network design decisions.
-
 
 \chapter{Methodology}
 \label{ch:methodology}
-With this chapter's layout, I am following the natural order of the design and development process of the project, throughout which I first created the practical implementation of the carrier integration system based on the principles discussed in the literature review.
-Following that, I built a real commercial application that implements this system as a core component, and started exploring the topic of the monitoring dashboard through this application as well.
+With this chapter's layout, the natural order of the design and development process of the project is followed, throughout which the practical implementation of the carrier integration system was first to be implemented, based on the principles discussed in the literature review.
+Following that, a real commercial application named \textit{Shopickup} was built, which implements this system as a core component, and serves as context through which the question of monitoring dashboard and KPIs is further explored.
 
-The combination of the integration layer and the commercial application serves as a proof of concept that attests the validity and feasibility of the literature review's proposed architecture and answer of the first research question.
-A central part of this proof of concept is the dashboard, for which most of the feasible KPIs and design choices were implemented, then further evaluated based on in-depth interviews with two merchants using the application, and based on the IS system success model by DeLone and McLean \cite{savolainenPerformanceDashboardEffectiveness2023}.
+This serves as a proof of concept that attests the validity and feasibility of the literature review's proposed architecture and answer of the first research question.
+A central part of this proof of concept is the dashboard, for which most of the feasible KPIs and design choices were implemented, then further evaluated based on in-depth interviews with two merchants using the application.
+After refinement and feedback from real users, the IS system success model by DeLone and McLean was applied to further validate the effectiveness of the dashboard. \cite{savolainenPerformanceDashboardEffectiveness2023}
+% TODO: Actually do the evaluation
 
 \section{Carrier Integration Architecture Design}
 As described in the literature review, after considering various architectural options, an adapter + API gateway architecture was chosen as the most suitable trade-off for the carrier integration system.
 This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
-Through development, I found the following components to be essential for such system, which are also the ones implemented in the practical project.
+The following components were found to be essential for such systems.
 
 \begin{table}[H]
   \centering
   \small
-  \begin{tabular}{@{}p{3cm}p{8cm}p{4cm}@{}}
+  \begin{tabular}{@{}p{3cm}p{8cm}p{3cm}@{}}
     \toprule
-    \textbf{Component}                 & \textbf{Description}                                                                                                                                                                                                                                                                                & \textbf{Responsibility}    \\
-    \midrule                                                                                                                                                                                                                                                                                                                                                              \\[6pt]
-    Core contract (used by adapters)   & Defines base interface contracts for both input and output of the canonical domain model via optional advertised capabilities available to all adapters.                                                                                                                                            & Integration developers     \\[6pt]
-    Carrier Adapters (one per carrier) & Defines which capabilities of the core contract are implemented. Responsible for mapping canonical domain model to carrier request, calling carrier API (including auth), interpreting responses and errors, and returning normalized output. Packaged as independently deployable modules/plugins. & Integration developers     \\[6pt]
-    API Gateway                        & Single ingress for clients handling cross-cutting concerns between requests, such as auth, rate limiting and internal services.                                                                                                                                                                     & End-application developers \\[6pt]
-    Extra components: Tracking Service & Periodic polling or webhook consumer that ingests carrier state changes, normalizes them, and updates shipment state; emits events for alerts/analytics.                                                                                                                                            & End-application developers \\[6pt]
+    \textbf{Component}                 & \textbf{Description}                                                                                                                                                                                                                                                               & \textbf{Responsibility}    \\
+    \midrule                                                                                                                                                                                                                                                                                                                                             \\[6pt]
+    Core contract (used by adapters)   & Defines base interface contracts for both input and output of the canonical domain model via optional advertised capabilities available to all adapters.                                                                                                                           & Integration developers     \\[6pt]
+    Carrier Adapters (one per carrier) & Defines which capabilities of the core contract are implemented. Responsible for mapping canonical domain model to carrier request, calling carrier API, interpreting responses and errors, and returning normalized output. Packaged as independently deployable modules/plugins. & Integration developers     \\[6pt]
+    API Gateway                        & Single ingress for clients handling cross-cutting concerns between requests, such as auth, rate limiting and internal services.                                                                                                                                                    & End-application developers \\[6pt]
+    Extra components: Tracking Service & Periodic polling or webhook consumer that ingests carrier state changes, normalizes them, and updates shipment state; emits events for alerts/analytics.                                                                                                                           & End-application developers \\[6pt]
     \bottomrule
   \end{tabular}
+  \caption{Overview of the carrier integration system components}
 \end{table}
 
 These components layer-by-layer build to more specific and higher-level functionalities, with the core contract being the most abstract and the API gateway being the most concrete and specific to the end application.
@@ -772,17 +787,19 @@ The following figure gives an overview of a theoretical complete system architec
 
 % TODO: Diagram of the overall architecture of the system here
 
-In a practical context, the domain independent parts are referred to as the \textit{carrier integration layer} throughout this paper. It was deliberately built for Node.js,the most popular web framework and runtime in the industry\parencite{stackoverflowDeveloperSurvey2025} and was made completely available as an open-source package, which can be found on \textbf{npmjs}\parencite{shopickupNpmOrganization2026} for integrators and in raw code format on \textbf{GitHub}\parencite{shopickupIntegrationLayerGitHub2026} for developers and reviewers.
+In a practical context, the domain independent parts are referred to as the \textit{carrier integration layer} throughout this paper. It was deliberately built for \textit{Node.js}, the most popular web framework and runtime in the industry \parencite{stackoverflowDeveloperSurvey2025} and was made completely available as an open-source package, which can be found on \textit{npmjs} \parencite{shopickupNpmOrganization2026} for integrators and in raw code format on \textit{GitHub} \parencite{shopickupIntegrationLayerGitHub2026} for developers and reviewers.
 The rationale behind the MIT license and open-source approach is two-fold: first, it allows the research to be more transparent and allows insight for review, second, it could potentially be used by other developers and integrators in the future, perhaps even evolving into a common, "crowdsourced" solution for the problem of carrier integration.
-Multiple developers getting on board would also allow for continuous updates and improvements and relatively fast reaction to changes in the carrier APIs.
+Multiple developers getting on board would also allow for continuous updates and improvements and relatively fast reaction to changes happening in the carrier APIs.
 This is also one of the reasons why extensibility was a key design principle for the system.
-The public repository follows a monorepo structure on GitHub, while the core package and all adapters are published separately under the \textit{shopickup} npm organization.
-
-As of the time of writing, three shipping providers are supported for on average five of the main capabilities required by merchants, such as label creation, tracking, pickup point retrieval, etc.
-The currently supported carriers are Magyar Posta Logisztika (MPL), GLS and Foxpost, which are Hungary's three largest carriers\parencite{gkidEvertekelesEsLogisztika2020}, each with their own automated postal lockers and pickup points.
-Three further providers are in the process of being added, including Austrian Post, and two more regional carriers.
+The public repository follows a monorepo structure on \textit{GitHub}, while the core package and all adapters are published separately under the \textit{shopickup npmjs} organization.
 
 % TODO: Image collage of the GitHub repo and npm packages here
+
+As of the time of writing, three shipping providers are supported for on average five of of the main capabilities required by merchants, such as pacel and label creation, tracking, pickup point retrieval and more.
+The currently supported carriers are Magyar Posta Logisztika (MPL), GLS and Foxpost, which are Hungary's three largest carriers, each with their own automated postal lockers and pickup points. \parencite{gkidEvertekelesEsLogisztika2020}
+Three further providers are in the process of being added, including Austrian Post, and two more regional Hungarian carriers.
+
+% TODO: Image of support internationally vs regionally here
 
 The following subsections will go over the components one by one, with much greater detail for the core contract and carrier adapters, as they are the most relevant to the research question and are application domain independent, unlike the others.
 For the end-application dependent components, simpler guidelines and overviews will be given without going into much technical detail.
@@ -792,27 +809,27 @@ As mentioned before, the core contract is the most abstract element of the syste
 
 \begin{itemize}[itemsep=3pt]
   \item \textbf{Abstract capability and flow definitions}: it defines the capabilities carrier adapters can implement, such as label creation, parcel creation, tracking, etc. Adapters can then choose which of these capabilities they implement based on the carrier's available API endpoints and clearly advertise them as available. Taking this idea one step further, the core can also define flows that combine multiple capabilities into higher-level sequences, such as "create label" that would first create a parcel, then print its label in a singular step.
-  \item \textbf{Canonical models and type safety}: the whole project was built with TypeScript and is strongly typed, the core accordingly defines the canonical domain models via base types for the adapters. The adapters import these types, extend them with carrier-specific fields where required and return the output in a similar predefined format. This enforces a certain level of consistency across adapters and promotes predictability. In the following figure, we can see for example through the example of a parcel creation flow how the core defines strict types such as `Parcel`, `CreateParcelsRequest` and `CreateParcelResponse`, defining the core types end to end.
-  \item \textbf{Pluggable central utilities and context}: the core also provides crucial utilities used by all adapters, such as http clients, logging, telemetry or store helpers. As of the time of writing, the http client and logging utilities are completely implemented and used. The core discipline is to keep these utilities generic and pluggable, the package does provide for example a simply initializable \textit{Axios} / \textit{Fetch} based http client, but developers also have the choice to use their own custom client as long as it adheres to or is mappable to the core's defined standard http interface type. Similarly, the logging utility provides a simple \textit{pino} logger setup, but implementers can bring their own logger instances if they can map to the standard info/debug/error level logs. The adapters then use these utilities for their internal operations.
+  \item \textbf{Canonical models and type safety}: the whole project was built with \textit{TypeScript} and is strongly typed, the core accordingly defines the canonical domain models via base types for the adapters. The adapters import these types, extend them with carrier-specific fields where required and return the output in a similar predefined format. This enforces a certain level of consistency across adapters and promotes predictability. In the following figure, we can see for example through the example of a parcel creation flow how the core defines strict types such as \texttt{Parcel}, \texttt{CreateParcelsRequest} and \texttt{CreateParcelResponse}, defining the core types end to end.
+  \item \textbf{Pluggable central utilities and context}: the core also provides crucial utilities used by adapters, such as HTTP clients, logging, telemetry or store helpers. As of the time of writing, the http client and logging utilities are completely implemented and used. The core discipline is to keep these utilities generic and pluggable, the package does provide for example a simply initializable \textit{Axios} / \textit{Fetch} based HTTP client, but developers also have the choice to use their own custom client as long as it adheres to or is mappable to the core's defined standard HTTP interface type. Similarly, the logging utility provides a simple \textit{pino} logger setup, but implementers can bring their own logger instances if they can map to the standard info/debug/error level logs. The adapters then use these utilities for their internal operations.
 \end{itemize}
 
 % TODO: Here show show a diagram that shows the architecture of the Core through the flow of a `createParcel` request, such as Foxpost
 
 \subsubsection{Core Issue: Specificity vs. Generality}
 One of the main challenges in designing the core contract was finding the right balance of what should be included in the core and what should be left out.
-On one hand, the core should be general enough to be applicable to a wide range of carriers, but as we have seen through the literature, these APIs are not uniform at all, with each carrier having their own unique requirements and quirks.
-On the other hand, the core should be specific enough to provide real value and guidance to adapter developers to avoid regressing to the one to one mapping antipattern.
+On one hand, the core should be general enough to be applicable to a wide range of carriers, but as we have seen throughout the literature and in practice, these APIs are not uniform at all, with each carrier having their own unique requirements and quirks.
+On the other hand, the core should be specific enough to provide real value and guidance to adapter developers to avoid regressing to the one-to-one mapping antipattern.
 
 The compromise for this issue was to define the contract in a way where the types provide a base structure with predefined points for extension on the input and raw response field for the result.
-Perhaps, the best way to understand this is through an example, such as the `createParcel` flow mentioned before.
-On the input side, the core defines a `CreateParcelRequest` type with the usual expected fields for the incoming data, such as `Parcel`.
-It is apparent however, that different carriers offer unique features and services that require additional fields, such as express delivery flags, insurance options, etc.
-To accommodate this, the core defines a custom field in the type of `RequestOptions`, which is deliberately left up to the adapter to define and use as they see fit.
+Perhaps, the best way to understand this is through an example, such as the \texttt{createParcel} flow mentioned before.
+On the input side, the core defines a \texttt{CreateParcelRequest} type with the usual expected fields for the incoming data, such as \texttt{Parcel}.
+It is apparent however, that different carriers offer unique features and services that require additional fields, such as express delivery flags, insurance options and so on.
+To accommodate this, the core defines a custom field in the type of \texttt{RequestOptions}, which is deliberately left up to the adapter to define and use as they see fit.
 
 \begin{listing}[H]
-\caption{Request options extensibility in \texttt{src/core/request-options.ts}}
-\label{lst:request-options}
-\begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
+  \caption{Core request options extensibility in \texttt{src/core/request-options.ts}}
+  \label{lst:request-options}
+  \begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
 /**
  * Request options
  * Per-call options that adapters can use to modify behavior
@@ -833,12 +850,12 @@ export interface RequestOptions {
 \end{minted}
 \end{listing}
 
-This lenient typing allows adapters to first extend the core types, then specify them to their needs, such as the following example for Foxpost's parcel creation, which extends the (aliased) core type we have seen before and specifies the `options` field with custom flags, such as `isWeb`, that indicates to the carrier whether the parcel shall be hidden in their own interface.
+This lenient typing allows adapters to first extend the core types, then specify them to their needs, such as the following example for Foxpost's parcel creation, which extends the (aliased) core type we have seen before and specifies the \texttt{options} field with custom flags, such as \texttt{isWeb}, that indicates to the carrier whether the parcel shall be hidden in their own interface.
 
 \begin{listing}[H]
-\caption{Foxpost-specific request options in \texttt{src/adapters/foxpost/types.ts}}
-\label{lst:foxpost-request-options}
-\begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
+  \caption{Adapter, Foxpost-specific request options in \texttt{src/adapters/foxpost/types.ts}}
+  \label{lst:foxpost-request-options}
+  \begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
 /**
  * Foxpost-specific CreateParcelsRequest (narrowed credentials)
  */
@@ -862,13 +879,13 @@ export interface FoxpostParcelOptions extends RequestOptions {
 \end{minted}
 \end{listing}
 
-Similarly, with the responses, the core defines a base structure for the output that includes all sensible and common fields, such as `trackingNumber` for instance in case of parcel creation, but integrators might need more details returned by the carriers.
-For this reason, the core defines `rawCarrierResponse` as a field in the output, which is simply a free-form serialized version of the carrier's original response body, allowing integrators access to all details they might need without locking in to the core's defined structure.
+Similarly, with the responses, the core defines a base structure for the output that includes all sensible and common fields, such as \texttt{trackingNumber} for instance in case of parcel creation, but integrators might need more details returned by the carriers.
+For this reason, the core defines \texttt{rawCarrierResponse} as a field in the output, which is simply a free-form serialized version of the carrier's original response body, allowing integrators access to all details they might need without locking in to the core's defined structure.
 
 % TODO: Diagram showing the extensibility on both ends
 
 \subsection{Integration Layer - Carrier Adapters}
-The carrier adapters are the concrete implementations of the core contract for each carrier.
+Carrier adapters are the concrete implementations of the core contract for each carrier.
 They all have a rather predictable structure, which is recommended to be followed by guidelines for new implementations.
 Here is an example structure for a carrier adapter, excluding miscellaneous files, helpers and directories.
 
@@ -882,60 +899,100 @@ Here is an example structure for a carrier adapter, excluding miscellaneous file
 The main functionalities that define and differentiate the adapters are the following:
 
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Capabilities}: One file recommended per each group of capability exposed by the carrier. Defines the actual functions that utilize the pluggable context, such as the http client and logger to then make requests to the carrier's API and return the normalized output. Orchestrates from the mapping of the core's canonical domain model to the carrier's expected request, handles the API call according to the carrier's specification and expected format (e.g. JSON or XML), response, potential errors, and finally maps the carrier's response back to the core's canonical output format.
-  \item \textbf{Mappers}: Are imported as functions by the capability functions and are responsible for the mapping to and from the core's canonical domain model. It would be easy to just think of them as simple field mappers, but they do actually hold functionality, which should as per the documentation guidelines set forth be described in detail. One of the best examples for parcel creation is package sizes, most carriers have predefined package size categories, such as small, medium and large, defined by the dimensions and weight of the parcel. The mappers in this case can implement logic from provided documentations and based on the incoming `Parcel` data, automatically determine the correct size category (unless deliberately overridden via custom options).
+  \item \textbf{Capabilities}: One file recommended per each group of capability exposed by the carrier. Defines the actual functions that utilize the pluggable context, such as the HTTP client and logger to then make requests to the carrier's API and return the normalized output. Orchestrates from the mapping of the core's canonical domain model to the carrier's expected request, handles the API call according to the carrier's specification and expected format (e.g. JSON or XML), response, potential errors, and finally maps the carrier's response back to the core's canonical output format.
+  \item \textbf{Mappers}: Are imported as functions by the capability functions and are responsible for the mapping to and from the core's canonical domain model. It would be easy to just think of them as simple field mappers, but they do actually hold functionality, which should as per the documentation guidelines set forth be described in detail. One of the best examples for parcel creation is package sizes, most carriers have predefined package size categories, such as small, medium and large, defined by the dimensions and weight of the parcel. The mappers in this case can implement logic from provided documentations and based on the incoming core \texttt{Parcel} data, automatically determine the correct size category (unless deliberately overridden via custom options).
   \item \textbf{Types}: A central types file imports the core types, extends them with carrier-specific fields where needed and then these are used by both the mappers and validators to ensure type safety and the core to adapter contract changeover.
   \item \textbf{Validation}: This is another crucial part of the adapters, here we define \textbf{Zod} schemas to be used for validation throughout the capability functions. These are used to safely validate input variables beyond just the type (e.g. for strings length or format such as email), throughout the process to validate that the carrier's response is as expected as per the documentation, and also to validate the final output before returning results. Essentially, while the type safe approach throughout the project ensure developers have good and consistent experience when building or utilizing the packages, the validation ensures actual runtime safety and predictability of the system.
   \item \textbf{Tests}: Each adapter comes with its own set of tests, which are crucial for ensuring the reliability and correctness of implementation. The tests cover various scenarios across different levels of concern, but since this is a big part of the adapter development's design philosophy, we will go over it in more detail in the next subsection.
 \end{itemize}
 
-Main design choice with the adapters was to keep them simple and focused on simply implementing the core contract in the provider's context.
-This way the contracts and already built implementations serve as a clear guide for new implementations, significantly reducing effort and time needed to add a new carrier.
+Main design choice with the adapters was to keep them simple and focused on implementing the core contract in the provider's context.
+This way, the contracts and already built implementations serve as a clear guide for new implementations, significantly reducing effort and time needed to add a new carrier.
 
 \subsubsection{Test-driven Approach}
 Right from the start of development, a test-driven approach was favored for the carrier adapters especially, as it has multiple benefits for both the long term reliability of the adapter and the development process itself.
-First, it ensures that the implementation is correct, and in case of truly end-to-end testing, the tests can at any time be repeated to see whether the 
+First, it ensures that the implementation is correct, and in case of truly end-to-end testing, the tests can at any time be repeated to see whether the implementation is still valid and working as expected.
+Second, it serves as a form of documentation for the adapter, as the tests describe the expected behavior and edge cases of the implementation.
 
-\subsection{End Application - API Gateway and Extra Components}
+As can be seen in figure \ref{fig:integration-layer-carrier-adapters-file-structure}, the tests are organized in a separate directory with another level of separation by the depth of concern.
+Generally, the three levels of concern are \texttt{unit}, \texttt{mock (integration)} and \texttt{live (end-to-end)} tests, each serving different purposes and having different requirements for setup and execution.
 
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{@{}p{3.5cm}p{5cm}p{6cm}@{}}
+    \toprule
+    \textbf{Level of concern}   & \textbf{Purpose}                                                          & \textbf{Example}                                                                                                                                                                                                                                                \\
+    \midrule
+    \texttt{unit}               & Validate individual functions in isolation with mocked I/O.               & Verify that \texttt{determineFoxpostSize()} correctly maps the canonical \texttt{Parcel} dimensions to the Foxpost-specific size categories. Testing validation, mapping, transformation logic.                                                                 \\[6pt]
+    \texttt{mock (integration)} & Test a complete capability flow with a simulated carrier HTTP endpoint.   & Mock the carrier's API to return predefined responses, then assert that the adapter handles these responses correctly. E.g.: parcel creation with mock data returns mock response which is parsed and normalized by the adapter.                                \\[6pt]
+    \texttt{live (end-to-end)}  & Execute the full flow against the real carrier sandbox or production API. & Call the adapter's different capabilities and verify their behavior in a real-world scenario, validating the integration with the actual carrier systems. Serves to validate the prior smoke tests and that the carrier's API is still functioning as expected. \\
+    \bottomrule
+  \end{tabular}
+  \caption{Three levels of testing employed for carrier adapters}
+  \label{tab:testing-levels}
+\end{table}
 
-\subsection{Example Usage}
+\subsection{End Application - API Gateway and Tracking Service}
 
+% TODO: Here explain how a general API gateway and tracking service may be implemented
+
+\subsection{Developer Tooling}
+The developer tooling provided for the integration layer is designed to facilitate the development and testing of carrier adapters, as well as to provide a reference implementation for integrators and developers.
+It is a command-line interface (CLI) tool that allows developers to quickly define locally callable scripts of their newly created adapter capabilities.
+These functions are really helpful for testing and debugging, as they allow developers to quickly call the adapter's functions with different inputs and see the results without having to implement them in a full application context.
+
+The CLI tool does not simply route and call static predefined scripts, but instead defines a smart context for the functions to be called in.
+For example, developers have the choice to directly call it via CLI input, or make predefined \texttt{JSON} fixture files that define the input for repeatable testing and documentation purposes.
+It offers optional convenient helpers, such as the one for authorization, reading in credentials from environment variables and injecting them into specific keys of the request object to avoid hardcoding them in the fixture files.
+There are further utilities that help with validating the output, such as the built-in configurable \textit{pino} logger with which developers can see the output in a structured and readable format, or the option to write the output to a file for further inspection.
+Writing the output to a file is especially useful in case of label generation, where the tool has flag for writing the label to PDF.
+
+Furthermore, a lightweight \textit{Fastify} server is also provided in the repository, through which developers may document and expose their adapter's capabilities in a visual format, with the ability to call them directly from the browser.
+This is done through \textit{OpenAPI} documentation and a \textit{Swagger UI} interface, which is automatically generated from the OpenAPI specifications.
+At the moment of writing, this is simply a proof of concept and has not been fully implemented or kept up to date for each carrier, as development is more convenient via the CLI tool, but it is a promising direction for future development showcasing capabilities and serving as central documentation hub for all carrier adapters.
 
 \section{Shopickup Application Overview}
-Shopickup is a multi-carrier shipping integration and monitoring platform designed for e-commerce merchants, that implements the integration layer as packages and builds around it an application that follows the principles set forth in the literature review.
+\textit{Shopickup} is a multi-carrier shipping integration and monitoring platform designed for e-commerce merchants, that implements the integration layer as packages and builds an application around it that follows the principles set forth in the literature review.
 It allows merchants to extend their online stores with a unified interface for managing shipments across multiple carriers, print labels, track packages, and gain insights into shipping performance through a dedicated dashboard.
 Customers of these stores also have the benefit of utilizing the platform's pickup point picker widget, which provides them with a seamless experience for selecting their preferred delivery options during checkout.
 
-% TODO: Here a collage of screenshots of the dashboard / pickup point picker widget / settings page etc. would be nice
-
-Since this is a commercial application with proprietary license, unlike the integration layer itself, I will not be giving access to the source code. I will instead provide a high level overview of it, only going into greater detail for the parts relevant to the thesis's main research questions.
+Since this is a commercial application with proprietary license, unlike the integration layer itself, the source code will not be shared. Instead, a high level overview of it is provided, only going into greater detail for the parts relevant to the thesis's main research questions.
 While the app itself does not directly answer any of our research questions, it serves as context on how the proposed carrier integration system can be applied in the real world, and also as a vector for me to explore the design and evaluation of the monitoring dashboard.
-
-To give a better understanding of the application, I will first describe its functionality concisely in terms of user flows, then I will give an architectural overview of the system and the technologies used paying special attention to the parts relevant to the thesis.
+First an overview of the common user flows is provided as context, followed by a description of the architectural choices and technologies used, paying special attention to the parts relevant to the thesis.
 
 \subsection{User Flows}
-Perhaps, the best way to understand the user flows of Shopickup is through diagrams. There are two main user categories: customers and merchants, each with their own distinct flows and motivations for using the platform.
-To make the flows easily readable I followed the following color scheme: blue for customer actions, yellow for choices, green for automatic system actions and purple for metadata or information.
+Perhaps, the best way to understand the user flows of \textit{Shopickup} is through diagrams. There are two main user categories: customers and merchants, each with their own distinct flows and motivations for using the platform.
+To make the flows easily readable, the following color scheme was used: blue for customer actions, yellow for choices, green for automatic system actions and purple for metadata or information.
 
 \subsubsection{Customer Flow}
-I will start with the customer flow, as it is perhaps the easiest to relate to and their motivations are simple as well: they want to receive their orders in the most convenient way possible, which is often not just home delivery, but also pickup points, which are becoming increasingly popular.
-The customer flow starts once they have added items to their cart and decided to go ahead with the checkout process.
+Let's start with the customer flow, as it is perhaps the easiest to relate to and their motivations are simple as well: they want to receive their orders in the most convenient way possible.
+This includes home delivery, but also pickup points such as lockers and parcel shops, which are becoming increasingly popular.
 
-Following this, the flow splits into three distinct paths, depending on whether they directly navigate to the checkout page and based on how they interact with the pickup point picker widget on the cart page.
-The reason for the first split based on navigation is due to a limitation of the Shopify platform, which does not allow widgets directly on the checkout page, leaving merchants with the only choice of setting the pickup point picker on the cart page. (Shopify Plus merchants are exempt from this limitation, which is supported by the app as well, but for the vast majority of stores this is the case.)
+% TODO: Show screenshot collage of the application regarding the customer flow
+
+As can be seen in Figure \ref{fig:shopickup-user-flows}, the customer flow starts once they have added items to their cart and decided to go ahead with the checkout process.
+Following this, the flow splits into three distinct paths, depending on whether they directly navigate to the checkout page, and based on how they interact with the pickup point picker widget on the cart page.
+The reason for the first split based on navigation is due to a limitation of the \textit{Shopify} platform, which does not allow widgets directly on the checkout page, leaving merchants with the only choice of setting the pickup point picker on the cart page.
+(Shopify Plus merchants are exempt from this limitation, which is supported by the app as well, but the vast majority of stores do not have access to this feature.)
 Logically, in case the user automatically navigates to the checkout page, they may miss the other two flows completely.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.90\textwidth]{src/diagrams/shopickup-user-flows-customer.png}
-  \caption{Shopickup customer flows for pickup-point selection and home delivery}
+  \caption{Customer flows for pickup-point selection and home delivery}
   \label{fig:shopickup-user-flows}
 \end{figure}
 
+\subsubsection{Merchant Flow}
+As we have seen, the customer flow is rather simple both in terms of the number of steps and the lack of variety in the automatic actions taken by the system.
+The merchant flow on the other hand, as depicted in Figure \ref{fig:shopickup-merchant-flows}, has a many more distinct motives and actions.
+
+% TODO: Show screenshot collage of the application regarding the merchant flow
+
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Integration Management}: Screens that are meant to allow users to easily connect their preferred providers through API keys and configure most relevant settings made available through the carriers' APIs, such as delivery times, label formats and extra services for example. This step essentially exposes each available carrier adapters' options to the user in an indirect way.
-  \item \textbf{Shipping and Payment Methods Configuration}: Once there are connected and set up carriers in the system, merchants can create and connect shipping and payment methods to the shipping provider's available services. For example, the merchant can simply add a new shipping method called "Provider XYZ - Pickup Point" and connects it to the corresponding carrier, then is able to limit the payment method to for example Cash on Delivery. This allows seamless filtering of methods on the checkout page for merchant flows through Shopify's Payment and Shipping Customization APIs.
+  \item \textbf{Integration Management}: Screens that are meant to allow users to easily connect their preferred providers through API keys and configure most relevant settings made available by the carrier, such as delivery times, label formats and extra services for instance. This step essentially exposes each available carrier adapters' options to the user in an indirect way.
+  \item \textbf{Shipping and Payment Methods Configuration}: Once there are connected and set up carriers in the system, merchants can create and connect shipping and payment methods to the shipping provider's available services. For example, the merchant can simply add a new shipping method called \textit{"Provider XYZ - Pickup Point"} and connect it to the corresponding carrier, then is able to limit the payment method to for example Cash on Delivery. This allows seamless filtering of methods on the checkout page for merchant flows through \textit{Shopify's Payment and Shipping Customization APIs}.
   \item \textbf{Shipment and Order Management}: Allows merchants to quickly overview their shipments through a sortable and filterable table and take common actions such as printing labels, tracking packages with just a few clicks. In case of further needs, they can click on a shipment to see a detailed view and take more specific actions, such as changing delivery address, method, carrier or even canceling the shipment. This section is related to the carrier integration system through tracking and manual updates, which are also exposed by the adapters.
   \item \textbf{Performance Monitoring}: Is done through the central dashboard, which is a common, tiled layout that can be customized by the merchant to only show the KPIs and metrics that are most relevant to them. This section also shows any warnings or alerts related to the shipments or services, such as SLA breaches or carrier delays. The dashboard's design and implementation is further explored in the next section of the methodology.
 \end{itemize}
@@ -943,40 +1000,90 @@ Logically, in case the user automatically navigates to the checkout page, they m
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\textwidth]{src/diagrams/shopickup-user-flows-merchant-tb.png}
-  \caption{Shopickup merchant flows for integration, mappings, shipments, and monitoring}
+  \caption{Merchant flows for integration, mappings, shipments, and monitoring}
   \label{fig:shopickup-merchant-flows}
 \end{figure}
 
 \subsection{Architectural Overview and Technology Stack}
 Now that we have seen the user flows of the application, we can go into the architectural details of where the carrier integration layer plugs into the application, and also to give an overview of the technologies used and effort required to build such a system.
-Most of the tech stack consists of modern standard tools and frameworks that are commonly used in the industry, however in some specific regards the choices have been limited or influenced by Shopify's platform requirements for embedded apps.
+Most of the technology stack consists of modern standard tools and frameworks that are commonly used in the industry, however in some specific regards the choices have been limited or influenced by Shopify's platform requirements for embedded apps.
 
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Backend + Frontend}: The backend + frontend is specified by Shopify to be built using \textbf{React Router v7} in the server-side rendering framework mode, which means that for small applications such as this one, both the backend and frontend needs can be fulfilled by this single server from a classical web development perspective. This all was served through \textbf{Render} with future scalability in mind. This serves the merchant flows we learned about before and hosts the dashboard as well.
-  \item \textbf{Integration Layer - Backend}: The carrier integration layer is built into many of the backend endpoints, and they mainly cover the integration management and shipment management flows described earlier. These are simply imported as regular \textbf{npm} packages and directly used to communicate with the carriers' APIs without any additional API gateway or broker, as each merchant is using their own instance and credentials, there are no shared resources or rate limits to worry about.
-  \item \textbf{Database}: The database was chosen to be as open as possible to avoid vendor lock-in and to allow for future flexibility via extensions. The choice ended on \textbf{PostgreSQL} hosted through \textbf{Supabase} and managed through \textbf{Prisma} as the ORM. This choice allows for a good balance between ease of use, scalability, and extensibility, as well as being a common choice in the industry.
-  \item \textbf{Edge Functions}: Edge functions were an indirect requirement of the Shopify platform, as they require webhook handlers to be as fast as possible. Since \textbf{Supabase} already supports \textbf{Deno} runtime edge functions, it was a natural choice to use them for this purpose as well.
-  \item \textbf{Cron Jobs}: Cron jobs are handled in a twofold way: for less critical jobs, such as cleanups we use \textbf{pg\_cron} if something can be directly handled on the database, and \textbf{node-cron} for more complex tasks. In case a task is more critical or requires longer runtimes, we delegate it to \textbf{Render Cron Jobs} to ensure consistency and reliability. (Dashboard data updates, batch analytics, package tracking, etc.)
-  \item \textbf{Integration Layer - Cron}: The integration layer is also used the cron jobs for tracking each merchant's shipments and updating their status in the database, as well as updating pickup points and other relevant data from the carriers. This is done through the same npm packages as the backend, but in a different context. Since these jobs are either on a larger system level scale, or even in case of per-merchant scale could run into hundreds of requests, in this case we did implement a simple API gateway as recommended by the literature review.
-  \item \textbf{Shopify Theme Extension}: The pickup point picker widget is a completely separate piece of frontend code that needs to build to WebAssembly as per Shopify's requirements. It was built using \textbf{SolidJS} and serves as an interface for customers to select their preferred delivery options during checkout. It needs to both communicate with our backend server and Shopify's APIs to function properly, and it is designed to be as lightweight and fast as possible to not overburden merchants' storefronts.
+  \item \textbf{Backend + Frontend}: The backend + frontend is specified by Shopify to be built using \textbf{React Router v7} in the server-side rendering framework mode, which means that for small applications such as this one, both the backend and frontend needs can be fulfilled by this single server from a classical web development perspective. It is served through \textbf{Render} with future scalability in mind. This hosts the merchant flows we learned about before and the dashboard as well.
+  \item \textbf{Integration Layer - Backend}: The carrier integration layer is built into many of the backend endpoints, and they mainly cover the integration management and shipment management flows described earlier. These are imported as regular \textbf{npm} packages and directly used to communicate with the carriers' APIs without any additional API gateway or broker, as each merchant is using their own instance and credentials, there are no shared resources or rate limits to worry about generally. (The exception to this is event handling and tracking services that require more control.)
+  \item \textbf{Database and Storage}: The database was chosen to be as open as possible to avoid vendor lock-in and to allow for future flexibility via extensions. The choice ended on \textbf{PostgreSQL} hosted through \textbf{Supabase} and managed through \textbf{Prisma} as the ORM. This choice allows for a good balance between ease of use, scalability, and extensibility, as well as being a common choice in the industry. Another benefit of \textbf{Supabase} is the integrated and generous S3-compatible storage buckets, which are used for storing label PDFs and other documents related to shipments.
+  \item \textbf{Webhook Handlers}: \textit{Shopify} provides ways to register to events happening in the merchant's store, such as new orders and order updates. These are utilized to synchronize state to our database and automatically take actions on the merchant's behalf. This requires resilience and retry mechanisms, for which we use \textbf{Inngest} as an event-driven workflow orchestration and durable execution platform. It has the ability to queue and retry failed jobs, without adding the overhead and complexity of additional infrastructure, as it runs our preexisting \textit{Node.js} server.
+  \item \textbf{Cron Jobs}: There are also multiple cron jobs to consider, such as the ones used for tracking active shipment statuses, or the ones calculating and updating dashboard's KPIs. These are also implemented using \textbf{Inngest} and run on the same server as the backend, but they are scheduled to run at specific intervals, such as every 5 minutes or every hour, depending on the use case. With shipment tracking for example, since we are once again making use of the merchant's API key access and not ours, we do not need to have serious gateway rules set aside from a simple exponential backoff and retry mechanism, while making sure to respect carrier's guidance with our scheduling. (E.g.: in case of MPL, they recommend to only poll a shipment every four hours.)
+  \item \textbf{Integration Layer - Cron}: The integration layer is also used the cron jobs for tracking each merchant's shipments and updating their status in the database, as well as updating pickup points and other relevant data from the carriers. This is done through the same \textbf{npm} packages as the backend, but in a different context. Since these jobs are either on a larger system level scale, or even in case of per-merchant scale could run into the hundreds of requests per hour, we have to be careful with scheduling and queuing.
+  \item \textbf{Shopify Theme Extension - App Block}: The pickup point picker widget is a completely separate piece of frontend code that needs to build to \textit{WebAssembly} as per Shopify's requirements. It was built using \textbf{SolidJS} and serves as an interface for customers to select their preferred delivery options during checkout. It needs to both communicate with our backend server and Shopify's APIs to function properly, and it is designed to be as lightweight and fast as possible to not overburden merchants' storefronts.
+  \item \textbf{Error Tracking and Telemetry}: For all of the above component, including the backend, frontend and the Shopify app block, we use \textbf{Sentry} for error tracking and telemetry. This allows us to monitor the health of the application, catch errors in real-time, and gain insights into user behavior and performance metrics. It is crucial for maintaining a high-quality user experience and quickly addressing any issues that arise.
 \end{itemize}
 
 The following diagram shows an overview of the elements I have described before. The arrows represent connections with the direction showing which component initiates the interactions and dotted lines representing asynchronous interactions.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.90\textwidth]{src/diagrams/shopickup-system-architecture-overview.png}
+  \includegraphics[width=0.8\textwidth]{src/diagrams/shopickup-system-architecture-overview.png}
   \caption{Shopickup system architecture overview}
   \label{fig:shopickup-architecture-overview}
 \end{figure}
 
 One of the main challenges is interactions with external systems, such as the shipping providers, because we have no control over their APIs, nor have any idea of their inner workings.
-Being able to communicate with multiple providers using a unified and consistent interface could save a lot of time and effort for developers and allow them to focus on the business logic, rather than the brittle, custom one-to-one function mappings that are usually built on a per app basis.
-In this case, overall development time was not shortened, as not only the provider adapters, but the core also needed to be built from scratch, but once it was time to implement the capabilities in the app, it was much more convenient and quicker.
+Being able to communicate with multiple providers using a unified and consistent interface could save a lot of time and effort for developers and allow them to focus on the business logic, rather than the brittle, custom one-to-one function mappings that are usually built on a per application basis.
+In this case, overall development time was not shortened, as not only the provider adapters, but the core also needed to be built from scratch, but once it was time to implement the capabilities in the app, it was much better developer experience.
+Conclusion of \textbf{MRQ1} from a practical perspective is that while it is not necessarily faster, the adapter + API gateway architecture is a suitable trade-off for extensibility and operational effort, as it allows for a unified interface to multiple providers, while still allowing for provider-specific customizations and extensions and is seemingly a better user experience.
 
 \section{Monitoring Dashboard Design}
-Based on the literature review, a hybrid Lambda Architecture-inspired design was chosen for the monitoring dashboard of Shopickup.
-This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
+\label{sec:dashboard-design}
+This section describes the specifics of how the dashboard was implemented, what technologies were used, and the challenges faced during development.
+Development of the dashboard was done in parallel with the rest of the application, and it was designed to be a central hub for merchants to monitor their shipping operations and gain insights into their performance.
+
+First concern was to define the order of components and the layout while keeping in mind the need for flexibility and customization.
+The final design was a 3 tiered layout:
+
+\begin{enumerate}
+  \item A top bar that serves as a constant point of reference, always showing data related to the merchant's account, their subscription plan and reassurance that the system is working as expected. It also holds some application-wide settings and navigation options, such as a language selector and link to the latest orders.
+  \item Following this a section for alerts and warnings, which groups warnings into a scrollable list of cards, each card representing a warning or alert, such as SLA breaches, carrier delays or other issues that require the merchant's attention. Each card has an icon that is colored based on the severity and depicts a symbol according to the topic. All cards are dismissible and based on the type they may come with a button that automatically takes an action, or links to the relevant section of the application (e.g.: order details page) for further investigation. Crucial issues that need immediate attention are always shown at the top without any need to scroll. These include for example issues with our own system, that may or may not be fixed automatically. (e.g.: synchronization issue between our system and \textit{Shopify}, requiring the merchant to take some action.)
+  \item The main section of the dashboard is a grid of tiles, each tile representing a KPI or metric that is relevant to the merchant's shipping operations. The tiles can be rearranged according to the merchant's preferences, and they can choose from a variety of visualizations, such as line charts, bar charts, pie charts, and more. This uses a three columns wide base layout and the tiles range from one to three columns wide by one row. The design is also responsive, on vertical mobile views it breaks down to a two-column layout and tiles are reorganized accordingly.
+\end{enumerate}
+
+% TODO: Show screenshot collage of the dashboard and its components in general
+
+All visualizations are built using the library \textbf{Recharts}, which is a composable charting library built for \textit{React} systems, based on \textit{D3.js}.
+It is really easy to use and comes with a wide variety of chart types, while also fitting into \textit{Shopify's Polaris} design system and theming.
+
+% TODO: Show screenshot showcasing the variety of optional visualizations users can choose from
+
+Table \ref{tab:visualization-mapping} provides a non-exhaustive overview of available visualization choices, the \textit{Recharts} chart types used, and which of the previously defined KPIs (see Tables \ref{tab:operational-kpis} and \ref{tab:strategic-kpis}) they depict.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{@{}p{3cm}p{3cm}p{4.5cm}p{3.5cm}@{}}
+    \toprule
+    \textbf{Visualization}    & \textbf{Chart Type (Recharts)} & \textbf{KPI(s) Depicted}                                                  & \textbf{Layer} \\
+    \midrule
+    OTDR Gauge                & \texttt{RadialBarChart}        & On Time Delivery Rate (Operational)                                       & Speed          \\[6pt]
+    OTDR Trend (7-day)        & \texttt{LineChart}             & On Time Delivery Rate (Operational)                                       & Batch          \\[6pt]
+    SLA Breach Alert Counter  & \texttt{N/A (numeric tile)}    & OTDR SLA (Operational)                                                    & Speed          \\[6pt]
+    Carrier Cost Comparison   & \texttt{BarChart}              & Carrier Cost per Shipment (Strategic)                                     & Batch          \\[6pt]
+    Forecasting Accuracy      & \texttt{LineChart}             & Accuracy of Forecasting (Strategic)                                       & Batch          \\[6pt]
+    Damage Rate by Carrier    & \texttt{BarChart}              & Damage Rate (Strategic)                                                   & Batch          \\[6pt]
+    Return Rate Trend         & \texttt{LineChart}             & Return Rate (Strategic)                                                   & Batch          \\[6pt]
+    Shipment Status Breakdown & \texttt{PieChart}              & N/A — supporting metric (e.g., delivered / in transit / exception counts) & Both           \\
+    \bottomrule
+  \end{tabular}
+  \caption{Mapping of dashboard visualizations to Recharts chart types and KPIs}
+  \label{tab:visualization-mapping}
+\end{table}
+
+Based on the literature review, a hybrid \textit{Lambda Architecture}-inspired design was chosen for the data pipeline, dividing the analytics into three layers as described in the following subsections.
+
+\subsection{Batch Layer}
+
+\subsection{Speed Layer}
+
+\subsection{Serving Layer}
 
 \section{Evaluation Methodology}
 Describe the planned evaluation methods of the dashboard system and used KPIs.
@@ -989,40 +1096,53 @@ These quantitative metrics in conjunction with survey data will help assess the 
 A combination of these methods will provide a comprehensive evaluation of the dashboard's impact on merchant decision-making and operational efficiency.
 One planned way to get merchants on board for this evaluation is to offer them heavily discounted or favorable pricing plans in the initial launch phase in exchange for their participation in the study.
 
-\subsection{Limitations and Scope}
-It is also important to address some of the shortcomings of the practically implemented system:
+\subsection{Qualitative Interviews}
+\label{sec:qualitative-interviews}
+For the qualitative interviews, a semi-structured interview format was chosen to allow for both guided questions and open-ended responses from participants.
+As the application has not yet been released to the public, we had limited access to potential participants and first had to reach out to merchants in our network of acquaintances and contacts.
+In the end, two SME merchants were chosen based on their willingness to provide feedback and eagerness to explore new shipping solutions.
+
+They were first introduced to the platform and its features through a brief online onboarding session, following which they were given unlimited free access to the application and its features for the period of two weeks.
+After this period, in-person interviews were conducted with each merchant, where they were asked to share their experiences, followed by a guided discussion on the dashboard, its usability and the usefulness of the provided KPIs and metrics.
+
+% TODO: Finish up qualitative interviews section with a summary of the findings and insights gained from the merchants' feedback.
+
+\subsection{DeLone and McLean IS Success Model}
+\label{sec:deleno-mclean}
+
+
+\section{Limitations and Scope}
+It is important to address some of the shortcomings of our work and the research done, as well as the limitations of the system and its practical application.
 
 \begin{itemize}[itemsep=3pt]
-  \item \textbf{Platform agnosticism}: While the backend is built in a way where most of it is platform-agnostic and reusable, at the time of writing the frontend is primarily designed to integrate with Shopify's admin dashboard via an embedded app.
-  \item \textbf{International carriers}: Although the carrier integration system verifiably works with multiple domestic carriers (such as MPL or Foxpost), the practical application was only released for the Hungarian market and thus does not yet support international providers.
+  \item \textbf{Qualitative research}: The main shortcoming compared to the original plan was the evaluation of the dashboard.
+        It was supposed to be carried out in a quantitative manner using surveys and analytics, which could have given us a more objective and statistically significant result, but due to \textit{Shopify's} rigorous app review process that may require more than two-three months at this time for newcomers.
+        This is an unfortunate and unpredictable factor in our planning, as this heightened waiting time is a temporary issue on \textit{Shopify's} side, but it is not something we can control or predict, and it has a direct impact on our ability to conduct the evaluation in a timely manner.
+        Because of not having passed review yet, the application is not yet available to the public through \textit{Shopify's} app store, and thus we cannot reach a wide enough audience to conduct the evaluation as planned.
+        Instead, we opted for a workaround with the qualitative research described in section \ref{sec:qualitative-interviews} via custom per customer app deployments.
+  \item \textbf{Platform agnosticism}: While the backend is built in a way where most of the logic is platform-agnostic and reusable, at the time of writing the frontend is primarily designed to integrate with \textit{Shopify's} admin dashboard via an embedded app. As mentioned before, this is a constraint imposed by the platform as the applications have to adhere to certain rules to be servable through \textit{iframes} in their admin UI.
+  \item \textbf{International carriers}: Although the carrier integration system verifiably works with multiple Hungarian carriers (\textit{GLS}, \textit{MPL}, \textit{Foxpost}), it has not yet been tested with non-domestic carriers, such as \textit{Austrian Post}. While international carrier support was not named directly in the scope of the thesis, it would have been a natural extension of the work done, further proving the system's flexibility and extensibility.
 \end{itemize}
 
 \chapter{Summary}
 \label{ch:summary}
+Address the research questions and summarize the findings of the thesis, highlighting the contributions made to the field of multi-carrier shipping integration and monitoring.
 
-This exposé summarizes the current state of the thesis.
-The research phase is essentially complete: the literature review has established the architectural foundations for multi-carrier integration and the dashboard layer, with an API gateway-centric adapter architecture identified as the most appropriate trade-off for extensibility and operational effort, and a hybrid real-time/batch analytics model selected for KPI-driven monitoring, with defined operational and strategic KPIs tailored to shipping contexts.
+\label{ch:results}
+Present experiments, results, and discussion.
 
-Based on these findings, the methodology has been defined to guide the subsequent implementation and evaluation phases.
-The next steps are to operationalize this methodology by detailing the concrete system design, implementing the prototype components, and executing the planned evaluation through qualitative interviews and quantitative measurements.
-This work will commence immediately following this exposé's approval.
-
-% \chapter{Results}
-% \label{ch:results}
-% Present experiments, results, and discussion.
-
-% \chapter{Conclusion and Future Work}
-% \label{ch:conclusion}
-% Summarise findings and outline future directions.
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+Summarize findings and outline future directions.
 
 % ----- Bibliography and Appendices -----
 \backmatter
 % Bibliography
 \printbibliography
 
-% \begin{appendices}
-%   \chapter{Appendix A}
-%   Supplementary material.
-% \end{appendices}
+\begin{appendices}
+  \chapter{Appendix A}
+  Supplementary material.
+\end{appendices}
 
 \end{document}

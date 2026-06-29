@@ -9,25 +9,25 @@ flowchart TB
         shopifyApi -.-> shopifyWebhook
     end
 
+    sentry@{ shape: rounded, label: "Sentry" }
     pickupWidget@{ shape: rounded, label: "Pickup Point Picker" }
 
     subgraph OurSystem[Our System]
         direction TB
         subgraph App[App / SSR]
             direction TB
-            ssr@{ shape: rect, label: "React Router v7 SSR App\n(Frontend, Dashboard, Backend Endpoints)" }
+            ssr@{ shape: rect, label: "Node.js React Router v7\n(Frontend, Dashboard, Backend Endpoints)" }
             integration@{ shape: rect, label: "Carrier Integration Layer" }
-            cron@{ shape: rect, label: "Cron Jobs" }
+            inngest@{ shape: rect, label: "Inngest service\n(webhook and cron)" }
             ssr --> integration
-            cron -.-> integration
+            ssr <--> inngest
+            inngest -.-> integration
         end
 
         subgraph Data[Supabase / DB]
             direction TB
-            edge@{ shape: rect, label: "Edge Functions" }
             prisma[[Prisma ORM]]
             db@{ shape: cyl, label: "PostgreSQL" }
-            edge --> db
             prisma --> db
         end
 
@@ -41,10 +41,12 @@ flowchart TB
         carrierApi --> carrierBackend
     end
 
+    ssr -.-> sentry
+    pickupWidget -.-> sentry
     pickupWidget <--> merchantStore
     pickupWidget --> shopifyApi
     pickupWidget --> ssr
-    shopifyWebhook -.-> edge
+    shopifyWebhook -.-> inngest
     integration --> carrierApi
     ssr <--> shopifyApi
 
@@ -55,7 +57,7 @@ flowchart TB
     classDef provider fill:#ecfdf5,stroke:#059669,color:#064e3e,stroke-width:1px;
 
     class pickupWidget bridge;
-    class merchantStore,shopifyApi,shopifyWebhook shopify;
+    class merchantStore,shopifyApi,shopifyWebhook,sentry shopify;
     class dashboard,ssr,backend,integration,cron app;
-    class edge,prisma,db data;
+    class prisma,db data;
     class carrierBackend,carrierApi provider;
