@@ -25,9 +25,12 @@
 \usepackage{graphicx}
 \usepackage{svg}
 \usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
 \usepackage{subcaption}
+\usepackage{eurosym}
 
 % Bibliography: use biblatex with IEEE style (Zotero -> export references.bib via Better BibTeX)
 \usepackage[backend=biber,style=ieee]{biblatex}
@@ -183,7 +186,7 @@ Implementation of the integration layer and the analytical dashboard will be eva
 Throughout this thesis, the standard IMRAD structure (Introduction, Methods, Results, and Discussion) is followed, mirroring the process of scientific discovery, as well as my journey of development along the way.
 The remainder of this thesis is structured as follows, as per the IMC Krems guidelines:
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \begin{tabular}{@{}p{1.5cm}p{4cm}p{9cm}@{}}
     \toprule
@@ -338,9 +341,9 @@ Extensibility has been mentioned multiple times as a key design goal for this th
 The technical report by the Software Engineering Institute (SEI) at CMU discusses extensibility as a specific architectural concern and outlines how extension points and extension strategies should be identified and evaluated. \cite{kazmanExtensibility2022}
 In the following table I will present their view on how a system's extensibility can be assessed, and how these criteria map to the thesis domain of multi-carrier shipping integration.
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
-  \begin{tabular}{@{}p{6cm}p{9cm}@{}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{6cm}p{9cm}@{}}
     \toprule
     \textbf{Criterion}                                          & \textbf{Thesis domain example}                                                                            \\
     \midrule
@@ -488,10 +491,10 @@ For this thesis, event-driven microservices are therefore considered primarily a
 
 Synthesizing the above subsections, the architectural options can be compared along the axes that matter for this thesis: extensibility, complexity, and fitness for the project's context.
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \small
-  \begin{tabular}{@{}p{3.5cm}p{5.5cm}p{5.5cm}@{}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.5cm}p{5.5cm}p{5.5cm}@{}}
     \toprule
     \textbf{Architecture}                                                                        & \textbf{Pros} & \textbf{Cons} \\
     \midrule
@@ -576,6 +579,7 @@ Google's Four Golden Signals framework \cite{GoogleSREMonitoring} provides usefu
 Evidently, in our case, while technical metrics are important for ensuring reliable operation, what we are really looking for are user-centric KPIs that reflect the dashboard's effectiveness in driving merchant decisions.
 
 \subsection{Real-Time vs. Batch Analytics}
+\label{sec:real-time-vs-batch-analytics}
 Now let us address the main topic of \textbf{MRQ2}, which is the architectural and design choice of our proposed dashboard system.
 A fundamental architectural decision in shipping monitoring systems is the choice between real-time and batch analytics approaches.
 This decision is not primarily technical but rather reflects what decision-making problems, time horizons and type of data analysis the system aims to support.
@@ -592,7 +596,7 @@ For this, I turn to Sandu's definitions \cite{sanduOperationalRealtimeBusiness20
 Batch analytics usually processes accumulated data in scheduled bulk operations, enabling comprehensive analysis of patterns over longer time horizons and greater amounts of data.
 A batch job that runs weekly might analyze all shipments of the given week to give greater insight on carrier performance, cost trends, or customer preferences.
 
-Operational intelligence focuses on current situations, and thus they require low-latency, real time data processing.
+Operational intelligence focuses on current situations, and thus they require low-latency, real-time data processing.
 Real-time analytics processes data continuously as events occur, enabling decisions in motion while situations are still unfolding.
 This rapid response window—often measured in minutes rather than hours—enables operational intelligence, acting on immediate situations, such as shipment delays or inventory shortages.
 
@@ -644,7 +648,7 @@ With understanding of the real-time/batch distinction established, we can now co
 For this, we primarily rely on the standard of \textbf{SCOR DS} (Supply Chain Operations Reference Digital Standard) set forth by the \textit{Association for Supply Chain Management} (ASCM), that describes and categorizes a framework of over \texttt{250} KPIs relevant to supply chain management. \cite{ascm2022scor}
 While not all of these KPIs are relevant to our specific domain, it still provides a comprehensive reference for core metrics and serves as the focal point of many related papers, such as the paper of Kusrini \& Miranda that addresses make-to-order scenarios, which is especially common for \textit{Shopify} SMEs. \cite{kusriniDeterminingPerformanceMetrics2021}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=1.0\textwidth]{src/screens/scor-ds-recap.png}
   \caption{Quick Reference Guide of SCOR DS depicting categories of KPIs and list of orchestration processes}
@@ -657,9 +661,8 @@ We however, categorize them into tiers reflecting the different decision horizon
 This serves both to clarify their purpose and to guide the underlying data architecture needed to support them in practice.
 
 % TODO: Clean up these sentences
-While SCOR DS provides an exhaustive dictionary of metrics, recent literature emphasizes that SMEs require a simplified, capability-linked subset of these KPIs that focus heavily on customer value outcomes and unit economics rather than complex network utilization \cite{kusriniDeterminingPerformanceMetrics2021, llivisacaKeyPerformanceIndicators2020}. For an SME merchant fulfilling orders (often utilizing a multi-carrier adapter), the focal point shifts toward end-to-end metrics like Total Order Cycle Time (TOCT) and Cost Per Order (CPO). Furthermore, as e-commerce fulfillment increasingly relies on omnichannel strategies and third-party logistics (3PL) integrations, metrics tracking item consolidation rates and failed first delivery attempts have emerged as critical drivers of both cost-efficiency and customer satisfaction \cite{yeContextualStochasticOptimization2024}.
-Implementation of some of these KPIs is then attempted in section \ref{sec:dashboard-design}, followed by an evaluation of their effectiveness based on merchant feedback and the IS system success model by DeLone and McLean. \cite{savolainenPerformanceDashboardEffectiveness2023}
-% TODO: Here I took this idea from a master's thesis, but they themselves are pointing to DeLone and McLean's model, so rework this part
+While SCOR DS provides an exhaustive dictionary of metrics, recent literature emphasizes that SMEs require a simplified, capability-linked subset of these KPIs that focus heavily on customer value outcomes and unit economics rather than complex network utilization \cite{kusriniDeterminingPerformanceMetrics2021, llivisaca2020key}. For an SME merchant fulfilling orders (often utilizing a multi-carrier adapter), the focal point shifts toward end-to-end metrics like Total Order Cycle Time (TOCT) and Cost Per Order (CPO). Furthermore, as e-commerce fulfillment increasingly relies on omnichannel strategies and third-party logistics (3PL) integrations, metrics tracking item consolidation rates and failed first delivery attempts have emerged as critical drivers of both cost-efficiency and customer satisfaction \cite{yeContextualStochasticOptimization2025}.
+Implementation of some of these KPIs is then attempted in section \ref{sec:dashboard-design}, followed by an evaluation of their effectiveness based on merchant feedback in the form of two in-depth interviews.
 
 Operation KPIs can usually be turned into strategic ones by simply aggregating them over time.
 Similarly, we can make multiple versions of our strategic KPIs by aggregating them over different time horizons, such as weekly, monthly, quarterly or yearly and over different shipment providers.
@@ -670,32 +673,32 @@ Operational KPIs are designed to support immediate decision-making, often in res
 These KPIs are typically displayed on real-time dashboards and trigger automated alerts when thresholds are breached.
 The following table summarizes domain-specific operational KPIs relevant to shipment monitoring systems and their sources.
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \small
-  \begin{tabular}{@{}p{4cm}p{8cm}p{3cm}@{}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{4cm}p{8cm}>{\raggedright\arraybackslash}p{3cm}@{}}
     \toprule
-    \textbf{KPI}                                                                                                                                                                                                                                                                                                                                & \textbf{Description} & \textbf{Source} \\
+    \textbf{KPI}                                                                                                                                                                                                                                                                                                                               & \textbf{Description} & \textbf{Source} \\
     \midrule
-    On Time Delivery Rate (OTDR)                                                                                                                                                                                                                                                                                                                &
-    What percentage of shipments are delivered on time according to the promised delivery date. Surfacing these issues to merchants is crucial for maintaining customer satisfaction, manage expectations.                                                                                                                                      &
-    Piela \cite{pielaKeyPerformanceIndicator2017}; Raj et al. \cite{rajStochasticModelingIntegrated2024}; ASCM RL.2.2 and RL.3.3 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                 \\[6pt]
+    On Time Delivery Rate (OTDR)                                                                                                                                                                                                                                                                                                               &
+    What percentage of shipments are delivered on time according to the promised delivery date. Surfacing these issues to merchants is crucial for maintaining customer satisfaction, manage expectations.                                                                                                                                     &
+    Piela \cite{pielaKeyPerformanceIndicator2017}; Raj et al. \cite{rajStochasticModelingIntegrated2024}; ASCM RL.2.2 and RL.3.3 \cite{ascm2022scor}                                                                                                                                                                                                                                    \\[6pt]
 
-    OTDR SLA                                                                                                                                                                                                                                                                                                                                    &
-    It is important to differentiate between the OTDR as measured for customer satisfaction and the OTDR in regard to broken SLAs, as the latter carries different implications for business performance. Merchant's may exercise their SLA rights when deliveries are not made on time.                                                        &
-    Piela \cite{pielaKeyPerformanceIndicator2017}; ASCM RL.3.3 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                                                                 \\[6pt]
+    OTDR SLA                                                                                                                                                                                                                                                                                                                                   &
+    It is important to differentiate between the OTDR as measured for customer satisfaction and the OTDR in regard to broken SLAs, as the latter carries different implications for business performance. Merchant's may exercise their SLA rights when deliveries are not made on time.                                                       &
+    Piela \cite{pielaKeyPerformanceIndicator2017}; ASCM RL.3.3 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                                      \\[6pt]
 
-    Total Order Cycle Time (TOCT) / Order-to-delivery time (real or near-real-time)                                                                                                                                                                                                                                                                                             &
-    The time it takes from the order's creation to the moment it is handed over to the carrier. This can serve as an operational, near-real-time metric as well on a per-order basis, since often merchants not only promise overall shipping times, but fulfillment guarantees as well, especially in case of custom-made items. &
-    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Llivisaca et al. \cite{llivisaca2020key}                                                                                                                                                                                                                                                                           \\[6pt]
+    Total Order Cycle Time (TOCT) / Order-to-delivery time (real or near-real-time)                                                                                                                                                                                                                                                            &
+    The time it takes from the order's creation to the moment it is handed over to the carrier. This can serve as an operational, near-real-time metric as well on a per-order basis, since often merchants not only promise overall shipping times, but fulfillment guarantees as well, especially in case of custom-made items.              &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Llivisaca et al. \cite{llivisaca2020key}                                                                                                                                                                                                                                                                                     \\[6pt]
 
-    Order entry accuracy and invoice accuracy                                                                                                                                                                                                                                                                                                   &
-    Defines on a per-order basis the accuracy of order entry as requested by the customer. Automatically shipping or invoicing orders to wrong or non-existing customers could lead to significant operational and financial losses. The system could on order creation validate and immediately warn merchants about potential discrepancies.  &
-    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; ASCM RL.3.4 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                                                                   \\[6pt]
+    Order entry accuracy and invoice accuracy                                                                                                                                                                                                                                                                                                  &
+    Defines on a per-order basis the accuracy of order entry as requested by the customer. Automatically shipping or invoicing orders to wrong or non-existing customers could lead to significant operational and financial losses. The system could on order creation validate and immediately warn merchants about potential discrepancies. &
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; ASCM RL.3.4 \cite{ascm2022scor}                                                                                                                                                                                                                                                                                                \\[6pt]
 
-    Pending Orders / Order Backlog &
-    The count of orders accepted but not yet shipped. This serves as an early-warning agility KPI for SMEs to identify capacity constraints. &
-    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Kusrini \& Miranda \cite{kusriniDeterminingPerformanceMetrics2021} \\[6pt]
+    Pending Orders / Order Backlog                                                                                                                                                                                                                                                                                                             &
+    The count of orders accepted but not yet shipped. This serves as an early-warning agility KPI for SMEs to identify capacity constraints.                                                                                                                                                                                                   &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Kusrini \& Miranda \cite{kusriniDeterminingPerformanceMetrics2021}                                                                                                                                                                                                                                                           \\[6pt]
 
     \bottomrule
   \end{tabular}
@@ -706,44 +709,44 @@ The following table summarizes domain-specific operational KPIs relevant to ship
 \subsubsection{Strategic KPIs: Batch Monitoring for Tactical Planning}
 Strategic KPIs are designed to inform long-term planning and strategic decision-making, based on comprehensive historical data.
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \small
-  \begin{tabular}{@{}p{4cm}p{8cm}p{3cm}@{}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{4cm}p{8cm}>{\raggedright\arraybackslash}p{3cm}@{}}
     \toprule
-    \textbf{KPI}                                                                                                                                                                                                                                                            & \textbf{Description} & \textbf{Source} \\
+    \textbf{KPI}                                                                                                                                                                                                                                                                        & \textbf{Description} & \textbf{Source} \\
     \midrule
-    Delivery time                                                                                                                                                                                                                                               &
-    The average time it takes for a shipment to be delivered from the moment it is sent, over a period of time.                                                                                                                                                             &
-    Raj et al. \cite{rajStochasticModelingIntegrated2024}                                                                                                                                                                                                                                                            \\[6pt]
+    Delivery time                                                                                                                                                                                                                                                                       &
+    The average time it takes for a shipment to be delivered from the moment it is sent, over a period of time.                                                                                                                                                                         &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}                                                                                                                                                                                                                                                                        \\[6pt]
 
-    Order-to-delivery time (batch)                                                                                                                                                                                                                                          &
-    The average time it takes for an order to be handed over to the carrier from the moment it is placed, over a period of time.                                                                                                                                            &
-    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}                                                                                                                                                                                                       \\[6pt]
+    Order-to-delivery time (batch)                                                                                                                                                                                                                                                      &
+    The average time it takes for an order to be handed over to the carrier from the moment it is placed, over a period of time.                                                                                                                                                        &
+    Raj et al. \cite{rajStochasticModelingIntegrated2024}; Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}                                                                                                                                                                                                                   \\[6pt]
 
-    Time to Completion / Customer Order Fulfillment Cycle Time                                                                                                                                                                                                              &
-    Often differently named by authors, essentially the average actual cycle time consistently achieved to fulfill customer orders. From order receipt to customer acceptance of the order.                                                                                 &
-    ASCM RS.1.1 / RS.2.4. \cite{ascm2022scor}                                                                                                                                                                                                                                                                                  \\[6pt]
+    Time to Completion / Customer Order Fulfillment Cycle Time                                                                                                                                                                                                                          &
+    Often differently named by authors, essentially the average actual cycle time consistently achieved to fulfill customer orders. From order receipt to customer acceptance of the order.                                                                                             &
+    ASCM RS.1.1 / RS.2.4. \cite{ascm2022scor}                                                                                                                                                                                                                                                                                    \\[6pt]
 
-    Damage Rate                                                                                                                                                                                                                                                             &
-    Percentage of shipments that are reported as damaged upon delivery. Indicates carrier handling quality.                                                                                                                                                                 &
-    Piela \cite{caiImprovingSupplyChain2009}; ASCM RL.3.10 \cite{ascm2022scor}                                                                                                                                                                                                                                                                        \\[6pt]
+    Damage Rate                                                                                                                                                                                                                                                                         &
+    Percentage of shipments that are reported as damaged upon delivery. Indicates carrier handling quality.                                                                                                                                                                             &
+    Piela \cite{caiImprovingSupplyChain2009}; ASCM RL.3.10 \cite{ascm2022scor}                                                                                                                                                                                                                                                   \\[6pt]
 
-    Return Rate                                                                                                                                                                                                                                                             &
-    Percentage of shipments that are returned by customers. High return rates may indicate issues with product quality or shipping accuracy. Comparing the return rates between carriers could expose issues with their relative performance.                               &
-    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}                                                                                                                                                                                                                                                              \\[6pt]
+    Return Rate                                                                                                                                                                                                                                                                         &
+    Percentage of shipments that are returned by customers. High return rates may indicate issues with product quality or shipping accuracy. Comparing the return rates between carriers could expose issues with their relative performance.                                           &
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}                                                                                                                                                                                                                                                                          \\[6pt]
 
-    Perfect Order / Fulfillment Rate                                                                                                                                                                                                                                        &
+    Perfect Order / Fulfillment Rate                                                                                                                                                                                                                                                    &
     The percentage of orders that were delivered as expected, on time, in full and undamaged. It essentially "combines" carrier measures of OTDR, damage and return rate with extra dimensionality of merchant performance of having no mistakes at all. Shows overall service quality. &
-    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; ASCM RL.1.1 \cite{ascm2022scor}                                                                                                                                                                                                                             \\[6pt]
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; ASCM RL.1.1 \cite{ascm2022scor}                                                                                                                                                                                                                                         \\[6pt]
 
-    Carrier Cost per Shipment                                                                                                                                                                                                                                               &
-    Average cost incurred per shipment by each carrier. Comparing carrier costs helps in negotiating contracts and selecting carriers or pricing shipment options accordingly.                                                                                                                                                              &
-    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; Partially ASCM CO.3.6 \cite{ascm2022scor}                                                                                                                                                                                                                                                              \\[6pt]
+    Carrier Cost per Shipment                                                                                                                                                                                                                                                           &
+    Average cost incurred per shipment by each carrier. Comparing carrier costs helps in negotiating contracts and selecting carriers or pricing shipment options accordingly.                                                                                                          &
+    Ekren et al. \cite{ekrenEnhancingEgroceryOrder2025}; Partially ASCM CO.3.6 \cite{ascm2022scor}                                                                                                                                                                                                                               \\[6pt]
 
-    Shipping Cost vs. Carrier Performance (Value Balance) &
-    A composite strategic view plotting cost per order by carrier against OTDR, damage rate, and transit time. Enables SMEs lacking analytical staff to make informed contract and routing decisions. &
-    Ye et al. \cite{yeContextualStochasticOptimization2025} \\[6pt]
+    Shipping Cost vs. Carrier Performance (Value Balance)                                                                                                                                                                                                                               &
+    A composite strategic view plotting cost per order by carrier against OTDR, damage rate, and transit time. Enables SMEs lacking analytical staff to make informed contract and routing decisions.                                                                                   &
+    Ye et al. \cite{yeContextualStochasticOptimization2025}                                                                                                                                                                                                                                                                      \\[6pt]
 
     \bottomrule
   \end{tabular}
@@ -758,18 +761,16 @@ Following that, a real commercial application named \textit{Shopickup} was built
 
 This serves as a proof of concept that attests the validity and feasibility of the literature review's proposed architecture and answer of the first research question.
 A central part of this proof of concept is the dashboard, for which most of the feasible KPIs and design choices were implemented, then further evaluated based on in-depth interviews with two merchants using the application.
-After refinement and feedback from real users, the IS system success model by DeLone and McLean was applied to further validate the effectiveness of the dashboard. \cite{savolainenPerformanceDashboardEffectiveness2023}
-% TODO: Actually do the evaluation
 
 \section{Carrier Integration Architecture Design}
 As described in the literature review, after considering various architectural options, an adapter + API gateway architecture was chosen as the most suitable trade-off for the carrier integration system.
 This section will describe the specifics of how this architecture was implemented, what technologies were used, and the challenges faced during development.
 The following components were found to be essential for such systems.
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \small
-  \begin{tabular}{@{}p{3cm}p{8cm}p{3cm}@{}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3cm}p{8cm}>{\raggedright\arraybackslash}p{3cm}@{}}
     \toprule
     \textbf{Component}                 & \textbf{Description}                                                                                                                                                                                                                                                               & \textbf{Responsibility}    \\
     \midrule                                                                                                                                                                                                                                                                                                                                             \\[6pt]
@@ -795,7 +796,7 @@ The public repository follows a monorepo structure on \textit{GitHub}, while the
 
 % TODO: Image collage of the GitHub repo and npm packages here
 
-As of the time of writing, three shipping providers are supported for on average five of of the main capabilities required by merchants, such as pacel and label creation, tracking, pickup point retrieval and more.
+As of the time of writing, three shipping providers are supported for on average five of the main capabilities required by merchants, such as parcel and label creation, tracking, pickup point retrieval and more.
 The currently supported carriers are Magyar Posta Logisztika (MPL), GLS and Foxpost, which are Hungary's three largest carriers, each with their own automated postal lockers and pickup points. \parencite{gkidEvertekelesEsLogisztika2020}
 Three further providers are in the process of being added, including Austrian Post, and two more regional Hungarian carriers.
 
@@ -826,7 +827,7 @@ On the input side, the core defines a \texttt{CreateParcelRequest} type with the
 It is apparent however, that different carriers offer unique features and services that require additional fields, such as express delivery flags, insurance options and so on.
 To accommodate this, the core defines a custom field in the type of \texttt{RequestOptions}, which is deliberately left up to the adapter to define and use as they see fit.
 
-\begin{listing}[H]
+\begin{listing}[htbp]
   \caption{Core request options extensibility in \texttt{src/core/request-options.ts}}
   \label{lst:request-options}
   \begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
@@ -852,7 +853,7 @@ export interface RequestOptions {
 
 This lenient typing allows adapters to first extend the core types, then specify them to their needs, such as the following example for Foxpost's parcel creation, which extends the (aliased) core type we have seen before and specifies the \texttt{options} field with custom flags, such as \texttt{isWeb}, that indicates to the carrier whether the parcel shall be hidden in their own interface.
 
-\begin{listing}[H]
+\begin{listing}[htbp]
   \caption{Adapter, Foxpost-specific request options in \texttt{src/adapters/foxpost/types.ts}}
   \label{lst:foxpost-request-options}
   \begin{minted}[fontsize=\small, linenos, breaklines, frame=single]{typescript}
@@ -889,7 +890,7 @@ Carrier adapters are the concrete implementations of the core contract for each 
 They all have a rather predictable structure, which is recommended to be followed by guidelines for new implementations.
 Here is an example structure for a carrier adapter, excluding miscellaneous files, helpers and directories.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.20\textwidth]{src/diagrams/integration-layer-carrier-adapters-file-structure.png}
   \caption{File structure of the integration layer - carrier adapters}
@@ -917,10 +918,10 @@ Second, it serves as a form of documentation for the adapter, as the tests descr
 As can be seen in figure \ref{fig:integration-layer-carrier-adapters-file-structure}, the tests are organized in a separate directory with another level of separation by the depth of concern.
 Generally, the three levels of concern are \texttt{unit}, \texttt{mock (integration)} and \texttt{live (end-to-end)} tests, each serving different purposes and having different requirements for setup and execution.
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \small
-  \begin{tabular}{@{}p{3.5cm}p{5cm}p{6cm}@{}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.5cm}p{5cm}p{6cm}@{}}
     \toprule
     \textbf{Level of concern}   & \textbf{Purpose}                                                          & \textbf{Example}                                                                                                                                                                                                                                                \\
     \midrule
@@ -977,7 +978,7 @@ The reason for the first split based on navigation is due to a limitation of the
 (Shopify Plus merchants are exempt from this limitation, which is supported by the app as well, but the vast majority of stores do not have access to this feature.)
 Logically, in case the user automatically navigates to the checkout page, they may miss the other two flows completely.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.90\textwidth]{src/diagrams/shopickup-user-flows-customer.png}
   \caption{Customer flows for pickup-point selection and home delivery}
@@ -997,7 +998,7 @@ The merchant flow on the other hand, as depicted in Figure \ref{fig:shopickup-me
   \item \textbf{Performance Monitoring}: Is done through the central dashboard, which is a common, tiled layout that can be customized by the merchant to only show the KPIs and metrics that are most relevant to them. This section also shows any warnings or alerts related to the shipments or services, such as SLA breaches or carrier delays. The dashboard's design and implementation is further explored in the next section of the methodology.
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=1\textwidth]{src/diagrams/shopickup-user-flows-merchant-tb.png}
   \caption{Merchant flows for integration, mappings, shipments, and monitoring}
@@ -1021,7 +1022,7 @@ Most of the technology stack consists of modern standard tools and frameworks th
 
 The following diagram shows an overview of the elements I have described before. The arrows represent connections with the direction showing which component initiates the interactions and dotted lines representing asynchronous interactions.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{src/diagrams/shopickup-system-architecture-overview.png}
   \caption{Shopickup system architecture overview}
@@ -1042,74 +1043,208 @@ First concern was to define the order of components and the layout while keeping
 The final design was a 3 tiered layout:
 
 \begin{enumerate}
-  \item A top bar that serves as a constant point of reference, always showing data related to the merchant's account, their subscription plan and reassurance that the system is working as expected. It also holds some application-wide settings and navigation options, such as a language selector and link to the latest orders.
-  \item Following this a section for alerts and warnings, which groups warnings into a scrollable list of cards, each card representing a warning or alert, such as SLA breaches, carrier delays or other issues that require the merchant's attention. Each card has an icon that is colored based on the severity and depicts a symbol according to the topic. All cards are dismissible and based on the type they may come with a button that automatically takes an action, or links to the relevant section of the application (e.g.: order details page) for further investigation. Crucial issues that need immediate attention are always shown at the top without any need to scroll. These include for example issues with our own system, that may or may not be fixed automatically. (e.g.: synchronization issue between our system and \textit{Shopify}, requiring the merchant to take some action.)
-  \item The main section of the dashboard is a grid of tiles, each tile representing a KPI or metric that is relevant to the merchant's shipping operations. The tiles can be rearranged according to the merchant's preferences, and they can choose from a variety of visualizations, such as line charts, bar charts, pie charts, and more. This uses a three columns wide base layout and the tiles range from one to three columns wide by one row. The design is also responsive, on vertical mobile views it breaks down to a two-column layout and tiles are reorganized accordingly.
+  \item \textbf{Top bar}: serves as a constant point of reference, always showing data related to the merchant's account, their subscription plan and reassurance that the system is working as expected. It also holds some application-wide settings and navigation options, such as a language selector and link to the latest orders.
+  \item \textbf{Alerts and warnings}: a section through which we can reach out to merchants about important issues and news. It groups three distinct levels of events (info, warning, critical) into a collapsible list of cards, representing for example SLA breaches, carrier delays or other issues that demand the merchant's attention. All cards are dismissible and based on the type they may come with a button that automatically takes an action, or links to the relevant section of the application (e.g.: order details page) for further investigation. Critical issues that need immediate attention are always shown at the top without any need to undo the collapse. These include for example issues with our own system, that may or may not be fixed automatically. (e.g.: synchronization issue between our system and \textit{Shopify}, requiring the merchant to take some action.)
+  \item \textbf{Main section}: The main section of the dashboard is a grid of tiles, each tile representing a KPI or metric that is relevant to the merchant's shipping operations. The tiles can be rearranged according to the merchant's preferences, and they can choose from a variety of visualizations, such as line charts, bar charts, pie charts, and more through a modal. This uses a three columns wide base layout and the tiles range from one to two columns wide by one row. The design is also responsive, on vertical mobile views it breaks down to a two-column layout and tiles are reorganized accordingly.
 \end{enumerate}
 
 % TODO: Show screenshot collage of the dashboard and its components in general
 
 All visualizations are built using the library \textbf{Recharts}, which is a composable charting library built for \textit{React} systems, based on \textit{D3.js}.
 It is really easy to use and comes with a wide variety of chart types, while also fitting into \textit{Shopify's Polaris} design system and theming.
+Each tile is rendered as a self-contained unit composed of a title bar with a tooltip describing the metric, an optional row of action toggles (time range, view mode, chart type, etc.), and a visualization area that can display either a chart or a numeric counter. Tiles that have no data yet render an empty-state message explaining when data will appear, rather than a misleading zero or blank chart.
+
+The grid of tiles is organized by a declarative registry of the tile configurations, each specifying a unique identifier, category (orders, shipping, analytics), default visibility, grid span (1 or 2 columns), the data layer it reads from (\texttt{speed} or \texttt{batch} or \texttt{both}), and a descriptive tooltip.
+The merchant can open a \textit{customizer modal} to reorder tiles by drag-and-drop, toggle individual tile visibility, reset to the factory layout, and enable a demo mode that replaces real metrics with realistic sample data for prototyping and demonstration purposes.
 
 % TODO: Show screenshot showcasing the variety of optional visualizations users can choose from
 
-Table \ref{tab:visualization-mapping} provides a non-exhaustive overview of available visualization choices, the \textit{Recharts} chart types used, and which of the previously defined KPIs (see Tables \ref{tab:operational-kpis} and \ref{tab:strategic-kpis}) they depict.
+Table \ref{tab:visualization-mapping} provides a complete overview of the nineteen dashboard tiles, their \textit{Recharts} chart types, the KPIs they depict (as defined in Tables \ref{tab:operational-kpis} and \ref{tab:strategic-kpis}), and the data layer each tile draws from.
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \small
-  \begin{tabular}{@{}p{3cm}p{3cm}p{4.5cm}p{3.5cm}@{}}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{2.5cm}p{5.0cm}>{\raggedright\arraybackslash}p{2.0cm}@{}}
     \toprule
-    \textbf{Visualization}    & \textbf{Chart Type (Recharts)} & \textbf{KPI(s) Depicted}                                                  & \textbf{Layer} \\
+    \textbf{Tile}               & \textbf{Chart Type}     & \textbf{KPI(s) Depicted}                                                                                         & \textbf{Layer} \\
     \midrule
-    OTDR Gauge                & \texttt{RadialBarChart}        & On Time Delivery Rate (Operational)                                       & Speed          \\[6pt]
-    OTDR Trend (7-day)        & \texttt{LineChart}             & On Time Delivery Rate (Operational)                                       & Batch          \\[6pt]
-    SLA Breach Alert Counter  & \texttt{N/A (numeric tile)}    & OTDR SLA (Operational)                                                    & Speed          \\[6pt]
-    Carrier Cost Comparison   & \texttt{BarChart}              & Carrier Cost per Shipment (Strategic)                                     & Batch          \\[6pt]
-    Forecasting Accuracy      & \texttt{LineChart}             & Accuracy of Forecasting (Strategic)                                       & Batch          \\[6pt]
-    Damage Rate by Carrier    & \texttt{BarChart}              & Damage Rate (Strategic)                                                   & Batch          \\[6pt]
-    Return Rate Trend         & \texttt{LineChart}             & Return Rate (Strategic)                                                   & Batch          \\[6pt]
-    Shipment Status Breakdown & \texttt{PieChart}              & N/A — supporting metric (e.g., delivered / in transit / exception counts) & Both           \\
+    OTDR Gauge                  & \texttt{RadialBarChart} & On Time Delivery Rate - 7d / 30d / all-time (Operational, Table \ref{tab:operational-kpis} row 1)                & Speed          \\[6pt]
+    OTDR Trend                  & \texttt{LineChart}      & On Time Delivery Rate trend - 7d / 30d (Operational)                                                             & Batch          \\[6pt]
+    Delivery Promise Breaches   & Numeric Tile            & OTDR SLA - count of active breaches (Operational, Table \ref{tab:operational-kpis} row 2)                        & Speed          \\[6pt]
+    Delivery Promise Compliance & Numeric Tile            & OTDR SLA - compliance rate across all shipments (Operational)                                                    & Speed          \\[6pt]
+    Carrier SLA Compliance      & Numeric Tile            & 1-day carrier SLA - 24h guaranteed delivery rate (Operational)                                                   & Speed          \\[6pt]
+    Pending Orders              & Numeric Tile            & Order Backlog - unfulfilled/partial count (Operational, Table \ref{tab:operational-kpis} row 5)                  & Speed          \\[6pt]
+    Daily Orders                & \texttt{AreaChart}      & Daily order volume by carrier - 90-day stacked area (supporting)                                                 & Batch          \\[6pt]
+    Carrier Distribution        & \texttt{PieChart}       & Shipment split by carrier - daily / weekly / yearly views (supporting)                                           & Both           \\[6pt]
+    Fulfillment Status          & \texttt{PieChart}       & Orders by fulfillment status - 30d / 90d / all-time (supporting)                                                 & Both           \\[6pt]
+    Shipment Status Breakdown   & \texttt{PieChart}       & Shipments by tracking status - 7d / 30d / all (supporting)                                                       & Both           \\[6pt]
+    Carrier Cost Comparison     & \texttt{BarChart}       & Carrier Cost per Shipment - avg / total views (Strategic, Table \ref{tab:strategic-kpis} row 7)                  & Batch          \\[6pt]
+    Cost vs Performance         & \texttt{ScatterChart}   & Cost vs OTDR / damage / delivery time (Strategic, Table \ref{tab:strategic-kpis} row 8)                          & Batch          \\[6pt]
+    Damage Rate by Carrier      & \texttt{BarChart}       & Damage Rate per carrier - all-time (Strategic, Table \ref{tab:strategic-kpis} row 4)                             & Batch          \\[6pt]
+    Return Rate Trend           & \texttt{LineChart}      & Return Rate - 12-month trend per month (Strategic, Table \ref{tab:strategic-kpis} row 5)                         & Batch          \\[6pt]
+    Avg Delivery Time           & Numeric Tile            & Delivery Time - handover-to-delivery in hours (Strategic, Table \ref{tab:strategic-kpis} row 1)                  & Batch          \\[6pt]
+    Avg Fulfillment Cycle       & Numeric Tile            & TOCT / Fulfillment Cycle Time - order creation to delivery (Strategic, Table \ref{tab:strategic-kpis} rows 2--3) & Batch          \\[6pt]
+    Perfect Order Rate          & Numeric Tile            & Perfect Order Rate - on-time + undamaged + not returned (Strategic, Table \ref{tab:strategic-kpis} row 6)        & Batch          \\[6pt]
+    Forecasting Accuracy        & \texttt{LineChart}      & Predicted vs actual OTDR - accuracy over time (Strategic, supporting)                                            & Batch          \\[6pt]
+    Labels by Carrier (Weekly)  & \texttt{BarChart}       & Printed label count per carrier per week (supporting)                                                            & Batch          \\[6pt]
     \bottomrule
   \end{tabular}
-  \caption{Mapping of dashboard visualizations to Recharts chart types and KPIs}
+  \caption{Complete mapping of dashboard tiles to Recharts chart types, KPIs, and data layers}
   \label{tab:visualization-mapping}
 \end{table}
 
-Based on the literature review, a hybrid \textit{Lambda Architecture}-inspired design was chosen for the data pipeline, dividing the analytics into three layers as described in the following subsections.
+\subsection{Real-Time Alert and Monitoring System}
+
+The alert feed described in the second tier of the layout is backed by a server-side alerting pipeline.
+Four categories of alerts are generated automatically by the system based on tracking events and the incoming webhook events.
+
+\begin{enumerate}[left=0pt, itemsep=3pt]
+  \item \textbf{SLA Breaches}: When a tracking-event webhook or periodic evaluation detects that a shipment is in transit but past its promised delivery date, a \texttt{warning} alert is created. Shipments approaching their deadline (within 24 hours) generate a \texttt{warning} \textit{SLA at-risk} alert instead. (Operational, Table \ref{tab:operational-kpis} row 1)
+  \item \textbf{1-Day Carrier SLA Breaches}: For shipments tagged with \texttt{oneDaySlaActive} (carrier-guaranteed 24-hour delivery from handover), a \texttt{critical} alert is raised when 24 hours elapse without a delivery event. (Operational, Table \ref{tab:operational-kpis} row 2)
+  \item \textbf{Damage and Exception Detection}: When a tracking event arrives with a status that indicates an exception or damage, the shipment is automatically flagged in the database accordingly and a \texttt{warning} level alert notifies the merchant. (Strategic, Table \ref{tab:strategic-kpis} row 4)
+  \item \textbf{Order and Invoice Validation}: When a new order is created, the system does preliminary validation of the order details and flags inconsistencies both relevant for shipping (e.g.: missing address or recipient details) and for accounting (e.g.: nonsensical VAT numbers). A \texttt{warning} alert is raised for any detected issues. (Operational, Table \ref{tab:operational-kpis} row 4)
+\end{enumerate}
+
+In addition to these high-priority alerts, the system also generates \texttt{info} alerts for non-critical events, such as new features, upcoming maintenance, and other informational messages, which are manually issued by the system administrators.
+All alerts are deduplicated within a 24-hour window per (shop, category, related entity), pinned critical alerts appear permanently expanded at the top of the feed, and every alert carries a server-side dismiss action guarded by UUID validation.
+In demo mode, four realistic sample alerts (SLA breach, delayed delivery, flagged order requiring review, and a new-feature announcement) are presented with a \texttt{[DEMO]} prefix to avoid confusing merchants.
 
 \subsection{Batch Layer}
 
+The Batch Layer follows the Lambda Architecture pattern described in Section \ref{sec:real-time-vs-batch-analytics} and implements the master-dataset concept via a nightly cron job that populates a dedicated aggregate table, \texttt{ShipmentDailyAggregate}.
+For every shop, the cron queries all shipments that had activity on the previous calendar day and groups them by shipping provider and shipping type.
+For each group a numerous set of aggregate metrics is computed, including counts, sums, and averages of the KPIs or data utilized for their computation.
+
+The aggregate rows are upserted so the cron is essentially idempotent. Re-running it for a given date and carrier overwrites the previous values rather than duplicating them, consistent with Marz's principle that batch views can always be recomputed from the immutable source data. \cite{marzHowBeatCAP2011}
+This design eliminates expensive N+1 queries on the raw shipment table at dashboard render time.
+Instead, the Batch Layer serves all historical KPIs by reading directly from the precomputed aggregate table via simple \texttt{GROUP BY} and \texttt{SUM} queries.
+Even cross-carrier comparisons and multi-period views (e.g., 90-day daily orders, 12-month return rate trend) require only a handful of indexed reads rather than scanning thousands of shipment rows.
+
 \subsection{Speed Layer}
+
+The Speed Layer compensates for the inherent latency of the nightly batch interval by querying live database tables on every dashboard load.
+It is responsible for metrics where freshness matters more than long-term comprehensiveness, similar to how the warning and message system prioritizes timeliness over historical completeness.
+
+This layer deliberately trades some query complexity for timeliness: the computations run synchronously in the dashboard metrics loader and reflect the state of the database at request time.
+Because the raw shipment table is queried for SLA and OTDR metrics, the Speed Layer guarantees that merchants see breaches and compliance figures almost as soon as they are apparent in our systems, supporting the operational intelligence use cases identified in Section. \ref{sec:real-time-vs-batch-analytics}
+The design of components served through the speed layer needs to be carefully considered, as to not overload the database with expensive queries even if merchants decide to use all available tiles on the dashboard.
 
 \subsection{Serving Layer}
 
-\section{Evaluation Methodology}
-Describe the planned evaluation methods of the dashboard system and used KPIs.
-Both qualitative interviews and quantitative perhaps according to the DeLone and McLean IS success model.
+The Serving Layer is a single API endpoint, \texttt{/api/dashboard-metrics}, that merges the results from both layers into one \textit{JSON} response structured as three blocks.
 
-The plan is to conduct user interviews with merchants using the dashboard to gather qualitative feedback on usability, usefulness, and overall satisfaction.
-Additionally, system usage analytics will be collected to measure engagement metrics such as session duration, feature usage frequency, and task completion rates.
-These quantitative metrics in conjunction with survey data will help assess the effectiveness of the dashboard in improving shipping operations.
+\begin{enumerate}[left=0pt, itemsep=3pt]
+  \item \texttt{speed}: all real-time KPIs, similarly surfaced to warnings and messages
+  \item \texttt{batch}: all historically aggregated KPIs from the nightly cron job that are directly utilized
+  \item \texttt{computed}: KPIs primarily derived from batch aggregates but presented separately for clarity (e.g.: perfect order rate, carrier cost statistics and per-carrier OTDR).
+\end{enumerate}
 
-A combination of these methods will provide a comprehensive evaluation of the dashboard's impact on merchant decision-making and operational efficiency.
-One planned way to get merchants on board for this evaluation is to offer them heavily discounted or favorable pricing plans in the initial launch phase in exchange for their participation in the study.
+Each response also carries a \texttt{\_meta} object with two timestamps: \texttt{speedFreshAt} (the time the live queries ran) and \texttt{batchLastDate} (the most recent date present in the aggregate table, or \texttt{null} if the cron has never run).
+On the dashboard, every tile displays a freshness note in its tooltip - \textit{“Live data”} for Speed Layer tiles and \textit{“Batch data: [date]”} for Batch Layer tiles - giving the merchant immediate awareness of data recency.
+Data is lazily loaded via the previously mentioned endpoint, utilizing a separate fetcher as to not block the main application render and allow for a more responsive user experience.
 
-\subsection{Qualitative Interviews}
+This design mirrors the Lambda Architecture's separation of concerns as described by Lekkala: the batch layer is authoritative and eventually consistent, the speed layer fills the freshness gap, and the serving layer presents a unified view that transparently informs the user about which data source powers each metric. \cite{lekkalaLeveragingLambdaArchitecture2020}
+
+\section{Evaluation Methodology: Qualitative Interviews}
 \label{sec:qualitative-interviews}
 For the qualitative interviews, a semi-structured interview format was chosen to allow for both guided questions and open-ended responses from participants.
 As the application has not yet been released to the public, we had limited access to potential participants and first had to reach out to merchants in our network of acquaintances and contacts.
-In the end, two SME merchants were chosen based on their willingness to provide feedback and eagerness to explore new shipping solutions.
+In the end, two SME merchants were chosen based on their willingness to provide feedback and eagerness to explore new shipping connector solutions.
 
 They were first introduced to the platform and its features through a brief online onboarding session, following which they were given unlimited free access to the application and its features for the period of two weeks.
-After this period, in-person interviews were conducted with each merchant, where they were asked to share their experiences, followed by a guided discussion on the dashboard, its usability and the usefulness of the provided KPIs and metrics.
+After this period, in-person interviews were conducted with each merchant, where they were asked to share their experiences, followed by a guided discussion on the dashboard and its individual components one-by-one, its usability and the usefulness of the provided KPIs and metrics.
+At the end of the interview, they were also asked to think through what metrics they would like to see in the future and what would be the most useful for their business.
 
-% TODO: Finish up qualitative interviews section with a summary of the findings and insights gained from the merchants' feedback.
+\subsection{Interview Findings}
+The following table summarizes the key findings from the two semi-structured interviews, organized by the main discussion topics that were covered with each merchant.
+Merchants will not be named and be referred to as \textit{Merchant A} and \textit{Merchant B} from here on.
 
-\subsection{DeLone and McLean IS Success Model}
-\label{sec:deleno-mclean}
+\textit{Merchant A} is a small, personalized photo gift store that sells goods such as mugs and aprons with custom printing made to the customer's specification.
+Each product is made to order, and the merchant has a small team of three people with the owner managing operations and order fulfillment.
+Average monthly order volume is in the range of 250--500 orders, with a high degree of variability due to seasonal demand and marketing campaigns.
+Yearly revenue is in the range of \EUR{100000} to \EUR{150000}.
 
+\textit{Merchant B} is a similarly sized clothing store that specializes in selling in colorful, oriental-themed dresses and accessories.
+The store is run by two people with the owner managing operations and order fulfillment.
+Average monthly order volume is in the range of 150--250 orders, with comparatively stable demand throughout the year.
+Yearly revenue is in the range of \EUR{75000} to \EUR{100000}.
+
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{3.5cm}p{5.5cm}p{5.5cm}@{}}
+  \caption{Summary of qualitative interview findings organized by discussion topic and merchant}
+  \label{tab:qualitative-findings} \\
+  \toprule
+  \textbf{Topic} & \textbf{Merchant A} & \textbf{Merchant B} \\
+  \midrule
+  \endfirsthead
+  \multicolumn{3}{c}{\small\textit{\tablename\ \thetable{} -- continued}} \\
+  \toprule
+  \textbf{Topic} & \textbf{Merchant A} & \textbf{Merchant B} \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{3}{r}{\small\textit{Continued on next page}} \\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+    \textbf{General layout}                                                                                                                                                                                                                                                                                                                 &
+    Found the layout to be intuitive and logical. For them alerts are high priority and preferred seeing them at the top.                                                                                                                                                                                                                   &
+    Similarly, they found the layout to be logical. However, they noted that the top bar could be more useful, given that it is the first and most visible element on the page.                                                                                                                                                                                                         \\[6pt]
+
+    \textbf{Top bar}                                                                                                                                                                                                                                                                                                                        &
+    Believed it is useful for seeing their subscription status and found the following top card on the system's operational state reassuring.                                                                                                                                                                                               &
+    Did not find it particularly useful but acknowledged its presence. Would have loved if it were more informative on common metrics, or if it were customizable as well.                                                                                                                                                                                                              \\[6pt]
+
+    \textbf{Alerts \& warnings}                                                                                                                                                                                                                                                                                                             &
+    Found the alert system to be very useful and a stated that it is a core differentiator between our solution and the alternatives. Had an idea about e-mail forwarding for critical alerts.                                                                                                                                              &
+    Was happy seeing an alert system that is not only used for info level notifications about the service in general.                                                                                                                                                                                                                                                                   \\[6pt]
+
+    \textbf{Main section / tile grid}                                                                                                                                                                                                                                                                                                       &
+    Liked the customizability. Managed easily with reordering and turning on and off tiles.                                                                                                                                                                                                                                                 &
+    Found the layout and customizability to be great, but felt a bit overwhelmed by the number of available tiles.                                                                                                                                                                                                                                                                      \\[6pt]
+
+    \textbf{OTDR-related tiles}                                                                                                                                                                                                                                                                                                             &
+    Checked the OTDR gauge daily. Found the differentiation between customer-facing OTDR and SLA compliance useful.                                                                                                                                                                                                                         &
+    Relied on the OTDR trend line chart and the per-carrier breakdown to evaluate carrier contracts. Requested an export function.                                                                                                                                                                                                                                                      \\[6pt]
+
+    \textbf{Promise / SLA breach alerts}                                                                                                                                                                                                                                                                                                    &
+    Considered these generally as some of the most valuable feature, as in their case the products are mainly purchased as gifts for specific occasions, making their delivery a timely matter. Requested automatic e-mail notifications.                                                                                                   &
+    Saved time by not having to manually go through the system and multiple screens to find and preemptively look for potential issues.                                                                                                                                                                                                                                                 \\[6pt]
+
+    \textbf{Pending orders / backlog}                                                                                                                                                                                                                                                                                                       &
+    Preferred having these type of tiles at the top of the dashboard to quickly gauge the remaining work needed. (Products sold are custom and thus relatively labor-intensive.)                                                                                                                                                            &
+    Did not provide additional value for them. Mentioned that through \textit{Shopify's} order list they are already used to monitoring their orders.                                                                                                                                                                                                                                   \\[6pt]
+
+    \textbf{Damage / return-rate tiles}                                                                                                                                                                                                                                                                                                     &
+    No return or damage happened during the observation period, but noted they would keep these tiles at the top of the dashboard, as for them even one damaged or returned item has a significant impact. (Returned custom items not only lose them the shipping and labor, but also the cost of material as they are no longer sellable.) &
+    Mentioned that damage is not common, and while return-rate is an important metric to them overall, they are more interested in the rates on a per item level which they can access through \textit{Shopify's} analytics. They don't believe there would be great differences between carriers in this regard.                                                                                                                                                                                                                                                      \\[6pt]
+
+    \textbf{Carrier cost / value comparison}                                                                                                                                                                                                                                                                                                &
+    Found the cost and value comparison charts a great idea. Would use the per carrier cost tile on a monthly basis to better anticipate the billing cycle. Mentioned that it would help them properly set the prices for individual shipping methods. Noted that the \textit{cost vs.\ performance} scatter chart felt too complex for quick glances.                                                                                                                                                                               &
+    General costs tile was welcomed. Believed that the value comparison chart could be promising based on the mock data, but could not fully utilize it without sufficient historical data in their system. Had the idea for a tile that compares the per shipping method average price with the amount they ask for the option at checkout, and see historically, how much money they earn or lose with those options overall.                                                                                                                                                                            \\[6pt]
+
+    \textbf{Delivery \& cycle times}                                                                                                                                                                                                                                                                                                        &
+    Believed this to be another set of very important metrics. Explained that as a small team they are not using sophisticated process management tracking tools, but rather the owner is responsible for keeping track of most details regarding fulfillment. For them it was especially useful to see what time it takes for them to prepare the order and hand it off. Per carrier delivery times were also found useful as they explained that with seasonal celebrations they need to know which carriers are the fastest and the ones they can realy on to get there by the celebration, but would prefer a daily and weekly view as well for this metric.                                                                                                                                                                                                      &
+    Thought these were genuinely useful metrics, as before they had only seen the overall time from the order coming in to it being marked as fulfilled.                                                                                                                                                                                                                                                                                       \\[6pt]
+
+    \textbf{Perfect order rate}                                                                                                                                                                                                                                                                                                             &
+    Liked the idea of a single metric they can just look at and get feedback how their logistics are doing.                                                                                                                                                                                                           &
+    Was more skeptical about the idea of single value metrics such as this one, as they prefer going into the details themselves.                                                                                                                                                                                                                                            \\[6pt]
+
+    \textbf{Additional feedback / ideas}                                                                                                                                                                                                                                                                                                    &
+    Told us about how their biggest pain point is COD orders and especially pickup point orders that never get accepted. They would like to see more in-depth data and warnings regarding these two cases. Following this, suggested expanding the alert system to cover more scenarios: notifications for shipments not yet picked up from pickup points (with user-configurable thresholds for how long before flagging), tracking events that have not updated for an extended period, and a manual "mark as damaged" option since carriers are not always reliable with damage reporting as per their experience. Proposed new tiles including a per-carrier \textit{quality score} (0--100 based on a custom formula), a comparison of automated parcel machine success rates vs.\ home delivery, and the ability to surface pickup point opening hours directly in alerts to help manage COD deliveries. &
+    Similarly to \textit{Merchant A}, mentioned COD deliveries and tracking them as a major pain point as these had to be manually checked to see how many days each customer has left to pick up their orders. Their end goal is to remind customers to pick up their orders to not lose out on the money, for which they found the idea of automated emails great. Further mentioned several new tile ideas: a daily \textit{labels by carrier} chart (similar to the existing daily orders tile, possibly combined with a toggle), a \textit{pending orders per carrier} breakdown, a \textit{successful vs.\ not successful delivery rate} trend (general and per carrier), and extending the carrier cost comparison to also show what the customer paid for shipping at checkout, thereby revealing the net margin on each shipping option. Requested an export-to-PDF or CSV feature for monthly business reviews. \\[6pt]
+
+    \bottomrule
+\end{longtable}
+
+Overall, both merchants expressed satisfaction with the dashboard's core value proposition and found the KPI-driven overview to be a significant improvement over their previous fragmented workflows and manual tracking methods they had to adapt to, due to the competition lacking these features.
+The most commonly cited suggestions for future improvement relate to COD and pickup point orders, export functionality, and configurable alert channels (e-mail forwarding).
+Surprisingly, both merchants agreed on pickup orders being a major pain point, which was not anticipated based on the initial research and literature review, as it was not highlighted in any of the sources sited.
+This could indicate a gap in the literature regarding the challenges of dealing with these types of orders, and could be a potential area for future research.
+However, we have to keep in mind the small sample size of the interviews, and that the literature cited generally approaches the issue from a larger scale, logistical standpoint.
+Another factor could be that the literature reviewed was international and came from all over the globe, the merchants interviewed were both operating in Hungary, where locker style pickup points (APMs) are especially popular. \cite{gkidEvertekelesEsLogisztika2020}
 
 \section{Limitations and Scope}
 It is important to address some of the shortcomings of our work and the research done, as well as the limitations of the system and its practical application.
