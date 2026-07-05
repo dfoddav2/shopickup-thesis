@@ -1,0 +1,61 @@
+---
+title: High-Level System Architecture Example
+config:
+  flowchart:
+    curve: linear
+    rankSpacing: 70
+---
+flowchart TB
+  subgraph ExternalSystems[External Systems]
+    direction LR
+    S["Shopify<br/><small>Admin API / Webhooks</small>"]
+    C["Carrier APIs<br/><small>GLS / MPL / Foxpost</small>"]
+  end
+
+  subgraph AppLayer[Application Layer <small>End-application specific</small>]
+    direction LR
+    FE["Frontend<br/><small>React Router v7</small>"]
+    TS["Tracking Service<br/><small>Cron / Webhook consumer</small>"]
+  end
+
+  subgraph GatewayLayer[API Gateway Layer]
+    direction TB
+    GW["API Gateway<br/><small>Auth / Rate Limiting / Routing</small>"]
+  end
+
+  subgraph IntegrationLayer[Carrier Integration Layer <small>Domain-independent, open-source</small>]
+    direction LR
+    CC["Core Contract<br/><small>Canonical models, interfaces</small>"]
+    A1["GLS<br/>Adapter"]
+    A2["MPL<br/>Adapter"]
+    A3["Foxpost<br/>Adapter"]
+  end
+
+  S -.-> FE
+  FE -.-> GW
+  TS -.-> GW
+  GW -.-> A1
+  GW -.-> A2
+  GW -.-> A3
+  A1 -.-> C
+  A2 -.-> C
+  A3 -.-> C
+  A1 -.-> CC
+  A2 -.-> CC
+  A3 -.-> CC
+
+  style ExternalSystems fill:#e8f5e9,stroke:#2e7d32,color:#000,stroke-width:1px
+  style AppLayer fill:#e3f2fd,stroke:#1565c0,color:#000,stroke-width:1px
+  style GatewayLayer fill:#fff3e0,stroke:#e65100,color:#000,stroke-width:1px
+  style IntegrationLayer fill:#f3e5f5,stroke:#6a1b9a,color:#000,stroke-width:1px
+  style CC fill:#f3e5f5,stroke:#6a1b9a,color:#000,stroke-width:1px
+  style A1 fill:#f3e5f5,stroke:#6a1b9a,color:#000,stroke-width:1px
+  style A2 fill:#f3e5f5,stroke:#6a1b9a,color:#000,stroke-width:1px
+  style A3 fill:#f3e5f5,stroke:#6a1b9a,color:#000,stroke-width:1px
+  style S fill:#e8f5e9,stroke:#2e7d32,color:#000,stroke-width:1px
+  style C fill:#e8f5e9,stroke:#2e7d32,color:#000,stroke-width:1px
+  style FE fill:#e3f2fd,stroke:#1565c0,color:#000,stroke-width:1px
+  style TS fill:#e3f2fd,stroke:#1565c0,color:#000,stroke-width:1px
+  style GW fill:#fff3e0,stroke:#e65100,color:#000,stroke-width:1px
+
+  linkStyle default stroke:#9ca3af,stroke-width:1.25px,stroke-dasharray:4 4
